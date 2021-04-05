@@ -5,6 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import admin.admin.model.CertificateDTO;
+import admin.admin.model.CertificateRequest;
 import admin.admin.services.CertificateRequestService;
 
 import java.util.List;
@@ -15,6 +17,38 @@ public class CertificateRequestController {
 
     @Autowired
     CertificateRequestService certificateRequestService;
+    
+    @RequestMapping(value = "/send-certificate-request", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendCertificateRequest(@RequestBody byte[] encryptedCSR) {
+
+        try {
+            boolean success = certificateRequestService.createCertificateRequest(encryptedCSR);
+
+            if (success)
+                return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CertificateRequest>> getCertificateRequests() {
+
+        List<CertificateRequest> reqs = certificateRequestService.findAll();
+        return new ResponseEntity<>(reqs, HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeCertificateRequest(@PathVariable Integer id) {
+
+        if (certificateRequestService.delete(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
     
 }

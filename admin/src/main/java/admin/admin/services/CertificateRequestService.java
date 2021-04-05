@@ -22,6 +22,12 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.*;
+
 @Service
 public class CertificateRequestService {
 
@@ -59,5 +65,16 @@ public class CertificateRequestService {
         return false;
 
     }
+    
+    
+    
+    
+    
+    
+    public boolean createCertificateRequest(byte[] encryptedCSR) throws IOException {
 
+	    return true;
+	}
+	
+	
 }
