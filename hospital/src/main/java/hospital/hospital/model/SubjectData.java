@@ -33,6 +33,15 @@ public class SubjectData {
 		this.endDate = endDate;
 	}
 
+	public SubjectData(PublicKey publicKey, X500Name x500name, String serialNumber) {
+		this.publicKey = publicKey;
+		this.x500name = x500name;
+		this.serialNumber = serialNumber;
+	}
+
+	public SubjectData(PublicKey aPublic, X500Name build) {
+	}
+
 	public X500Name getX500name() {
 		return x500name;
 	}
