@@ -49,7 +49,7 @@ public class CertificateRequestService {
 	public CertificateRequest saveOne(CertificateRequest entity) {
 		CertificateRequest request = certificateRequestRepository.findByUserId(entity.getUserId());
 
-		if (request != null)
+		if (request == null)
 			return certificateRequestRepository.save(entity);
 		else
 			return null;
@@ -66,8 +66,8 @@ public class CertificateRequestService {
 
 	}
 
-	public boolean createCertificateRequest(byte[] encryptedCSR) throws IOException {
-
+	public boolean createCertificateRequest(CertificateRequest cr) throws IOException {
+		saveOne(cr);
 		return true;
 	}
 

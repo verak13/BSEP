@@ -54,6 +54,14 @@ public class KeyStoreWriter {
         }
     }
     
+    public void loadKeyStore() {
+        try {
+            keyStore.load(new FileInputStream(file), password);
+        } catch (IOException | CertificateException | NoSuchAlgorithmException e) {
+        	e.printStackTrace();
+        }
+    }
+    
     public boolean keyStoreExists() {
     	File f = new File(file);
     	if(f.exists()) {

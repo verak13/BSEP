@@ -21,10 +21,10 @@ public class CertificateRequestController {
     
     @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
     @RequestMapping(value = "/send-certificate-request", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendCertificateRequest(@RequestBody byte[] encryptedCSR) {
+    public ResponseEntity<?> sendCertificateRequest(@RequestBody CertificateRequest cr) {
 
         try {
-            boolean success = certificateRequestService.createCertificateRequest(encryptedCSR);
+            boolean success = certificateRequestService.createCertificateRequest(cr);
 
             if (success)
                 return new ResponseEntity<>(HttpStatus.OK);

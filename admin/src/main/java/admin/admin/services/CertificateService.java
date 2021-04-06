@@ -7,11 +7,10 @@ import org.springframework.stereotype.Component;
 
 import admin.admin.keystore.KeyStoreReader;
 import admin.admin.keystore.KeyStoreWriter;
-import admin.admin.model.CreateCertificateDTO;
 import admin.admin.model.CertificateDTO;
 import admin.admin.model.CertificateRequest;
 import admin.admin.model.IssuerData;
-import admin.admin.model.KeyUsageDTO;
+import admin.admin.model.CreateCertificateDTO;
 import admin.admin.model.RevokeCertificateDTO;
 import admin.admin.model.SubjectData;
 
@@ -112,6 +111,7 @@ public class CertificateService {
 
 	private void createRootCertificate()
 			throws OperatorCreationException, CertificateException, CRLException, IOException {
+		
 		try {
 			if (!keyStoreWriter.keyStoreExists()) {
 				keyStoreWriter.createKeyStore("password");
@@ -134,7 +134,7 @@ public class CertificateService {
 				X509v3CertificateBuilder rootCertBuilder = new JcaX509v3CertificateBuilder(rootCertIssuer,
 						rootSerialNum, startDate, endDate, rootCertSubject, keyPair.getPublic());
 
-				KeyUsageDTO keyUsageDTO = new KeyUsageDTO(true, true, true, true, true, true, true, true, true);
+				CreateCertificateDTO keyUsageDTO = new CreateCertificateDTO(true, true, true, true, true, true, true, true, true);
 				KeyUsage k = new KeyUsage(keyUsageDTO.getcRLSign() | keyUsageDTO.getDataEncipherment()
 						| keyUsageDTO.getDecipherOnly() | keyUsageDTO.getDigitalSignature()
 						| keyUsageDTO.getEncipherOnly() | keyUsageDTO.getKeyAgreement() | keyUsageDTO.getKeyCertSign()
@@ -161,12 +161,14 @@ public class CertificateService {
 
 				System.out.println(isRevoked(createdCertificate));
 
-				revokeCertificate(new RevokeCertificateDTO("superadmin@admin.com", "UNSPECIFIED"),
-						"superadmin@admin.com");
+				//revokeCertificate(new RevokeCertificateDTO("superadmin@admin.com", "UNSPECIFIED"),
+				//		"superadmin@admin.com");
 
 				System.out.println(isRevoked(createdCertificate));
 
 				ArrayList<CertificateDTO> lista = readAllCertificates();
+			} else {
+				keyStoreWriter.loadKeyStore();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,7 +190,7 @@ public class CertificateService {
 		os.close();
 	}
 
-	public void createAdminCertificate(CreateCertificateDTO certificateCreationDTO, String issuerAlias)
+	public boolean createAdminCertificate(CreateCertificateDTO certificateCreationDTO, String issuerAlias)
 			throws OperatorCreationException, CertificateException {
 
 		Certificate[] issuerCertificateChain = keyStoreReader.readCertificateChain(issuerAlias);
@@ -196,7 +198,7 @@ public class CertificateService {
 		X509Certificate issuer = (X509Certificate) issuerCertificateChain[0];
 		try {
 			if (!isValid(issuerCertificateChain) || issuer.getBasicConstraints() == -1 || !issuer.getKeyUsage()[5]) {
-				throw new Exception();
+				return false;
 			}
 		} catch (CertificateException e1) {
 			e1.printStackTrace();
@@ -208,12 +210,10 @@ public class CertificateService {
 			e1.printStackTrace();
 		}
 
-		String alias = certificateRequestService.findOne(certificateCreationDTO.getRequestID()).getEmail();
-
-		//Certificate certInfo = keyStoreReader.readCertificate(alias);
+		String alias = certificateRequestService.findOne(certificateCreationDTO.getRequestId()).getEmail();
 
 		KeyPair keyPair = generateKeyPair();
-		SubjectData subjectData = generateSubjectData(certificateCreationDTO.getRequestID());
+		SubjectData subjectData = generateSubjectData(certificateCreationDTO.getRequestId());
 
 		subjectData.setPublicKey(keyPair.getPublic());
 
@@ -236,7 +236,7 @@ public class CertificateService {
 		X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(issuerName, serialNum, startDate,
 				endDate, subjectData.getX500name(), keyPair.getPublic());
 
-		KeyUsageDTO keyUsageDTO = certificateCreationDTO.getKeyUsageDTO();
+		CreateCertificateDTO keyUsageDTO = certificateCreationDTO;
 		KeyUsage k = new KeyUsage(keyUsageDTO.getcRLSign() | keyUsageDTO.getDataEncipherment()
 				| keyUsageDTO.getDecipherOnly() | keyUsageDTO.getDigitalSignature() | keyUsageDTO.getEncipherOnly()
 				| keyUsageDTO.getKeyAgreement() | keyUsageDTO.getKeyCertSign() | keyUsageDTO.getKeyEncipherment()
@@ -244,7 +244,7 @@ public class CertificateService {
 
 		try {
 			builder.addExtension(Extension.keyUsage, false, k);
-			if (keyUsageDTO.iscRLSign())
+			if (keyUsageDTO.isKeyCertSign())
 				builder.addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
 		} catch (CertIOException e) {
 			e.printStackTrace();
@@ -260,6 +260,7 @@ public class CertificateService {
 		Certificate[] newCertificateChain = ArrayUtils.insert(0, issuerCertificateChain, createdCertificate);
 		keyStoreWriter.write(alias, keyPair.getPrivate(), newCertificateChain);
 		keyStoreWriter.saveKeyStore();
+		return true;
 	}
 
 	private KeyPair generateKeyPair() {
@@ -294,6 +295,7 @@ public class CertificateService {
 
 		String serialNumber = curCal.getTimeInMillis() + "";
 
+		
 		X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
 		builder.addRDN(BCStyle.CN, cerRequestInfo.getCommonName());
 		builder.addRDN(BCStyle.O, cerRequestInfo.getOrganization());
@@ -395,6 +397,9 @@ public class CertificateService {
 			X500Name subject = certHolder.getSubject();
 			certificate.setEmail(IETFUtils.valueToString(subject.getRDNs(BCStyle.E)[0].getFirst().getValue()));
 			certificate.setCommonName(IETFUtils.valueToString(subject.getRDNs(BCStyle.CN)[0].getFirst().getValue()));
+			System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+			System.out.println(((X509Certificate) c).getBasicConstraints());
+			System.out.println(((X509Certificate) c).getKeyUsage()[5]);
 			if (((X509Certificate) c).getBasicConstraints() != -1 || ((X509Certificate) c).getKeyUsage()[5])
 				certificate.setCA(true);
 			if (isRevoked(c)) {
