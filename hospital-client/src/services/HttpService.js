@@ -15,7 +15,7 @@ class HttpService {
     }
 }
 
-const options = { baseURL: 'http://localhost:8080' };
+const options = { baseURL: 'http://localhost:8085' };
 const httpService = new HttpService(options);
 
 export default httpService;

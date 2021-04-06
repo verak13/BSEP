@@ -16,6 +16,16 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const useStyles = makeStyles({
     table: {
@@ -41,7 +51,36 @@ const rows = [
 function Requests(props) {
 
     const classes = useStyles();
+    const initialState = {
+        requestId: 0,
+        cRLSign: false,
+        dataEncipherment: false,
+        decipherOnly: false,
+        digitalSignature: false,
+        encipherOnly: false,
+        keyAgreement: false,
+        keyCertSign: false,
+        keyEncipherment: false,
+        nonRepudiation: false,
+      };
+    
+    const [open, setOpen] = React.useState(false);
+    const [state, setState] = React.useState(initialState);
+    
+      const handleChange = (event) => {
+        console.log(state);
+        setState({ ...state, [event.target.name]: event.target.checked });
+      };    
+    
+    
+    const handleClose = () => {
+        setOpen(false);
+      };
 
+    const handleAdd = () => {
+        
+        setOpen(false);
+    }
 
     useEffect(() => {
         props.getRequestsAction();
@@ -79,20 +118,20 @@ function Requests(props) {
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                            {rows.map((row) => (
-                                <TableRow key={row.name}>
+                            {props.requests.map( row => (
+                                <TableRow key={row.id}>
                                 <TableCell component="th" scope="row">
-                                    {row.name}
+                                    {row.id}
                                 </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-
+                        <TableCell align="right">{row.commonName}</TableCell>
+                        <TableCell align="right">{row.countryName}</TableCell>
+                        <TableCell align="right">{row.organization}</TableCell>
+                        <TableCell align="right">{row.organizationUnitName}</TableCell>
+                        <TableCell align="right">{row.stateName}</TableCell>
+                        <TableCell align="right">{row.localityName}</TableCell>
+                        <TableCell align="right">{row.email}</TableCell>
+                        <TableCell align="right"><Button variant='outlined' color='primary' onClick={() => {setOpen(true); setState({...initialState, requestId:row.id})}}>ADD</Button></TableCell>
+                        
                             </TableRow>
                             ))}
                         </TableBody>
@@ -100,6 +139,90 @@ function Requests(props) {
                 </TableContainer>
             </Grid>
         </Grid>
+
+
+
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Add Certificate</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Tick the options below to create the certificate.
+            If you don't know what does what mean, read the manual.
+          </DialogContentText>
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.cRLSign} onChange={handleChange} name="cRLSign"/>}
+            label="cRLSign"
+            labelPlacement="start"
+          />
+
+        <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.dataEncipherment} onChange={handleChange} name="dataEncipherment" />}
+            label="dataEncipherment"
+            labelPlacement="start"
+          />
+
+        <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.decipherOnly} onChange={handleChange} name="decipherOnly"/>}
+            label="decipherOnly"
+            labelPlacement="start"
+          />
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.digitalSignature} onChange={handleChange} name="digitalSignature"/>}
+            label="digitalSignature"
+            labelPlacement="start"
+          />
+
+
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.encipherOnly} onChange={handleChange} name="encipherOnly"/>}
+            label="encipherOnly"
+            labelPlacement="start"
+          />
+
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.keyAgreement} onChange={handleChange} name="keyAgreement"/>}
+            label="keyAgreement"
+            labelPlacement="start"
+          />
+
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.keyCertSign} onChange={handleChange} name="keyCertSign" />}
+            label="keyCertSign"
+            labelPlacement="start"
+          />
+
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.keyEncipherment} onChange={handleChange} name="keyEncipherment" />}
+            label="keyEncipherment"
+            labelPlacement="start"
+          />
+    
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" checked={state.nonRepudiation} onChange={handleChange} name="nonRepudiation"/>}
+            label="nonRepudiation"
+            labelPlacement="start"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleAdd} color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
         <Footer />
     </div >
     )
@@ -107,6 +230,7 @@ function Requests(props) {
 }
 
 const mapStateToProps = state => ({
+    requests: state.requests.requests
 });
 
 const mapDispatchToProps = {
