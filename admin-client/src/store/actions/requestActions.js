@@ -1,4 +1,4 @@
-import {GET_REQUESTS, SET_REQUESTS} from './actionTypes';
+import {GET_REQUESTS, SET_REQUESTS, REMOVE_REQUEST} from './actionTypes';
 
 
 export const getRequests = payload => ({
@@ -7,5 +7,10 @@ export const getRequests = payload => ({
 
 export const setRequests = payload => ({
     type:SET_REQUESTS,
+    payload
+})
+
+export const removeRequest = payload =>({
+    type: REMOVE_REQUEST,
     payload
 })
