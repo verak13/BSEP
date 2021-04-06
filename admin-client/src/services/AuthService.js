@@ -24,7 +24,6 @@ class AuthService extends ApiService {
     isAuthenticated = () => {
 
         const jwt = JSON.parse(localStorage.getItem('user'));
-        this.setAuthorizationHeader(jwt.accessToken);
         return jwt && jwt.accessToken ? !this.isExpired(jwt) : false
 
     }
