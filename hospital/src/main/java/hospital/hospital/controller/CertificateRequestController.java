@@ -23,7 +23,7 @@ public class CertificateRequestController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) {
+    public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) throws Exception {
 
         if (certificateRequestService.createCSR(csr)) {
             return new ResponseEntity<>(HttpStatus.OK);
