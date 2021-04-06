@@ -2,6 +2,7 @@ import axios from 'axios';
 
 class HttpService {
     constructor(options = {}) {
+        axios.defaults.headers.common['Content-Type'] = 'application/json' // for all requests
         this.client = axios.create(options);
 
     }

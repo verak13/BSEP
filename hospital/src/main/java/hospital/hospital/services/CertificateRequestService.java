@@ -19,7 +19,7 @@ public class CertificateRequestService {
     public void sendCSR(CertificateRequest csr) throws Exception {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (csr.getEmail() != user.getEmail()) {
+        if (!csr.getEmail().equals(user.getEmail())) {
             throw new Exception();
         }
         KeyPair keyPairSubject = generateKeyPair();

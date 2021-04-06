@@ -16,3 +16,16 @@ export function* getRequests(){
         yield put(push(REQUESTS));
     }
 }
+
+export function* addRequest({payload}){
+    try{
+
+        const response = yield call(requestService.addRequest, payload);
+        yield put(newSuccess("Request made."));
+
+    }catch(error){
+        console.log(error);
+        yield put(newError("Can't make request."));
+
+    }
+}

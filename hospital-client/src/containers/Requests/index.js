@@ -8,14 +8,8 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { withFormikField } from '../../utils';
 import Footer from '../../components/Footer';
-import { getRequests } from '../../store/actions/requestActions';
+import { addRequest } from '../../store/actions/requestActions';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 const useStyles = makeStyles({
     table: {
@@ -23,22 +17,31 @@ const useStyles = makeStyles({
     },
   });
 
-  
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-
-
-
+  const FormikTextField = withFormikField(TextField);
 
 function Requests(props) {
 
     const classes = useStyles();
+    const initialState = {
+        requestId: 0,
+        cRLSign: false,
+        dataEncipherment: false,
+        decipherOnly: false,
+        digitalSignature: false,
+        encipherOnly: false,
+        keyAgreement: false,
+        keyCertSign: false,
+        keyEncipherment: false,
+        nonRepudiation: false,
+      };
+
+    const handleSubmit = values => {
+       console.log({...values, id:999, userId:999});
+       props.addRequest(values);
+    }
 
 
     useEffect(() => {
-        props.getRequestsAction();
     }, []);
   
     return (
@@ -53,32 +56,133 @@ function Requests(props) {
             alignItems="center"
             style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
         >
-            <h1>Certificate Requests</h1>
+            <h1>Make Request</h1>
         <Grid md={8}>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                    <TableRow>
-                        <TableCell>Request ID</TableCell>
-                        <TableCell align="right">Common Name</TableCell>
-                        <TableCell align="right">Country</TableCell>
-                        <TableCell align="right">Organization</TableCell>
-                        <TableCell align="right">Org Unit</TableCell>
-                        <TableCell align="right">State</TableCell>
-                        <TableCell align="right">Locality</TableCell>
-                        <TableCell align="right">Email</TableCell>
-
-                        <TableCell align="right">Add Certificate</TableCell>
-
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
+        <Formik
+                initialValues={{ commonName: '', countryName: '', organization:'', organizationUnitName:'', stateName:'', localityName:'', email:''  }}
+                validationSchema={Yup.object().shape({
+                })
+                }
+                onSubmit={handleSubmit}
+            >
+                <Form >
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
                             
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                
+
+
+                        </Grid>
+                        <Grid item xs={6}>
+
+                            <Field
+                                component={FormikTextField}
+                                type="text"
+                                name="commonName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                label="Common Name"
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Field
+                                component={FormikTextField}
+                                type="text"
+                                name="countryName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                label="Country Name"
+
+                            />
+                        </Grid>
+                      
+                        <Grid item xs={6}>
+
+                            <Field
+                                component={FormikTextField}
+                                type="text"
+                                name="organization"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                label="Organization"
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Field
+                                component={FormikTextField}
+                                type="text"
+                                name="organizationUnitName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                label="Organization Unit"
+
+                            />
+                        </Grid>
+                      
+                        <Grid item xs={6}>
+
+                            <Field
+                                component={FormikTextField}
+                                type="text"
+                                name="stateName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                label="State Name"
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Field
+                                component={FormikTextField}
+                                type="text"
+                                name="localityName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                label="Locality Name"
+
+                            />
+                        </Grid>
+
+
+                        <Grid item xs={12}>
+
+                            <Field
+                                component={FormikTextField}
+                                type="email"
+                                name="email"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                label="Email"
+                            />
+                        </Grid>
+    
+                      
+
+
+                        
+                        <Grid container justify='center' style={{ margin: '10px 0px' }}>
+                            <Button variant='contained' color='primary' type="submit">Make Request</Button>
+                               
+
+                        </Grid>
+                    </Grid>
+                </Form>
+            </Formik>
+            
             </Grid>
         </Grid>
+
+
+
+       
+
+
         <Footer />
     </div >
     )
@@ -86,10 +190,11 @@ function Requests(props) {
 }
 
 const mapStateToProps = state => ({
+    requests: state.requests.requests
 });
 
 const mapDispatchToProps = {
-    getRequestsAction: getRequests,
+  addRequest
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Requests);

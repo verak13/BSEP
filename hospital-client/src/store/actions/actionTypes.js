@@ -9,3 +9,4 @@ export const RESET_MESSAGE = 'RESET_MESSAGE';
 
 export const GET_REQUESTS = 'GET_REQUESTS';
 export const SET_REQUESTS = 'SET_REQUESTS';
+export const ADD_REQUEST = 'ADD_REQUEST';

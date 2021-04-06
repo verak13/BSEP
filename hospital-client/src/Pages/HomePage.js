@@ -26,7 +26,7 @@ export default function HomePage(props) {
                     </Grid>
                     <Grid item xs={10} md={6} lg={4}>
                         <Typography variant='h6' style={{ color: 'white', margin: '30px 0' }}>
-                            Who are we? The Hospital Welcome.
+                        <span style={{ color: '#050A30' }}> Who are we? The Hospital. Welcome. </span>
                     </Typography>
 
 

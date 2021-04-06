@@ -25,7 +25,6 @@ import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
-import { CERTIFICATES } from '../assets/routes';
 import { REQUESTS } from '../routes';
 
 const drawerWidth = 240;
@@ -125,7 +124,7 @@ function NavBar(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap onClick={() => props.history.push('/')}>
-                        Admin Panel
+                        The Hospital
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -147,15 +146,11 @@ function NavBar(props) {
 
 
                 {props.isAuthenticated ? <>
-                    <List>
-                        <ListItem onClick={() => props.history.push(CERTIFICATES)} button key={'Certificates'}>
-                            <ListItemIcon><AddCircle /></ListItemIcon>
-                            <ListItemText primary={'Certificates'} />
-                        </ListItem>
+                    <List>                        
 
                         <ListItem onClick={() => props.history.push(REQUESTS)} button key={'Requests'}>
                             <ListItemIcon><AddCircle /></ListItemIcon>
-                            <ListItemText primary={'Requests'} />
+                            <ListItemText primary={'Add Request'} />
                         </ListItem>
 
 

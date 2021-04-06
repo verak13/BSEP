@@ -48,7 +48,7 @@ public class CertificateController {
     }
 
 	@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
-    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> revokeCertificate(@Valid @RequestBody RevokeCertificateDTO revokeCertificateDTO) {
 
         //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -64,7 +64,7 @@ public class CertificateController {
     }
     
 	@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
-    @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ArrayList<CertificateDTO>> readAllCertificates() {
 
         //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

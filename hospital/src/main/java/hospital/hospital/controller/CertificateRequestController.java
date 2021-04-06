@@ -22,7 +22,7 @@ public class CertificateRequestController {
     CertificateRequestService certificateRequestService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) {
 
         try {
