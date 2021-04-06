@@ -1,84 +1,67 @@
 package hospital.hospital.services;
 
+import hospital.hospital.dto.CertificateRequestDTO;
 import hospital.hospital.model.CertificateRequest;
-import hospital.hospital.model.SubjectData;
 import hospital.hospital.model.User;
-import org.bouncycastle.asn1.x500.X500NameBuilder;
-import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import javax.security.auth.Subject;
+import org.springframework.web.client.RestTemplate;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.text.ParseException;
+
+import hospital.hospital.helper.RSA;
 
 @Service
 public class CertificateRequestService {
 
 
-    public void sendCSR(CertificateRequest csr) throws Exception {
+    public boolean createCSR(CertificateRequest csr) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (csr.getEmail() != user.getEmail()) {
-            throw new Exception();
+        if (!csr.getEmail().equals(user.getEmail())) {
+            return false;
         }
-        KeyPair keyPairSubject = generateKeyPair();
+        RSA rsa = new RSA();
+        KeyPair keyPair = rsa.generateKeys();
 
-        //generisi subjectdata
-        SubjectData subjectData = generateSubjectData(csr, user, keyPairSubject.getPublic());
+        String publicKeyEncoded = rsa.encodePublicKey(keyPair.getPublic());
+        csr.setPublicKey(publicKeyEncoded);
 
-        //hesiraj dokument ovo nekako treba u bytearr da ide
-//        byte[] dataHash = hash(subjectData);
+        byte[] hashedCSR = hash(csr.serializeObject().getBytes(StandardCharsets.UTF_8));
+        byte[] cipher = signCSR(hashedCSR, rsa, keyPair.getPrivate());
 
-        //kodira se sve sa private keyem
-        //digitalno potpisivanje
+        CertificateRequestDTO request = new CertificateRequestDTO(csr);
+        request.setEncodedHash(cipher);
 
-        //posalji ga preko rest templejta -lako
-
-        //proveri odg -tjt
-    } 
-
-
-    private SubjectData generateSubjectData(CertificateRequest csr, User user, PublicKey key) {
-
-
-        // klasa X500NameBuilder pravi X500Name objekat koji predstavlja podatke o vlasniku
-        X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
-        builder.addRDN(BCStyle.CN, csr.getCommonName());
-        builder.addRDN(BCStyle.SURNAME, user.getLastName());
-        builder.addRDN(BCStyle.GIVENNAME, user.getFirstName());
-        builder.addRDN(BCStyle.O, csr.getOrganization());
-        builder.addRDN(BCStyle.OU, csr.getOrganizationUnitName());
-        builder.addRDN(BCStyle.C, csr.getCountryName());
-        builder.addRDN(BCStyle.E, csr.getEmail());
-
-        // UID (USER ID) je ID korisnika
-        builder.addRDN(BCStyle.UID, user.getId().toString());
-
-        return new SubjectData(key, builder.build());
+        return sendRequest(request);
     }
-    
-    private KeyPair generateKeyPair() {
-        try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-            keyGen.initialize(2048, random);
-            return keyGen.generateKeyPair();
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+    public boolean sendRequest(CertificateRequestDTO csr) {
+        String urlCA = "http://localhost:8080//certificate-request/send-certificate-request";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<CertificateRequestDTO> request = new HttpEntity<>(csr);
+        ResponseEntity<?> response = restTemplate.exchange(urlCA,
+                HttpMethod.POST, request, CertificateRequestDTO.class);
+
+        return response.getStatusCode() == HttpStatus.OK;
     }
 
 
-    public byte[] hash(String data) {
+    public byte[] hash(byte[] data) {
         // Kao hes funkcija koristi SHA-256
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            return sha256.digest(data.getBytes());
+            return sha256.digest(data);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public byte[] signCSR(byte[] hash, RSA rsa, PrivateKey privateKey) {
+        return rsa.encrypt(hash, privateKey);
     }
 }

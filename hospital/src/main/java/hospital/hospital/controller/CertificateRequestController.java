@@ -25,12 +25,10 @@ public class CertificateRequestController {
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) {
 
-        try {
-            certificateRequestService.sendCSR(csr);
+        if (certificateRequestService.createCSR(csr)) {
             return new ResponseEntity<>(HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

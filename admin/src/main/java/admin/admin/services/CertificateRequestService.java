@@ -1,15 +1,8 @@
 package admin.admin.services;
 
-import org.apache.commons.codec.DecoderException;
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.x500.RDN;
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
+import admin.admin.dto.CertificateRequestDTO;
+import admin.admin.helper.RSA;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.apache.commons.codec.binary.Hex;
 import org.springframework.stereotype.Service;
 
 import admin.admin.keystore.KeyStoreReader;
@@ -17,16 +10,14 @@ import admin.admin.model.CertificateRequest;
 import admin.admin.repository.CertificateRequestRepository;
 
 import java.io.IOException;
-import java.security.PrivateKey;
+import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.xml.bind.DatatypeConverter;
 import java.security.*;
 
 @Service
@@ -66,9 +57,47 @@ public class CertificateRequestService {
 
 	}
 
-	public boolean createCertificateRequest(byte[] encryptedCSR) throws IOException {
+	public boolean createCertificateRequest(CertificateRequestDTO encryptedCSR) throws IOException {
+		RSA rsa = new RSA();
+		PublicKey publicKey = decodePublicKey(encryptedCSR.getCsr().getPublicKey());
+		byte[] decryptedHash = rsa.decrypt(encryptedCSR.getEncodedHash(), publicKey);
+		byte[] hashed = hash((encryptedCSR.getCsr().serializeObject()).getBytes(StandardCharsets.UTF_8));
+		if(!checkHash(hashed, decryptedHash)) {
+			return false;
+		}
 
 		return true;
+	}
+
+	private PublicKey decodePublicKey(String encodedKey) {
+
+		KeyFactory keyFactory = null;
+		try {
+			keyFactory = KeyFactory.getInstance("RSA");
+			byte[] decoded = DatatypeConverter.parseBase64Binary(encodedKey);
+			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoded);
+
+			return (RSAPublicKey) keyFactory.generatePublic(keySpec);
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	public byte[] hash(byte[] data) {
+		// Kao hes funkcija koristi SHA-256
+		try {
+			MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			return sha256.digest(data);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public boolean checkHash(byte[] receivedHash, byte[] hashed) {
+		return Arrays.equals(receivedHash, hashed);
 	}
 
 }
