@@ -12,6 +12,7 @@ import admin.admin.model.CertificateDTO;
 import admin.admin.model.CertificateRequest;
 import admin.admin.model.IssuerData;
 import admin.admin.model.KeyUsageDTO;
+import admin.admin.model.RevokeCertificateDTO;
 import admin.admin.model.SubjectData;
 
 import org.bouncycastle.asn1.x500.X500Name;
@@ -102,6 +103,28 @@ public class CertificateService {
     	Security.addProvider(new BouncyCastleProvider());
         createRootCA();
     }
+    
+    private void createCRL(PrivateKey pk, X500Name issuerName) throws CRLException, IOException, OperatorCreationException {
+        X509v2CRLBuilder crlBuilder = new X509v2CRLBuilder(issuerName, new Date());
+        //crlBuilder.setNextUpdate(new Date(System.currentTimeMillis() + 86400 * 1000));
+
+        JcaContentSignerBuilder contentSignerBuilder = new JcaContentSignerBuilder("SHA256WithRSA");
+        contentSignerBuilder.setProvider("BC");
+
+        X509CRLHolder crlHolder = crlBuilder.build(contentSignerBuilder.build(pk));
+        JcaX509CRLConverter converter = new JcaX509CRLConverter();
+        converter.setProvider("BC");
+
+        X509CRL crl = converter.getCRL(crlHolder);
+
+        byte[] bytes = crl.getEncoded();
+
+
+        OutputStream os = new FileOutputStream("src/main/resources/adminCRLs.crl");
+        os.write(bytes);
+        os.close();
+    }
+
 
     public void createAdminCertificate(CertificateCreationDTO certificateCreationDTO, String issuerAlias) throws OperatorCreationException, CertificateException {
 
@@ -222,8 +245,16 @@ public class CertificateService {
 
         X509Certificate createdCertificate = certConverter.getCertificate(certHolder);
 
-        keyStoreWriter.writeRootCA("super.admin@admin.com", keyPair.getPrivate(), createdCertificate);
+        keyStoreWriter.writeRootCA("superadmin@admin.com", keyPair.getPrivate(), createdCertificate);
         keyStoreWriter.saveKeyStore();
+        
+        createCRL(keyPair.getPrivate(), rootCertIssuer);
+        
+        System.out.println(isRevoked(createdCertificate));
+        
+        revokeCertificate(new RevokeCertificateDTO("superadmin@admin.com", "UNSPECIFIED"), "superadmin@admin.com");
+        
+        System.out.println(isRevoked(createdCertificate));
     }
     
     
@@ -277,6 +308,103 @@ public class CertificateService {
 
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public void revokeCertificate(RevokeCertificateDTO revokeCertificateDTO, String issuerAlias) throws IOException, CRLException, OperatorCreationException, CertificateEncodingException {
+
+        File file = new File("src/main/resources/adminCRLs.crl");
+
+        byte[] bytes = Files.readAllBytes(file.toPath());
+
+
+        X509CRLHolder holder = new X509CRLHolder(bytes);
+        X509v2CRLBuilder crlBuilder = new X509v2CRLBuilder(holder);
+
+        Certificate cer = keyStoreReader.readCertificate(revokeCertificateDTO.getSubjectAlias());
+        JcaX509CertificateHolder certHolder = new JcaX509CertificateHolder((X509Certificate) cer);
+
+        crlBuilder.addCRLEntry(certHolder.getSerialNumber()/*The serial number of the revoked certificate*/, new Date() /*Revocation time*/, RevocationReason.valueOf(revokeCertificateDTO.getRevocationReason()).ordinal() /*Reason for cancellation*/);
+
+
+        JcaContentSignerBuilder contentSignerBuilder = new JcaContentSignerBuilder("SHA256WithRSA");
+        contentSignerBuilder.setProvider("BC");
+
+
+        IssuerData issuer = keyStoreReader.readIssuerFromStore(issuerAlias);
+
+        X509CRLHolder crlHolder = crlBuilder.build(contentSignerBuilder.build(issuer.getPrivateKey()));
+        JcaX509CRLConverter converter = new JcaX509CRLConverter();
+        converter.setProvider("BC");
+
+        X509CRL crl = converter.getCRL(crlHolder);
+
+        bytes = crl.getEncoded();
+
+
+        OutputStream os = new FileOutputStream("src/main/resources/adminCRLs.crl");
+        os.write(bytes);
+        os.close();
+    }
+    
+    
+    public boolean isRevoked(Certificate cer) throws IOException, CertificateException, CRLException {
+
+        CertificateFactory factory = CertificateFactory.getInstance("X.509");
+
+        File file = new File("src/main/resources/adminCRLs.crl");
+
+        byte[] bytes = Files.readAllBytes(file.toPath());
+        X509CRL crl = (X509CRL) factory.generateCRL(new ByteArrayInputStream(bytes));
+
+        return crl.isRevoked(cer);
+    }
+    
+    
+    public boolean isCertificateValid(Certificate[] chain) throws CertificateException, CRLException, IOException {
+    	
+        X509Certificate cert;
+        for (int i = 0; i < chain.length; i++) {
+            cert = (X509Certificate) chain[i];
+
+            if (isRevoked(cert)) {
+                return false;
+            }
+
+            Date now = new Date();
+
+            if (now.after(cert.getNotAfter()) || now.before(cert.getNotBefore())) {
+                return false;
+            }
+
+            try {
+                if (i == chain.length - 1) {
+                	try {
+                        cert.verify(cert.getPublicKey());
+                        return true;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }
+                X509Certificate issuer = (X509Certificate) chain[i + 1];
+                cert.verify(issuer.getPublicKey());
+            } catch (SignatureException | InvalidKeyException e) {
+                return false;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+    
 
     
     
@@ -284,6 +412,19 @@ public class CertificateService {
     
     
     
-    
+    public enum RevocationReason {
+
+        UNSPECIFIED,
+        KEY_COMPROMISE,
+        CA_COMPROMISE,
+        AFFILIATION_CHANGED,
+        SUPERSEDED,
+        CESSATION_OF_OPERATION,
+        CERTIFICATE_HOLD,
+        REMOVE_FROM_CRL,
+        PRIVILEGE_WITHDRAWN,
+        AA_COMPROMISE
+
+    }
 
 }

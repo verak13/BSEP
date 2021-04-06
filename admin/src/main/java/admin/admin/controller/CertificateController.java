@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import admin.admin.model.CertificateCreationDTO;
+import admin.admin.model.RevokeCertificateDTO;
 import admin.admin.services.CertificateRequestService;
 import admin.admin.services.CertificateService;
 
@@ -29,7 +30,7 @@ public class CertificateController {
         //Admin loggedIn = (Admin) authentication.getPrincipal();
 
         try {
-            certificateService.createAdminCertificate(certificateCreationDTO, "hospitalAdmin");
+            certificateService.createAdminCertificate(certificateCreationDTO, "superadmin@admin.com");
             certificateRequestService.delete(certificateCreationDTO.getRequestID());
             return new ResponseEntity<>(HttpStatus.CREATED);
 
@@ -39,7 +40,20 @@ public class CertificateController {
     }
 
 
-	
+    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> revokeCertificate(@Valid @RequestBody RevokeCertificateDTO revokeCertificateDTO) {
+
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //Admin loggedIn = (Admin) authentication.getPrincipal();
+
+        try {
+            certificateService.revokeCertificate(revokeCertificateDTO, "superadmin@admin.com");
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
 	
 	
 	
