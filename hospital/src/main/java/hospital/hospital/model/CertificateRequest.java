@@ -1,10 +1,11 @@
 package hospital.hospital.model;
+import java.io.Serializable;
 
-import javax.persistence.*;
-
-public class CertificateRequest {
+public class CertificateRequest implements Serializable {
 	
     private int id;
+
+	private String publicKeyEncoded;
 
     private String commonName;
     
@@ -94,8 +95,16 @@ public class CertificateRequest {
 		this.email = email;
 	}
 
+	public String getPublicKey() {
+		return publicKeyEncoded;
+	}
+
+	public void setPublicKey(String publicKey) {
+		this.publicKeyEncoded = publicKey;
+	}
+
 	public CertificateRequest(int id, String commonName, String countryName, String organization,
-			String organizationUnitName, String stateName, String localityName, String email) {
+							  String organizationUnitName, String stateName, String localityName, String email, String publicKey) {
 		super();
 		this.id = id;
 		this.commonName = commonName;
@@ -105,6 +114,7 @@ public class CertificateRequest {
 		this.stateName = stateName;
 		this.localityName = localityName;
 		this.email = email;
+		this.publicKeyEncoded = publicKey;
 	}
 	
 	public CertificateRequest(String commonName, String countryName, String organization,
@@ -121,7 +131,20 @@ public class CertificateRequest {
 	}
 	
 	public CertificateRequest() {}
-    
-    
+
+	public String serializeObject() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.id);
+		sb.append(this.getEmail());
+		sb.append(this.getUserId());
+		sb.append(this.getCommonName());
+		sb.append(this.getCountryName());
+		sb.append(this.getLocalityName());
+		sb.append(this.getOrganization());
+		sb.append(this.getOrganizationUnitName());
+		sb.append(this.getStateName());
+
+		return sb.toString();
+	}
 
 }

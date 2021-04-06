@@ -1,4 +1,5 @@
 package admin.admin.controller;
+import admin.admin.dto.CertificateRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -6,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import admin.admin.model.CertificateDTO;
 import admin.admin.model.CertificateRequest;
 import admin.admin.services.CertificateRequestService;
 
@@ -18,21 +18,20 @@ public class CertificateRequestController {
 
     @Autowired
     CertificateRequestService certificateRequestService;
-    
-    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
-    @RequestMapping(value = "/send-certificate-request", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendCertificateRequest(@RequestBody CertificateRequest cr) {
+
+    @RequestMapping(value = "/send-certificate-request", method = RequestMethod.POST)
+    public ResponseEntity<?> sendCertificateRequest(@RequestBody CertificateRequestDTO encryptedCSR) {
 
         try {
-            boolean success = certificateRequestService.createCertificateRequest(cr);
-
-            if (success)
+            boolean success = certificateRequestService.createCertificateRequest(encryptedCSR);
+            if (success) {
                 return new ResponseEntity<>(HttpStatus.OK);
-
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
