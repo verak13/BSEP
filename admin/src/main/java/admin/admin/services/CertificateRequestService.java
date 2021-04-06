@@ -1,4 +1,5 @@
 package admin.admin.services;
+
 import org.apache.commons.codec.DecoderException;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.RDN;
@@ -31,50 +32,43 @@ import java.security.*;
 @Service
 public class CertificateRequestService {
 
-    @Autowired
-    CertificateRequestRepository certificateRequestRepository;
+	@Autowired
+	CertificateRequestRepository certificateRequestRepository;
 
-    @Autowired
-    KeyStoreReader keyStoreReader;
+	@Autowired
+	KeyStoreReader keyStoreReader;
 
-
-    public List<CertificateRequest> findAll() {
-        return certificateRequestRepository.findAll();
-    }
-
-    public CertificateRequest findOne(int id) {
-        return certificateRequestRepository.findById(id).orElse(null);
-    }
-
-    public CertificateRequest saveOne(CertificateRequest entity) {
-    	CertificateRequest request = certificateRequestRepository.findByUserId(entity.getUserId());
-
-    	if (request != null)
-    		return certificateRequestRepository.save(entity);
-    	else
-    		return null;
-
-    }
-
-    public boolean delete(int id) {
-    	CertificateRequest cerRequestInfo = findOne(id);
-        if (cerRequestInfo != null) {
-        	certificateRequestRepository.delete(cerRequestInfo);
-            return true;
-        }
-        return false;
-
-    }
-    
-    
-    
-    
-    
-    
-    public boolean createCertificateRequest(byte[] encryptedCSR) throws IOException {
-
-	    return true;
+	public List<CertificateRequest> findAll() {
+		return certificateRequestRepository.findAll();
 	}
-	
-	
+
+	public CertificateRequest findOne(int id) {
+		return certificateRequestRepository.findById(id).orElse(null);
+	}
+
+	public CertificateRequest saveOne(CertificateRequest entity) {
+		CertificateRequest request = certificateRequestRepository.findByUserId(entity.getUserId());
+
+		if (request != null)
+			return certificateRequestRepository.save(entity);
+		else
+			return null;
+
+	}
+
+	public boolean delete(int id) {
+		CertificateRequest request = findOne(id);
+		if (request != null) {
+			certificateRequestRepository.delete(request);
+			return true;
+		}
+		return false;
+
+	}
+
+	public boolean createCertificateRequest(byte[] encryptedCSR) throws IOException {
+
+		return true;
+	}
+
 }

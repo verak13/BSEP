@@ -11,6 +11,12 @@ public class CertificateDTO {
 
     private boolean isCA;
     
+	private boolean revoked;
+
+    private String revocationReason;
+
+    private List<CertificateDTO> certificates;
+    
     public CertificateDTO(String commonName, String email, boolean isCA, Boolean revoked, String revocationReason) {
 		super();
 		this.commonName = commonName;
@@ -37,11 +43,6 @@ public class CertificateDTO {
 		this.revocationReason = revocationReason;
 	}
 
-	private Boolean revoked;
-
-    private String revocationReason;
-
-    private List<CertificateDTO> certificates;
 
 	public String getCommonName() {
 		return commonName;

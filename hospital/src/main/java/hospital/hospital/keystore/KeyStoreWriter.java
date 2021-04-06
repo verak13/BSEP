@@ -53,22 +53,6 @@ public class KeyStoreWriter {
         }
     }
 
-    public boolean loadKeyStore() {
-        try {
-            if (file != null) {
-                keyStore.load(new FileInputStream(file), password);
-                return true;
-            } else {
-                // Ako je cilj kreirati novi KeyStore poziva se i dalje load, pri cemu je prvi parametar null
-                keyStore.load(null, password);
-                return false;
-            }
-        } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public void saveKeyStore() {
         try {
             keyStore.store(new FileOutputStream(file), password);

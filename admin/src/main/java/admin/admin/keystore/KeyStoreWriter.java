@@ -1,5 +1,6 @@
 package admin.admin.keystore;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -52,21 +53,13 @@ public class KeyStoreWriter {
             e.printStackTrace();
         }
     }
-
-    public boolean loadKeyStore() {
-        try {
-            if (file != null) {
-                keyStore.load(new FileInputStream(file), password);
-                return true;
-            } else {
-                // Ako je cilj kreirati novi KeyStore poziva se i dalje load, pri cemu je prvi parametar null
-                keyStore.load(null, password);
-                return false;
-            }
-        } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+    
+    public boolean keyStoreExists() {
+    	File f = new File(file);
+    	if(f.exists()) {
+    		return true;
+    	}
+    	return false;
     }
 
     public void saveKeyStore() {

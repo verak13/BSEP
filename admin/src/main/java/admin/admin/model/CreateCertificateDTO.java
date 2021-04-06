@@ -1,6 +1,6 @@
 package admin.admin.model;
 
-public class CertificateCreationDTO {
+public class CreateCertificateDTO {
 	
     private int requestId;
 
@@ -22,13 +22,13 @@ public class CertificateCreationDTO {
 		this.keyUsageDTO = keyUsageDTO;
 	}
 
-	public CertificateCreationDTO(int requestId, KeyUsageDTO keyUsageDTO) {
+	public CreateCertificateDTO(int requestId, KeyUsageDTO keyUsageDTO) {
 		super();
 		this.requestId = requestId;
 		this.keyUsageDTO = keyUsageDTO;
 	}
 	
-	public CertificateCreationDTO() {}
+	public CreateCertificateDTO() {}
 
     
 }

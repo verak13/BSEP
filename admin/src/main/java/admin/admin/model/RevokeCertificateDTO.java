@@ -2,31 +2,31 @@ package admin.admin.model;
 
 public class RevokeCertificateDTO {
 
-    private String subjectAlias;
+    private String alias;
 
-    private String revocationReason;
+    private String reason;
 
     public RevokeCertificateDTO() {
     }
 
-    public RevokeCertificateDTO(String subjectAlias, String revocationReason) {
-        this.subjectAlias = subjectAlias;
-        this.revocationReason = revocationReason;
+    public RevokeCertificateDTO(String alias, String reason) {
+        this.alias = alias;
+        this.reason = reason;
     }
 
-    public String getSubjectAlias() {
-        return subjectAlias;
+    public String getAlias() {
+        return alias;
     }
 
-    public void setSubjectAlias(String subjectAlias) {
-        this.subjectAlias = subjectAlias;
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
-    public String getRevocationReason() {
-        return revocationReason;
+    public String getReason() {
+        return reason;
     }
 
-    public void setRevocationReason(String revocationReason) {
-        this.revocationReason = revocationReason;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

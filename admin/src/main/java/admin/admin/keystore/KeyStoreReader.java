@@ -13,7 +13,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
+import java.util.Enumeration;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -73,14 +73,8 @@ public class KeyStoreReader {
         return null;
     }
 
-    /**
-     * Ucitava sertifikat is KS fajla
-     */
     public Certificate readCertificate(String alias) {
         try {
-            // kreiramo instancu KeyStore
-            //KeyStore ks = KeyStore.getInstance("JKS", "SUN");
-            // ucitavamo podatke
             BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
             keyStore.load(in, password);
 
@@ -95,9 +89,6 @@ public class KeyStoreReader {
         return null;
     }
 
-    /**
-     * Ucitava privatni kljuc is KS fajla
-     */
     public PrivateKey readPrivateKey(String alias) {
         try {
             // kreiramo instancu KeyStore
@@ -130,6 +121,18 @@ public class KeyStoreReader {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public Enumeration<String> readAliases() {
+    	 try {
+             BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+             keyStore.load(in, password);
+             return keyStore.aliases();
+           
+         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
+             e.printStackTrace();
+         }
+         return null;
     }
 
 }

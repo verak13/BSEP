@@ -2,36 +2,24 @@ package hospital.hospital.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "requests")
 public class CertificateRequest {
 	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "commonName", unique = false, nullable = false)
     private String commonName;
     
-    @Column(name = "countryName", unique = false, nullable = false)
     private String countryName;
     
-    @Column(name = "organization", unique = false, nullable = false)
     private String organization;
     
-    @Column(name = "organizationUnitName", unique = false, nullable = false)
     private String organizationUnitName;
     
-    @Column(name = "stateName", unique = false, nullable = false)
     private String stateName;
     
-    @Column(name = "localityName", unique = false, nullable = false)
     private String localityName;
     
-    @Column(name = "email", unique = false, nullable = false)
     private String email;
     
-    @Column(name = "userId", unique = false, nullable = false)
     private int userId;
 
 	public int getUserId() {
