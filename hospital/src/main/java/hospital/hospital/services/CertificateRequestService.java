@@ -24,6 +24,7 @@ public class CertificateRequestService {
         if (!csr.getEmail().equals(user.getEmail())) {
             return false;
         }
+        csr.setUserId(Math.toIntExact(user.getId()));
         RSA rsa = new RSA();
         KeyPair keyPair = rsa.generateKeys();
 

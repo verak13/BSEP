@@ -40,8 +40,9 @@ public class CertificateRequestService {
 	public CertificateRequest saveOne(CertificateRequest entity) {
 		CertificateRequest request = certificateRequestRepository.findByUserId(entity.getUserId());
 
-		if (request != null)
+		if (request == null) {
 			return certificateRequestRepository.save(entity);
+		}
 		else
 			return null;
 
@@ -65,6 +66,12 @@ public class CertificateRequestService {
 		if(!checkHash(hashed, decryptedHash)) {
 			return false;
 		}
+		try {
+			saveOne(encryptedCSR.getCsr());
+		} catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 
 		return true;
 	}
@@ -83,8 +90,7 @@ public class CertificateRequestService {
 			return null;
 		}
 	}
-
-
+	
 	public byte[] hash(byte[] data) {
 		// Kao hes funkcija koristi SHA-256
 		try {

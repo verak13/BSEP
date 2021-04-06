@@ -1,5 +1,6 @@
 package admin.admin.controller;
 
+import org.bouncycastle.operator.OperatorCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import admin.admin.model.RevokeCertificateDTO;
 import admin.admin.services.CertificateRequestService;
 import admin.admin.services.CertificateService;
 
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +32,15 @@ public class CertificateController {
 	
 	@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createCertificate(@Valid @RequestBody CreateCertificateDTO certificateCreationDTO) {
-
+    public ResponseEntity<?> createCertificate(@Valid @RequestBody CreateCertificateDTO certificateCreationDTO) throws OperatorCreationException, CertificateException {
+		
         try {
-            certificateService.createAdminCertificate(certificateCreationDTO, "superadmin@admin.com");
-            certificateRequestService.delete(certificateCreationDTO.getRequestID());
-            return new ResponseEntity<>(HttpStatus.CREATED);
+	        if (certificateService.createAdminCertificate(certificateCreationDTO, "superadmin@admin.com")) {
+	        	certificateRequestService.delete(certificateCreationDTO.getRequestId());
+		        return new ResponseEntity<>(HttpStatus.CREATED);
+	        } else {
+	            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	        }
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -35,7 +35,7 @@ public class CertificateRequestController {
     }
 
     @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
-    @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<CertificateRequest>> getCertificateRequests() {
 
         List<CertificateRequest> reqs = certificateRequestService.findAll();
@@ -44,7 +44,7 @@ public class CertificateRequestController {
     }
 
     @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeCertificateRequest(@PathVariable Integer id) {
 
         if (certificateRequestService.delete(id)) {

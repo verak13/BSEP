@@ -35,6 +35,7 @@ public class CertificateRequest implements Serializable  {
     @Column(name = "userId", unique = false, nullable = false)
     private int userId;
 
+    @Transient
     private String publicKeyEncoded;
 
 	public int getUserId() {
