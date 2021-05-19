@@ -24,9 +24,9 @@ import Settings from '@material-ui/icons/Settings';
 import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
-import { logoutAction } from '../store/actions/authActions';
+import PersonIcon from '@material-ui/icons/Person';
 import { CERTIFICATES } from '../assets/routes';
-import { REQUESTS } from '../routes';
+import { REQUESTS, USERS } from '../routes';
 
 const drawerWidth = 240;
 
@@ -158,8 +158,10 @@ function NavBar(props) {
                             <ListItemIcon><AddCircle /></ListItemIcon>
                             <ListItemText primary={'Requests'} />
                         </ListItem>
-
-
+                        <ListItem onClick={() => props.history.push(USERS)} button key={'Users'}>
+                            <ListItemIcon><PersonIcon /></ListItemIcon>
+                            <ListItemText primary={'Users'} />
+                        </ListItem>
                     </List>
                     <Divider />
                     <List>
