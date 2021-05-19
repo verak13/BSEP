@@ -34,7 +34,7 @@ public class CertificateRequestController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<CertificateRequest>> getCertificateRequests() {
 
@@ -43,7 +43,7 @@ public class CertificateRequestController {
 
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeCertificateRequest(@PathVariable Integer id) {
 

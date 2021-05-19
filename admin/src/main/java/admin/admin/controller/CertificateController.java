@@ -1,11 +1,15 @@
 package admin.admin.controller;
 
+import admin.admin.model.User;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.keycloak.KeycloakPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import admin.admin.model.CreateCertificateDTO;
@@ -30,7 +34,7 @@ public class CertificateController {
 	@Autowired
     CertificateRequestService certificateRequestService;
 	
-	@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+	@PreAuthorize("hasRole('SUPER_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createCertificate(@Valid @RequestBody CreateCertificateDTO certificateCreationDTO) throws OperatorCreationException, CertificateException {
 		
@@ -46,8 +50,7 @@ public class CertificateController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-	@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+	@PreAuthorize("hasRole('SUPER_ADMIN')")
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> revokeCertificate(@Valid @RequestBody RevokeCertificateDTO revokeCertificateDTO) {
 
@@ -62,13 +65,14 @@ public class CertificateController {
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
-    
-	@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+
+	@PreAuthorize("hasRole('SUPER_ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ArrayList<CertificateDTO>> readAllCertificates() {
 
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //User loggedIn = (User) authentication.getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        KeycloakPrincipal keycloakUser = (KeycloakPrincipal) authentication.getPrincipal();
+
 
     	ArrayList<CertificateDTO> certificates = new ArrayList<CertificateDTO>();
         try {
