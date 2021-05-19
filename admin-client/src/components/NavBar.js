@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import MoneyOff from '@material-ui/icons/MoneyOff';
+import { useKeycloak } from '@react-keycloak/web';
 import AddCircle from '@material-ui/icons/AddCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -94,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
 
 function NavBar(props) {
     const classes = useStyles();
+    const { keycloak } = useKeycloak();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -146,7 +147,7 @@ function NavBar(props) {
                 <Divider />
 
 
-                {props.isAuthenticated ? <>
+                {keycloak?.authenticated ? <>
                     <List>
                         <ListItem onClick={() => props.history.push(CERTIFICATES)} button key={'Certificates'}>
                             <ListItemIcon><AddCircle /></ListItemIcon>
@@ -166,7 +167,7 @@ function NavBar(props) {
 
                         
 
-                        <ListItem onClick={() => props.logout()} button key={'Log Out'}>
+                        <ListItem onClick={() => keycloak.logout()} button key={'Log Out'}>
                             <ListItemIcon><ExitToApp /></ListItemIcon>
                             <ListItemText primary={'Log Out'} />
                         </ListItem>
@@ -189,12 +190,4 @@ function NavBar(props) {
     );
 }
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
-
-const mapDispatchToProps = {
-    logout: logoutAction
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBar));
+export default withRouter(NavBar);

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'redux'
+import { useKeycloak } from '@react-keycloak/web';
 import { REQUESTS } from '../../assets/routes';
 
-function PublicRoute({ isAuthenticated, component: Component, ...rest }) {
+function PublicRoute({ component: Component, ...rest }) {
+    const { keycloak } = useKeycloak()
     return <Route   {...rest}
         render={renderProp => {
-            return isAuthenticated ? <Redirect to={REQUESTS} /> : <Component {...renderProp} />
+            return keycloak?.authenticated ? <Redirect to={REQUESTS} /> : <Component {...renderProp} />
         }}
 
 
@@ -15,10 +15,4 @@ function PublicRoute({ isAuthenticated, component: Component, ...rest }) {
 
 }
 
-const mapStateToProps = state => {
-    return {
-        isAuthenticated: state.auth.isAuthenticated,
-    }
-}
-
-export default connect(mapStateToProps)(PublicRoute);
+export default PublicRoute;

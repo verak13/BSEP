@@ -69,15 +69,14 @@ class AuthService extends ApiService {
         this.api.removeHeaders(['Authorization']);
     }
 
-    createSession = (user) => {
-        localStorage.setItem('user', JSON.stringify(user));
-        this.setAuthorizationHeader(user.accessToken);
+    createSession = token => {
+        localStorage.setItem('user', JSON.stringify(token));
+        this.setAuthorizationHeader(token);
     }
 
    
 
-    login = async payload => {
-        const { data } = await this.apiClient.post(ENDPOINTS.LOGIN, payload);
+    login = data => {
         this.createSession(data);
         return data;
     }
