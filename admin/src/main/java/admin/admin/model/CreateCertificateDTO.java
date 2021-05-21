@@ -1,5 +1,11 @@
 package admin.admin.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import org.bouncycastle.asn1.x509.KeyUsage;
 
 
@@ -15,22 +21,31 @@ public class CreateCertificateDTO {
 		this.requestId = requestId;
 	}
 
+	@NotNull
 	private boolean cRLSign;
 
+	@NotNull
     private boolean dataEncipherment;
 
+    @NotNull
     private boolean decipherOnly;
 
+    @NotNull
     private boolean digitalSignature;
 
+    @NotNull
     private boolean encipherOnly;
 
+    @NotNull
     private boolean keyAgreement;
 
+    @NotNull
     private boolean keyCertSign;
 
+    @NotNull
     private boolean keyEncipherment;
 
+    @NotNull
     private boolean nonRepudiation;
 
     public CreateCertificateDTO() {

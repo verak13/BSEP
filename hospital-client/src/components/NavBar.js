@@ -25,7 +25,7 @@ import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
-import { REQUESTS } from '../routes';
+import { REQUESTS, ADD_DOCTOR } from '../routes';
 
 const drawerWidth = 240;
 
@@ -151,6 +151,11 @@ function NavBar(props) {
                         <ListItem onClick={() => props.history.push(REQUESTS)} button key={'Requests'}>
                             <ListItemIcon><AddCircle /></ListItemIcon>
                             <ListItemText primary={'Add Request'} />
+                        </ListItem>
+
+                        <ListItem onClick={() => props.history.push(ADD_DOCTOR)} button key={'AddDoctor'}>
+                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemText primary={'Add Doctor'} />
                         </ListItem>
 
 

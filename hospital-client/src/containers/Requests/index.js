@@ -61,6 +61,37 @@ function Requests(props) {
         <Formik
                 initialValues={{ commonName: '', countryName: '', organization:'', organizationUnitName:'', stateName:'', localityName:'', email:''  }}
                 validationSchema={Yup.object().shape({
+                    email: Yup.string().email('Invalid email').required('Required'),
+                    commonName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    countryName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    organization: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    organizationUnitName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    stateName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    localityName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
                 })
                 }
                 onSubmit={handleSubmit}

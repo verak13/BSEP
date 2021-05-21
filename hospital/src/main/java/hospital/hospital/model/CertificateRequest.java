@@ -1,27 +1,63 @@
 package hospital.hospital.model;
 import java.io.Serializable;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class CertificateRequest implements Serializable {
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+	//@NotBlank(message="Field must not be empty")
+    //@Size(min=2, max=20)
+    //@Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
 	private String publicKeyEncoded;
 
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     private String commonName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     private String countryName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     private String organization;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     private String organizationUnitName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     private String stateName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     private String localityName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Email(message="Email must be valid.")
     private String email;
     
-    private int userId;
+    private Integer userId;
 
 	public int getUserId() {
 		return userId;

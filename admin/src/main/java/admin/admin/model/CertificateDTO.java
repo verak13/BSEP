@@ -13,9 +13,6 @@ public class CertificateDTO {
     
 	private boolean revoked;
 
-    //private String revocationReason;
-
-    //private List<CertificateDTO> certificates;
     
     public CertificateDTO(String commonName, String email, boolean isCA, Boolean revoked, String revocationReason) {
 		super();
@@ -23,8 +20,6 @@ public class CertificateDTO {
 		this.email = email;
 		this.isCA = isCA;
 		this.revoked = revoked;
-		//this.revocationReason = revocationReason;
-		//this.certificates = new ArrayList<>();
 	}
 
 	public Boolean getRevoked() {
@@ -68,24 +63,14 @@ public class CertificateDTO {
 		this.isCA = isCA;
 	}
 
-	/*public List<CertificateDTO> getCertificates() {
-		return certificates;
-	}
-
-	public void setCertificates(List<CertificateDTO> certificates) {
-		this.certificates = certificates;
-	}*/
-
 	public CertificateDTO(String commonName, String email, boolean isCA) {
 		super();
 		this.commonName = commonName;
 		this.email = email;
 		this.isCA = isCA;
-		//this.certificates = new ArrayList<>();
 	}
 	
 	public CertificateDTO() {
-		 //this.certificates = new ArrayList<>();
 		 this.revoked = false;
 	}
     

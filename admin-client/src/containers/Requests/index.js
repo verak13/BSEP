@@ -27,6 +27,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { addCertificate } from '../../store/actions/certificateActions';
+import { removeRequest } from '../../store/actions/requestActions';
+
+
 
 const useStyles = makeStyles({
     table: {
@@ -67,6 +70,10 @@ function Requests(props) {
     const handleAdd = () => {
         props.addCertificateAction(state);
         setOpen(false);
+    }
+
+    const handleDelete = (requestId) => {
+        props.deleteCertificateRequestAction(requestId);
     }
 
     useEffect(() => {
@@ -118,7 +125,8 @@ function Requests(props) {
                         <TableCell align="right">{row.localityName}</TableCell>
                         <TableCell align="right">{row.email}</TableCell>
                         <TableCell align="right"><Button variant='outlined' color='primary' onClick={() => {setOpen(true); setState({...initialState, requestId:row.id})}}>ADD</Button></TableCell>
-                        
+                        <TableCell align="right"><Button variant='outlined' color='primary' onClick={() => {handleDelete(row.id);}}>DELETE</Button></TableCell>
+
                             </TableRow>
                             ))}
                         </TableBody>
@@ -223,6 +231,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     getRequestsAction: getRequests,
     addCertificateAction: addCertificate,
+    deleteCertificateRequestAction: removeRequest,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Requests);
