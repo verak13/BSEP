@@ -69,7 +69,7 @@ public class CertificateController {
 
         //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //User loggedIn = (User) authentication.getPrincipal();
-
+        System.out.println("USAO");
     	ArrayList<CertificateDTO> certificates = new ArrayList<CertificateDTO>();
         try {
             certificates = certificateService.readAllCertificates();

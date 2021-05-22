@@ -232,7 +232,7 @@ public class CertificateService {
 		BigInteger serialNum = new BigInteger(Long.toString(new SecureRandom().nextLong()));
 
 		ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSAEncryption").setProvider("BC")
-				.build(keyPair.getPrivate());
+				.build(issuerData.getPrivateKey());
 		X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(issuerName, serialNum, startDate,
 				endDate, subjectData.getX500name(), keyPair.getPublic());
 
@@ -388,14 +388,20 @@ public class CertificateService {
 
 	public ArrayList<CertificateDTO> readAllCertificates() throws CertificateException, CRLException, IOException {
 		ArrayList<CertificateDTO> certificates = new ArrayList<CertificateDTO>();
+
 		Enumeration<String> aliases = keyStoreReader.readAliases();
+
 		while (aliases.hasMoreElements()) {
 			Certificate c = keyStoreReader.readCertificate(aliases.nextElement());
 			CertificateDTO certificate = new CertificateDTO();
 			JcaX509CertificateHolder certHolder = new JcaX509CertificateHolder((X509Certificate) c);
 			X500Name i = certHolder.getIssuer();
 			X500Name subject = certHolder.getSubject();
-			certificate.setEmail(IETFUtils.valueToString(subject.getRDNs(BCStyle.E)[0].getFirst().getValue()));
+			try {
+				certificate.setEmail(IETFUtils.valueToString(subject.getRDNs(BCStyle.E)[0].getFirst().getValue()));
+			}catch (Exception e){
+				certificate.setEmail("none");
+			}
 			certificate.setCommonName(IETFUtils.valueToString(subject.getRDNs(BCStyle.CN)[0].getFirst().getValue()));
 			System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
 			System.out.println(((X509Certificate) c).getBasicConstraints());
