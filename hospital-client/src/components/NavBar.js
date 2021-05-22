@@ -153,11 +153,6 @@ function NavBar(props) {
                             <ListItemText primary={'Add Request'} />
                         </ListItem>
 
-                        <ListItem onClick={() => props.history.push(ADD_DOCTOR)} button key={'AddDoctor'}>
-                            <ListItemIcon><AddCircle /></ListItemIcon>
-                            <ListItemText primary={'Add Doctor'} />
-                        </ListItem>
-
 
                     </List>
                     <Divider />

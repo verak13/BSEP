@@ -95,7 +95,19 @@
       {
         "id": "d0d7e98f-b067-4a6e-8e48-02278224d176",
         "name": "SUPER_ADMIN",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "client": {
+            "realm-management": [
+              "query-users",
+              "view-users",
+              "manage-clients",
+              "manage-realm",
+              "query-clients",
+              "manage-users"
+            ]
+          }
+        },
         "clientRole": false,
         "containerId": "admin-portal",
         "attributes": {}
@@ -317,7 +329,16 @@
       ],
       "security-admin-console": [],
       "admin-cli": [],
-      "admin-portal-client": [],
+      "admin-portal-client": [
+        {
+          "id": "c6b6693b-149a-4a42-a4a9-f92d173fb337",
+          "name": "DOCTOR",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "d4659c3b-6e62-41ff-9644-2671cd113a17",
+          "attributes": {}
+        }
+      ],
       "account-console": [],
       "broker": [
         {
@@ -466,9 +487,42 @@
       "roles": [
         "offline_access"
       ]
+    },
+    {
+      "clientScope": "roles",
+      "roles": [
+        "SUPER_ADMIN",
+        "DOCTOR"
+      ]
+    },
+    {
+      "clientScope": "role_list",
+      "roles": [
+        "SUPER_ADMIN",
+        "DOCTOR"
+      ]
     }
   ],
   "clientScopeMappings": {
+    "realm-management": [
+      {
+        "clientScope": "roles",
+        "roles": [
+          "manage-realm",
+          "manage-users",
+          "view-users",
+          "manage-clients"
+        ]
+      },
+      {
+        "clientScope": "role_list",
+        "roles": [
+          "view-realm",
+          "view-users",
+          "query-users"
+        ]
+      }
+    ],
     "account": [
       {
         "client": "account-console",
@@ -614,7 +668,7 @@
       "id": "d4659c3b-6e62-41ff-9644-2671cd113a17",
       "clientId": "admin-portal-client",
       "name": "admin-portal-client",
-      "adminUrl": "http://localhost:8081",
+      "adminUrl": "",
       "baseUrl": "http://localhost:8081",
       "surrogateAuthRequired": false,
       "enabled": true,
@@ -624,7 +678,7 @@
         "http://localhost:3000/*"
       ],
       "webOrigins": [
-        "http://localhost:3000"
+        "*"
       ],
       "notBefore": 0,
       "bearerOnly": false,
@@ -695,6 +749,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "saml.assertion.signature": "false",
+        "access.token.lifespan": "6000",
         "saml.force.post.binding": "false",
         "saml.multivalued.roles": "false",
         "saml.encrypt": "false",
@@ -1254,11 +1309,13 @@
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
           "consentRequired": false,
           "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "realm_access.roles",
-            "jsonType.label": "String",
-            "multivalued": "true"
+            "jsonType.label": "String"
           }
         },
         {

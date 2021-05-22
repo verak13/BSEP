@@ -17,7 +17,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import {  getCertificates, revokeCertificate } from '../../store/actions/certificateActions';
+import {  getUsers } from '../../store/actions/userActions';
 import RemoveUserDialog from './RemoveUserDialog';
 
 const ROLES = ["ADMIN", "DOCTOR"]
@@ -45,7 +45,7 @@ function Users(props) {
     const classes = useStyles();
 
     useEffect(() => {
-        // props.getCertificatesAction();
+        props.getUsers('DOCTOR');
 
     }, []);
 
@@ -92,7 +92,7 @@ function Users(props) {
             style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
         >
             <h1>USERS</h1>
-            <Grid md={8}>
+            <Grid>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
@@ -158,32 +158,12 @@ function Users(props) {
 
 
 const mapStateToProps = state => ({
-    users: [{
-        firstName: "ana",
-        lastName: "dada",
-        email: "neki mejl1",
-        role: "DOCTOR"
-    },
-    {
-        firstName: "ana",
-        lastName: "dada",
-        email: "neki mejl",
-        role: "DOCTOR"
-    },
-    {
-        firstName: "ana",
-        lastName: "dada",
-        email: "neki mejl22",
-        role: "ADMIN"
-    }]
+    users: state.users.all || []
 });
 
 const mapDispatchToProps = {
-    revokeCertificateAction: revokeCertificate,
-    getCertificatesAction: getCertificates,
+   getUsers: getUsers
 }
-
-
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Users);
