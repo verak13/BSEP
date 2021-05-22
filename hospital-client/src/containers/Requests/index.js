@@ -51,13 +51,12 @@ function Requests(props) {
             container
             component={Paper}
             direction="column"
-            xs={10}
-            md={10}
+            spacing={2}
             alignItems="center"
             style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
         >
             <h1>Make Request</h1>
-        <Grid md={8}>
+        <Grid>
         <Formik
                 initialValues={{ commonName: '', countryName: '', organization:'', organizationUnitName:'', stateName:'', localityName:'', email:''  }}
                 validationSchema={Yup.object().shape({

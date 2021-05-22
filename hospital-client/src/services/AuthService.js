@@ -1,6 +1,7 @@
 import jwt_decode from 'jwt-decode';
 const { default: ApiService } = require("./ApiService");
 
+
 const ENDPOINTS = {
     LOGIN: 'auth/login',
     LOGOUT: '',
@@ -69,15 +70,14 @@ class AuthService extends ApiService {
         this.api.removeHeaders(['Authorization']);
     }
 
-    createSession = (user) => {
-        localStorage.setItem('user', JSON.stringify(user));
-        this.setAuthorizationHeader(user.accessToken);
+    createSession = token => {
+        localStorage.setItem('user', JSON.stringify(token));
+        this.setAuthorizationHeader(token);
     }
 
    
 
-    login = async payload => {
-        const { data } = await this.apiClient.post(ENDPOINTS.LOGIN, payload);
+    login = data => {
         this.createSession(data);
         return data;
     }
@@ -96,6 +96,26 @@ class AuthService extends ApiService {
     getToken = () => {
         const user = localStorage.getItem('user');
         return user ? JSON.parse(user).access : undefined;
+    }
+
+    getRole = () => {
+        const jwt = JSON.parse(localStorage.getItem('user'));
+        console.log('ocvdeee')
+        console.log(jwt)
+        let decoded ;
+        let role = null;
+        try {
+
+            decoded = jwt_decode(jwt);
+            console.log(decoded)
+            role = decoded.realm_access.roles.filter(role => ['SUPER_ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR'].includes(role))[0]
+    
+        } catch (error) {
+            console.log(error)
+            return null;
+        }
+
+        return role;
     }
 }
 

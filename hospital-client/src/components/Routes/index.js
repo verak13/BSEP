@@ -12,8 +12,7 @@ export default function Routes() {
     return (
         <Switch>
             <PublicRoute path={HOME} component={HomePage} exact />
-            <PublicRoute path={LOGIN} component={LoginPage} exact />            
-            <PrivateRoute path={REQUESTS} component={Requests} exact />
+            <PrivateRoute path={REQUESTS} role='HOSPITAL_ADMIN' component={Requests} exact />
             <PrivateRoute path={ADD_DOCTOR} component={AddDoctor} exact />
         </Switch>
     )
