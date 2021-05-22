@@ -1,4 +1,4 @@
-package hospital.hospital.config;
+package admin.admin.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
