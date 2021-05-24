@@ -1,6 +1,13 @@
 package admin.admin.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import java.io.Serializable;
 
 @Entity
@@ -11,24 +18,45 @@ public class CertificateRequest implements Serializable  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     @Column(name = "commonName", unique = false, nullable = false)
     private String commonName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     @Column(name = "countryName", unique = false, nullable = false)
     private String countryName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     @Column(name = "organization", unique = false, nullable = false)
     private String organization;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     @Column(name = "organizationUnitName", unique = false, nullable = false)
     private String organizationUnitName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     @Column(name = "stateName", unique = false, nullable = false)
     private String stateName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     @Column(name = "localityName", unique = false, nullable = false)
     private String localityName;
     
+	@NotBlank(message="Field must not be empty")
+    @Size(min=2, max=20)
+    @Email(message="Email must be valid.")
     @Column(name = "email", unique = false, nullable = false)
     private String email;
     

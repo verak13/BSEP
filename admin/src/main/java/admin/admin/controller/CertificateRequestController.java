@@ -12,6 +12,8 @@ import admin.admin.services.CertificateRequestService;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/certificate-request", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CertificateRequestController {
@@ -20,7 +22,7 @@ public class CertificateRequestController {
     CertificateRequestService certificateRequestService;
 
     @RequestMapping(value = "/send-certificate-request", method = RequestMethod.POST)
-    public ResponseEntity<?> sendCertificateRequest(@RequestBody CertificateRequestDTO encryptedCSR) {
+    public ResponseEntity<?> sendCertificateRequest(@Valid @RequestBody CertificateRequestDTO encryptedCSR) {
 
         try {
             boolean success = certificateRequestService.createCertificateRequest(encryptedCSR);
@@ -34,7 +36,7 @@ public class CertificateRequestController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<CertificateRequest>> getCertificateRequests() {
 
@@ -43,9 +45,9 @@ public class CertificateRequestController {
 
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> removeCertificateRequest(@PathVariable Integer id) {
+    public ResponseEntity<?> removeCertificateRequest(@Valid @PathVariable Integer id) {
 
         if (certificateRequestService.delete(id)) {
             return new ResponseEntity<>(HttpStatus.OK);

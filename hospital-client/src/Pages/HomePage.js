@@ -31,9 +31,6 @@ export default function HomePage(props) {
 
 
                     </Grid>
-                    <Grid item xs>
-                        <Button className={classess.button} onClick={() => props.history.push(LOGIN)} variant="contained" color="secondary" >LOGIN</Button>
-                    </Grid>
                 </Grid>
 
             </div>

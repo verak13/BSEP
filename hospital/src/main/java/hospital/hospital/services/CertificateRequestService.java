@@ -20,12 +20,18 @@ public class CertificateRequestService {
 
 
     public boolean createCSR(CertificateRequest csr) throws Exception {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	//Principal user = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	
+    	/*if (authentication.getPrincipal() instanceof KeycloakPrincipal) {
+    	    KeycloakPrincipal principal = (KeycloakPrincipal) authentication.getPrincipal();
+    	    return principal.getName();*/
 
-        if (!csr.getEmail().equals(user.getEmail())) {
+        /*if (!csr.getEmail().equals(user.getEmail())) {
             throw new Exception();
-        }
-        csr.setUserId(Math.toIntExact(user.getId()));
+        }*/
+        //csr.setUserId(Math.toIntExact(user.getId()));
+    	csr.setUserId(1);
         RSA rsa = new RSA();
         KeyPair keyPair = rsa.generateKeys();
 

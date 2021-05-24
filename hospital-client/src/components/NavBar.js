@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useKeycloak } from '@react-keycloak/web';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -25,7 +26,8 @@ import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
-import { REQUESTS } from '../routes';
+import { REQUESTS, ADD_DOCTOR } from '../routes';
+import authService from '../services/AuthService';
 
 const drawerWidth = 240;
 
@@ -94,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
 function NavBar(props) {
     const classes = useStyles();
     const theme = useTheme();
+    const { keycloak } = useKeycloak();
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
@@ -145,27 +148,25 @@ function NavBar(props) {
                 <Divider />
 
 
-                {props.isAuthenticated ? <>
+                {keycloak?.authenticated && authService.getRole() === 'HOSPITAL_ADMIN' ? <>
                     <List>                        
 
                         <ListItem onClick={() => props.history.push(REQUESTS)} button key={'Requests'}>
                             <ListItemIcon><AddCircle /></ListItemIcon>
                             <ListItemText primary={'Add Request'} />
                         </ListItem>
-
-
                     </List>
                     <Divider />
+                    </>
+                : null }
+                {keycloak?.authenticated  ? <>
                     <List>
-
-
                         
-
-                        <ListItem onClick={() => props.logout()} button key={'Log Out'}>
+                        <ListItem onClick={() => keycloak.logout()} button key={'Log Out'}>
                             <ListItemIcon><ExitToApp /></ListItemIcon>
                             <ListItemText primary={'Log Out'} />
                         </ListItem>
-                    </List></> :
+                    </List> :
 
 
                     <List>
@@ -177,7 +178,8 @@ function NavBar(props) {
                         </ListItem>
 
             
-                    </List>}
+                    </List>
+                    </> : null }
             </Drawer>
 
         </div >

@@ -1,0 +1,9 @@
+{
+  "realm": "admin-portal",
+  "auth-server-url": "http://localhost:8081/auth/",
+  "ssl-required": "external",
+  "resource": "admin-portal-client",
+  "public-client": true,
+  "confidential-port": 0,
+  "clientId": "admin-portal-client"
+}

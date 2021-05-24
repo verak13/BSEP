@@ -51,16 +51,46 @@ function Requests(props) {
             container
             component={Paper}
             direction="column"
-            xs={10}
-            md={10}
+            spacing={2}
             alignItems="center"
             style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
         >
             <h1>Make Request</h1>
-        <Grid md={8}>
+        <Grid>
         <Formik
                 initialValues={{ commonName: '', countryName: '', organization:'', organizationUnitName:'', stateName:'', localityName:'', email:''  }}
                 validationSchema={Yup.object().shape({
+                    email: Yup.string().email('Invalid email').required('Required'),
+                    commonName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    countryName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    organization: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    organizationUnitName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    stateName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
+                    localityName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
+                    .matches(
+                        /^$|[a-zA-Z ]+$/,
+                        "Must Not Contain Special Characters"
+                    ),
                 })
                 }
                 onSubmit={handleSubmit}

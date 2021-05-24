@@ -231,8 +231,8 @@ public class CertificateService {
 
 		BigInteger serialNum = new BigInteger(Long.toString(new SecureRandom().nextLong()));
 
-		ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSAEncryption").setProvider("BC")
-				.build(issuerData.getPrivateKey());
+		ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSAEncryption").setProvider("BC").build(issuerData.getPrivateKey());
+
 		X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(issuerName, serialNum, startDate,
 				endDate, subjectData.getX500name(), keyPair.getPublic());
 

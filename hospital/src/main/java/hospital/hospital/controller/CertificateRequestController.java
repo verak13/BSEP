@@ -21,7 +21,7 @@ public class CertificateRequestController {
     @Autowired
     CertificateRequestService certificateRequestService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('HOSPITAL_ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) throws Exception {
 
