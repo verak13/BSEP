@@ -70,6 +70,7 @@ public class CertificateController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ArrayList<CertificateDTO>> readAllCertificates() {
 
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         KeycloakPrincipal keycloakUser = (KeycloakPrincipal) authentication.getPrincipal();
 
