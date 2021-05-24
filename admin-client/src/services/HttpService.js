@@ -16,8 +16,8 @@ class HttpService {
     }
 }
 
-const options = { baseURL: 'https://localhost:8443' };
-const keycloakOptions = { baseURL: 'http://localhost:8081/auth/admin/realms/admin-portal/' }
+const options = { baseURL: 'https://localhost:8441' };
+const keycloakOptions = { baseURL: 'https://localhost:8444/auth/admin/realms/admin-portal/' }
 
 const httpService = new HttpService(options);
 

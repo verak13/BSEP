@@ -34,7 +34,7 @@ public class ServerConfig {
         connector.setScheme("http");
         connector.setPort(8085);
         connector.setSecure(false);
-        connector.setRedirectPort(8444);
+        connector.setRedirectPort(8442);
         return connector;
     }
 }

@@ -48,7 +48,7 @@ public class CertificateRequestService {
     }
 
     public boolean sendRequest(CertificateRequestDTO csr) {
-        String urlCA = "https://localhost:8443//certificate-request/send-certificate-request";
+        String urlCA = "https://localhost:8441//certificate-request/send-certificate-request";
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<CertificateRequestDTO> request = new HttpEntity<>(csr);
         ResponseEntity<?> response = restTemplate.exchange(urlCA,
