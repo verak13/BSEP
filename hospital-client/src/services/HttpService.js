@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+
+
 class HttpService {
     constructor(options = {}) {
+    
         this.client = axios.create(options);
 
     }

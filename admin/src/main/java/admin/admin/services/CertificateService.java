@@ -405,9 +405,14 @@ public class CertificateService {
 			certificate.setCommonName(IETFUtils.valueToString(subject.getRDNs(BCStyle.CN)[0].getFirst().getValue()));
 			System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
 			System.out.println(((X509Certificate) c).getBasicConstraints());
-			System.out.println(((X509Certificate) c).getKeyUsage()[5]);
-			if (((X509Certificate) c).getBasicConstraints() != -1 || ((X509Certificate) c).getKeyUsage()[5])
-				certificate.setCA(true);
+			System.out.println(((X509Certificate) c).getKeyUsage());
+			try {
+				if (((X509Certificate) c).getBasicConstraints() != -1 || ((X509Certificate) c).getKeyUsage()[5])
+					certificate.setCA(true);
+			}catch (Exception e){
+				certificate.setCA(false);
+			}
+
 			if (isRevoked(c)) {
 				certificate.setRevoked(true);
 			}

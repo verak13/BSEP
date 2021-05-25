@@ -73,8 +73,8 @@ function Certificates(props) {
             alert("Pick a reason");
             return;
         }
-
-        props.revokeCertificateAction({alias: certID, reason});
+        const alias = certID !== "none" ? certID : "none@none.com";
+        props.revokeCertificateAction({alias: alias, reason});
         setOpen(false);
         props.getCertificatesAction();
     }

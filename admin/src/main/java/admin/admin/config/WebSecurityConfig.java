@@ -50,6 +50,13 @@ class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
+
+        http
+                .headers()
+                .xssProtection()
+                .and()
+                .contentSecurityPolicy("script-src 'self'");
+
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("*")
@@ -58,4 +65,6 @@ class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 //                .anyRequest()
                 .permitAll();
     }
+
+
 }
