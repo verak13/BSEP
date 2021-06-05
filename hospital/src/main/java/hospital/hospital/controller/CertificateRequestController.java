@@ -1,4 +1,6 @@
 package hospital.hospital.controller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +19,8 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/certificate-request", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CertificateRequestController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LogConfigController.class);
 
     @Autowired
     CertificateRequestService certificateRequestService;
@@ -26,8 +30,10 @@ public class CertificateRequestController {
     public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) throws Exception {
 
         if (certificateRequestService.createCSR(csr)) {
+        	logger.trace("New CSR created.");
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
+        	logger.error("Creating CSR failed.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
