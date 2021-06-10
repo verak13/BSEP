@@ -38,13 +38,14 @@ public class CertificateRequestService {
 	}
 
 	public CertificateRequest saveOne(CertificateRequest entity) {
-		CertificateRequest request = certificateRequestRepository.findByUserId(entity.getUserId());
+		CertificateRequest request = certificateRequestRepository.findByEmail(entity.getEmail());
 
 		if (request == null) {
 			return certificateRequestRepository.save(entity);
 		}
 		else
 			return null;
+		
 
 	}
 

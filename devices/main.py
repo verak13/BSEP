@@ -16,13 +16,17 @@ INVALID_CERT = ('./certs/revoke_me.cer', './certs/revoke_me.pkcs8')
 
 
 def create_message(id, temp, pulse, respiration, pressure, heartRate):
+
     return json.dumps({ "id": id, "temperature": temp, "pulse": pulse, "respirationRate": respiration,
             "bloodPressure": pressure, "heartRate": heartRate }).encode('utf-8')
 
-def read_key(cer_path = VALID_CERT[0]):
+
+
+def read_key(cer_path=VALID_CERT[0]):
     with open(cer_path, 'r') as f:
         cert = x509.load_pem_x509_certificate(f.read().encode('utf-8'))
         return cert.public_key()
+
 
 def send_data_valid():
     message = create_message(1, 37, 120, 200, 160, 70)
@@ -55,7 +59,7 @@ def send_data_valid():
     try:
         r = requests.post(HOSPITAL_ENDPOINT, data=data, verify=SERVER_CERT, cert=VALID_CERT)
         print(r.status_code)
-        
+
     except Exception as error:
         print(error)
 
@@ -82,3 +86,4 @@ if __name__ == '__main__':
     send_data_valid()
     #send_data_invalid()
     #send_data_XSS()
+

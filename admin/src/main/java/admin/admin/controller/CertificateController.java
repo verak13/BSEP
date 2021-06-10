@@ -1,5 +1,9 @@
 package admin.admin.controller;
 
+
+import admin.admin.dto.CertificateDTO;
+import admin.admin.dto.CreateCertificateDTO;
+import admin.admin.dto.RevokeCertificateDTO;
 import admin.admin.model.User;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.keycloak.KeycloakPrincipal;
@@ -12,9 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import admin.admin.model.CreateCertificateDTO;
-import admin.admin.model.CertificateDTO;
-import admin.admin.model.RevokeCertificateDTO;
 import admin.admin.services.CertificateRequestService;
 import admin.admin.services.CertificateService;
 

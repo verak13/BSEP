@@ -5,7 +5,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -13,12 +15,14 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -27,8 +31,11 @@ public class User implements UserDetails {
     @Column(name = "approved")
     private Boolean approved;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "last_login", nullable = true)
+    private LocalDate lastLogin;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
@@ -49,6 +56,11 @@ public class User implements UserDetails {
         this.email = email;
         this.approved = approved;
         this.password = password;
+    }
+
+    public User(String email, LocalDate lastLogin) {
+        this.email = email;
+        this.lastLogin = lastLogin;
     }
 
     public Long getId() {
@@ -137,5 +149,11 @@ public class User implements UserDetails {
         return authorities;
     }
 
+    public LocalDate getLastLogin() {
+        return lastLogin;
+    }
 
+    public void setLastLogin(LocalDate lastLogin) {
+        this.lastLogin = lastLogin;
+    }
 }

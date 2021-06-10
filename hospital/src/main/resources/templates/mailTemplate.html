@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lakiskaki</title>
+    <style type="text/css">
+
+    img {
+      max-width: 600px;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    a {
+      text-decoration: none;
+      border: 0;
+      outline: none;
+      color: #21BEB4;
+    }
+
+    a img {
+      border: none;
+    }
+
+    /* General styling */
+
+    td, h1, h2, h3  {
+      font-family: Helvetica, Arial, sans-serif;
+      font-weight: 400;
+    }
+
+    body {
+      -webkit-font-smoothing:antialiased;
+      -webkit-text-size-adjust:none;
+      width: 100%;
+      height: 100%;
+      color: #37302d;
+      background: #ffffff;
+    }
+
+    table {
+      background:
+    }
+
+    h1, h2, h3 {
+      padding: 0;
+      margin: 0;
+      color: #ffffff;
+      font-weight: 400;
+    }
+
+    h3 {
+      color: #21c5ba;
+      font-size: 24px;
+    }
+  </style>
+
+    <style type="text/css" media="screen">
+    @media screen {
+       /* Thanks Outlook 2013! http://goo.gl/XLxpyl*/
+      td, h1, h2, h3 {
+        font-family: 'Lato', 'Helvetica Neue', 'Arial', 'sans-serif' !important;
+      }
+    }
+  </style>
+
+    <style type="text/css" media="only screen and (max-width: 480px)">
+    /* Mobile styles */
+    @media only screen and (max-width: 480px) {
+      table[class="w320"] {
+        width: 320px !important;
+      }
+
+      table[class="w300"] {
+        width: 300px !important;
+      }
+
+      table[class="w290"] {
+        width: 290px !important;
+      }
+
+      td[class="w320"] {
+        width: 320px !important;
+      }
+
+      td[class="mobile-center"] {
+        text-align: center !important;
+      }
+
+      td[class="mobile-padding"] {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        padding-bottom: 20px !important;
+      }
+    }
+  </style>
+</head>
+<body class="body" style="padding:0; margin:0; display:block; background:#ffffff; -webkit-text-size-adjust:none" bgcolor="#ffffff">
+<table align="center" cellpadding="0" cellspacing="0" width="100%" height="100%" >
+    <tr>
+        <td align="center" valign="top" bgcolor="#ffffff"  width="100%">
+            <table cellspacing="0" cellpadding="0" width="100%">
+                <tr>
+                    <td background="https://comptiacdn.azureedge.net/webcontent/images/default-source/blogs/thinkstockphotos-533535877-(1).png?sfvrsn=ba2fdd36_0" th:src="@{static/mario.jpg}" bgcolor="#64594b" valign="top" style="no-repeat center; background-color: #64594b; background-position: center;">
+                        <div>
+                            <center>
+                                <table cellspacing="0" cellpadding="0" width="530" height="303" class="w320">
+                                    <tr>
+                                        <td valign="middle" style="vertical-align:middle; padding-right: 15px; padding-left: 15px; text-align:left;" class="mobile-center" height="303">
+                                            <h1 style="color: white; font-weight: 600; font-size: 60px;">SECURITY RISK!</h1>
+                                            <i class="fas fa-band-aid"></i>
+                                            <h2 style="color: white;">Something went wrong</h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </center>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top">
+                        <center>
+                            <table cellspacing="0" cellpadding="0" width="500" class="w320">
+                                <tr>
+                                    <td>
+
+                                        <table cellspacing="0" cellpadding="0" width="100%">
+                                            <tr>
+                                                <td class="mobile-padding" style="text-align:left;">
+                                                    <br>
+                                                    <br>
+                                                    <h2>Dear admin,</h2><br><br>
+                                                    <b><span th:text="${msg}"></span></b>
+                                                    <br>
+                                                    <br>
+                                                    If this wasn't trusted user please notify administrator.
+                                                    <br>
+                                                    <br>Thank you, <br>
+                                                    Support team
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

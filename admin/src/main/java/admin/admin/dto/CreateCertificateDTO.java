@@ -1,4 +1,4 @@
-package admin.admin.model;
+package admin.admin.dto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

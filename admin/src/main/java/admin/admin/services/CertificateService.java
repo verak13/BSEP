@@ -5,13 +5,13 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import admin.admin.dto.CertificateDTO;
+import admin.admin.dto.CreateCertificateDTO;
+import admin.admin.dto.RevokeCertificateDTO;
 import admin.admin.keystore.KeyStoreReader;
 import admin.admin.keystore.KeyStoreWriter;
-import admin.admin.model.CertificateDTO;
 import admin.admin.model.CertificateRequest;
 import admin.admin.model.IssuerData;
-import admin.admin.model.CreateCertificateDTO;
-import admin.admin.model.RevokeCertificateDTO;
 import admin.admin.model.SubjectData;
 
 import org.bouncycastle.asn1.x500.X500Name;
@@ -305,7 +305,7 @@ public class CertificateService {
 		builder.addRDN(BCStyle.ST, cerRequestInfo.getStateName());
 		builder.addRDN(BCStyle.L, cerRequestInfo.getLocalityName());
 
-		builder.addRDN(BCStyle.UID, String.valueOf(cerRequestInfo.getUserId()));
+		//builder.addRDN(BCStyle.UID, String.valueOf(cerRequestInfo.getUserId()));
 
 		return new SubjectData(builder.build(), serialNumber, startDate, endDate);
 
