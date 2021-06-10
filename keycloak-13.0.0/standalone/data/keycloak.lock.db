@@ -1,14 +1,6 @@
 #FileLock
-<<<<<<< HEAD
-#Thu Jun 10 13:32:09 CEST 2021
-server=10.0.135.247\:62167
-hostName=DESKTOP-2A8FGJ8
+#Thu Jun 10 21:42:16 CEST 2021
+hostName=192.168.1.15
+id=179f7724e1737c79528b249bb9f6d4f0ee1830d64bb
 method=file
-id=179f5b19f2a6a92138cb76a9ffc76bb6a903ae64a3b
-=======
-#Wed Jun 09 18:36:45 CEST 2021
-server=172.30.112.1\:49262
-hostName=DESKTOP-KD2333V.mshome.net
-method=file
-id=179f1a22055ce022336fde5e67a75fe67a72054587f
->>>>>>> ecbd5e8ee1b5ba10adad4b42702582b41f6b6985
+server=192.168.1.15\:57354
