@@ -23,14 +23,35 @@ public class SslConfiguration {
     @Autowired
     private Environment env;
 
-    @PostConstruct
-    private void configureSSL() {
-        //set to TLSv1.1 or TLSv1.2
-        System.setProperty("https.protocols", "TLSv1.1");
+    @Value("${trust-store}")
+    private Resource trustStore;
 
-        //load the 'javax.net.ssl.trustStore' and
-        //'javax.net.ssl.trustStorePassword' from application.properties
-        System.setProperty("javax.net.ssl.trustStore", env.getProperty("server.ssl.trust-store"));
-        System.setProperty("javax.net.ssl.trustStorePassword",env.getProperty("server.ssl.trust-store-password"));
+    @Value("${trust-store-password}")
+    private String trustStorePassword;
+
+//    @PostConstruct
+//    private void configureSSL() {
+//        //set to TLSv1.1 or TLSv1.2
+//        System.setProperty("https.protocols", "TLSv1.2");
+//
+//        //load the 'javax.net.ssl.trustStore' and
+//        //'javax.net.ssl.trustStorePassword' from application.properties
+//        System.setProperty("javax.net.ssl.trustStore", env.getProperty("server.ssl.trust-store"));
+//        System.setProperty("javax.net.ssl.trustStorePassword",env.getProperty("server.ssl.trust-store-password"));
+//    }
+
+    @Bean
+    RestTemplate restTemplate() throws Exception {
+        SSLContext sslContext = new SSLContextBuilder()
+                .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
+                .build();
+        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
+        HttpClient httpClient = HttpClients.custom()
+                .setSSLSocketFactory(socketFactory)
+                .build();
+        HttpComponentsClientHttpRequestFactory factory =
+                new HttpComponentsClientHttpRequestFactory(httpClient);
+        return new RestTemplate(factory);
     }
+
 }

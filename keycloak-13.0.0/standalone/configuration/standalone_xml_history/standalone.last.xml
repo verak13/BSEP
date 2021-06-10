@@ -453,6 +453,16 @@
                     </properties>
                 </provider>
             </spi>
+            <spi name="truststore">
+    			<provider name="file" enabled="true">
+        			<properties>
+            			<property name="file" value="truststore.jks"/>
+            			<property name="password" value="password"/>
+            			<property name="hostname-verification-policy" value="WILDCARD"/>
+            			<property name="disabled" value="false"/>
+        			</properties>
+    			</provider>
+			</spi>
             <spi name="userCache">
                 <provider name="default" enabled="true"/>
             </spi>
@@ -465,11 +475,7 @@
             <spi name="connectionsHttpClient">
                 <provider name="default" enabled="true">
 
-                	<properties>
-            			<property name="client-keystore" value="keycloak.jks"/>
-            			<property name="client-keystore-password" value="password"/>
 
-        			</properties>
         		</provider>
             </spi>
             <spi name="connectionsJpa">

@@ -25,6 +25,8 @@ public class CertificateRequestController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) throws Exception {
 
+        System.out.println("POGODJEN CTRL");
+        
         if (certificateRequestService.createCSR(csr)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
