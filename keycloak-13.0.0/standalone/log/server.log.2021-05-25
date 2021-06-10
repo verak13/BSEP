@@ -960,6 +960,7 @@
 2021-05-25 13:34:19,882 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 69) WFLYCLINF0003: Stopped http-remoting-connector cache from ejb container
 2021-05-25 13:34:19,888 INFO  [org.infinispan.manager.DefaultCacheManager] (ServerService Thread Pool -- 69) Stopping cache manager null on null
 2021-05-25 13:34:19,938 INFO  [org.jboss.as] (MSC service thread 1-2) WFLYSRV0050: Keycloak 13.0.0 (WildFly Core 15.0.1.Final) stopped in 1534ms
+<<<<<<< HEAD
 2021-05-25 17:17:31,347 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-1) WFLYUT0006: Undertow HTTPS listener https listening on 127.0.0.1:8444
 2021-05-25 17:17:32,318 INFO  [org.infinispan.CONTAINER] (ServerService Thread Pool -- 54) ISPN000128: Infinispan version: Infinispan 'Corona Extra' 11.0.9.Final
 2021-05-25 17:17:32,362 INFO  [org.infinispan.CONFIG] (MSC service thread 1-8) ISPN000152: Passivation configured without an eviction policy being selected. Only manually evicted entities will be passivated.
@@ -1017,3 +1018,5 @@
 2021-05-25 17:21:41,157 INFO  [org.keycloak.policy.BlacklistPasswordPolicyProviderFactory] (default task-1) Loading blacklist with name pass_blacklist.txt from C:\bezb\BSEP\keycloak-13.0.0\standalone\data\password-blacklists\pass_blacklist.txt - start
 2021-05-25 17:21:41,387 INFO  [org.keycloak.policy.BlacklistPasswordPolicyProviderFactory] (default task-1) Loading blacklist with name pass_blacklist.txt from C:\bezb\BSEP\keycloak-13.0.0\standalone\data\password-blacklists\pass_blacklist.txt - end
 2021-05-25 18:23:41,308 WARN  [org.keycloak.events] (default task-13) type=LOGIN_ERROR, realmId=admin-portal, clientId=null, userId=null, ipAddress=127.0.0.1, error=expired_code, restart_after_timeout=true, authSessionParentId=b6d3bd09-4186-4647-88ed-60fb7d83013e, authSessionTabId=IR-IpNzY6uY
+=======
+>>>>>>> ecbd5e8ee1b5ba10adad4b42702582b41f6b6985

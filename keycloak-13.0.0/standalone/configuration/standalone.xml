@@ -453,6 +453,16 @@
                     </properties>
                 </provider>
             </spi>
+            <spi name="truststore">
+    			<provider name="file" enabled="true">
+        			<properties>
+            			<property name="file" value="truststore.jks"/>
+            			<property name="password" value="password"/>
+            			<property name="hostname-verification-policy" value="WILDCARD"/>
+            			<property name="disabled" value="false"/>
+        			</properties>
+    			</provider>
+			</spi>
             <spi name="userCache">
                 <provider name="default" enabled="true"/>
             </spi>

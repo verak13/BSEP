@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
-public class HospitalApplication implements CommandLineRunner {
+public class HospitalApplication/* implements CommandLineRunner*/ {
 	
 	@Autowired
 	private LogRepository logRepository;
@@ -92,11 +92,11 @@ public class HospitalApplication implements CommandLineRunner {
 	}
 
 
-	@Override
+	/*@Override
 	public void run(String... args) throws Exception {
 		
 		
-		/*logger.info("this is a info message");
+		logger.info("this is a info message");
 	    logger.warn("this is a warn message");
 	    logger.error("this is a error message");
 	    
@@ -107,7 +107,7 @@ public class HospitalApplication implements CommandLineRunner {
 	    for (Log l : logPage) {
 	    	System.out.println(l);
 	    }
-	    System.out.println("SEARCHEND============================================================");*/
+	    System.out.println("SEARCHEND============================================================");
 		
 		//INSERT INTO patients (jmbg, first_name, last_name, birth_date, height, weight, gender, blood_type) VALUES ('1234567890', 'John', 'Smith', '2021-06-01 00:00:00', 185.0, 90.0, 'MALE', 'AB');
 
@@ -118,6 +118,6 @@ public class HospitalApplication implements CommandLineRunner {
 			System.out.println("*********************************************");
 			System.out.println(p.getFirstName() + p.getLastName() + p.getJmbg());
 		}
-	}
+	}*/
 	
 }
