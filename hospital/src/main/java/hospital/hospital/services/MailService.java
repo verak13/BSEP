@@ -1,5 +1,7 @@
 package hospital.hospital.services;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -11,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import hospital.hospital.model.cep.alarms.MessageAlarm;
+
 @Service
-public class SecurityService {
+public class MailService {
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -22,27 +26,28 @@ public class SecurityService {
 
     @Autowired
     private TemplateEngine templateEngine;
+    
+    @Autowired
+    private MessageAlarmService messageAlarmService;
 
 
-    public String build(String username, Long attempts) {
+    public String build(String msg) {
         Context context = new Context();
-        context.setVariable("username", username);
-        context.setVariable("attempts", attempts);
+        context.setVariable("msg", msg);
 
         return templateEngine.process("mailTemplate", context);
     }
 
     @Async
-    public void notifyAdmin(String username, Long attempts) throws MailException {
+    public void notifyAdmin(String adminEmail, String msg) throws MailException {
 
         System.out.println("ovdee");
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(env.getProperty("spring.mail.username"));
-            messageHelper.setTo("laketic.milena98@gmail.com");
+            messageHelper.setTo(adminEmail);
             messageHelper.setSubject("Security risk");
-            String content = build(username, attempts);
-            System.out.println(content);
+            String content = build(msg);
             messageHelper.setText(content, true);
         };
         try {
@@ -51,4 +56,14 @@ public class SecurityService {
             e.printStackTrace();
         }
     }
+    
+    @Async
+    public void notifyDoctors(MessageAlarm ma) throws MailException {
+
+    	ma.setDate(new Date());
+        System.out.println(ma);
+        messageAlarmService.saveMessageAlarm(ma);
+        
+    }
+       
 }

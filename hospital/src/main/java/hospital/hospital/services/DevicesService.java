@@ -39,12 +39,15 @@ public class DevicesService {
 	
 	@Autowired
 	PatientRepository patientRepository;
+	
+	@Autowired
+	private RulesService rulesService;
 
-    //yyyy-MM-dd HH:mm|patientId|bodyTemperature|pulseRate|respirationRate|bloodPressure|heartRate
+    //yyyy-MM-dd HH:mm|patientId|bodyTemperature|pulseRate|respirationRate|bloodPressureDiastolic|bloodPressureSystolic
     public boolean receiveMessage(String msg){
         System.out.println(msg);
         Message message = new Message();
-		String[] array = msg.split("|");
+		String[] array = msg.split("\\|");
 		Date date = null;
 		try {
 			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(array[0]);
@@ -56,11 +59,12 @@ public class DevicesService {
 		message.setBodyTemperature(Double.parseDouble(array[2]));
 		message.setPulseRaye(Double.parseDouble(array[3]));
 		message.setRespirationRate(Double.parseDouble(array[4]));
-		message.setBloodPressure(Double.parseDouble(array[5]));
-		message.setHeartRate(Double.parseDouble(array[6]));
+		message.setBloodPressureDiastolic(Double.parseDouble(array[5]));
+		message.setBloodPressureSystolic(Double.parseDouble(array[6]));
+				
 		messageRepository.save(message);
 		kieSession.insert(new MessageEvent(message));
-        kieSession.getAgenda().getAgendaGroup("doctor_alarms").setFocus();
+        kieSession.getAgenda().getAgendaGroup("doctor-alarms").setFocus();
 		kieSession.fireAllRules();
         return true;
     }
@@ -75,9 +79,9 @@ public class DevicesService {
 		for (Message m : messages.toList()) {
 			MessageResponseDTO messageDTO = new MessageResponseDTO();
 			messageDTO.setId(m.getId());
-			messageDTO.setBloodPressure(m.getBloodPressure());
+			messageDTO.setBloodPressure(m.getBloodPressureDiastolic());
 			messageDTO.setBodyTemperature(m.getBodyTemperature());
-			messageDTO.setHeartRate(m.getHeartRate());
+			messageDTO.setHeartRate(m.getBloodPressureSystolic());
 			messageDTO.setPatientId(m.getPatientId());
 			messageDTO.setPulseRaye(m.getPulseRaye());
 			messageDTO.setRespirationRate(m.getRespirationRate());

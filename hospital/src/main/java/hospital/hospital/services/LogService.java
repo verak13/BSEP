@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -12,8 +13,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import hospital.hospital.model.Patient;
+import hospital.hospital.model.*;
 import hospital.hospital.model.cep.LogEvent;
+import hospital.hospital.model.cep.UserLoginEvent;
 import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import hospital.hospital.dto.SearchLogDTO;
-import hospital.hospital.model.Log;
-import hospital.hospital.model.LogConfig;
-import hospital.hospital.model.LogConfigs;
 import hospital.hospital.parser.ApplicationLogParser;
 import hospital.hospital.parser.KeycloakLogParser;
 import hospital.hospital.parser.SimulatorLogParser;
@@ -42,6 +41,9 @@ public class LogService {
 
 	@Autowired
 	private KieSession kieSession;
+
+	@Autowired
+	private UserService userService;
 	
 	@Value("${pathkeycloak}")
 	private String pathKeycloak;
@@ -234,6 +236,10 @@ public class LogService {
 					line = reader.readLine();
 					continue;
 				}
+				if (log.getType().equalsIgnoreCase("LOGIN")) {
+					LocalDate lastLogin = userService.saveLastLogin(log.getUsername());
+					kieSession.insert(new UserLoginEvent(log.getUsername(), lastLogin));
+				}
 				if (!setNewFlagDate) {
 					newFlagDate = log.getTimestamp();
 					setNewFlagDate = true;
@@ -241,6 +247,8 @@ public class LogService {
 				if (!log.getTimestamp().after(flagDate)) {
 					break;
 				}
+
+
 
 				line = reader.readLine();
 			}

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import hospital.hospital.model.User;
-import hospital.hospital.services.SecurityService;
+import hospital.hospital.services.MailService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieRuntime;
@@ -19,6 +19,7 @@ import hospital.hospital.enums.BloodType;
 import hospital.hospital.enums.Gender;
 import hospital.hospital.model.Log;
 import hospital.hospital.model.Patient;
+
 import hospital.hospital.repository.LogRepository;
 import hospital.hospital.repository.PatientRepository;
 
@@ -38,7 +39,7 @@ public class HospitalApplication implements CommandLineRunner {
 	private PatientRepository patientRepository;
 
 	@Autowired
-	private SecurityService securityService;
+	private MailService mailService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HospitalApplication.class);
 
@@ -47,7 +48,7 @@ public class HospitalApplication implements CommandLineRunner {
 		KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
 		KieSession kieSession = kc.newKieSession("rulesSession");
 		KieRuntime kieRuntime = (KieRuntime) kieSession;
-		kieRuntime.setGlobal("securityService", securityService);
+		kieRuntime.setGlobal("mailService", mailService);
 
 		return kieSession;
 	}

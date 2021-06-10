@@ -10,11 +10,11 @@ VALID_CERT = ('./certs/hospital_device1.cer', './certs/hospital_device1.pkcs8')
 INVALID_CERT = ('./certs/revoke_me.cer', './certs/revoke_me.pkcs8')
 
 def send_data_valid():
-    #message format: yyyy-MM-dd HH:mm|patientId|bodyTemperature|pulseRate|respirationRate|bloodPressure|heartRate
+    #message format: yyyy-MM-dd HH:mm|patientId|bodyTemperature|pulseRate|respirationRate|bloodPressureDiastolic|bloodPressureSystolic
     while True:
-        message = datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "|" + random.randint(1, 10) + "|" + \
-                  round(random.uniform(34, 43), 1) + "|" + random.randint(50, 120) + "|" + random.randint(10, 20) + "|" + \
-                  random.randint(60, 90) + "|" + random.randint(100, 150)
+        message = datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "|" + str(random.randint(1, 10)) + "|" + \
+                  str(round(random.uniform(35, 43), 1)) + "|" + str(random.randint(50, 120)) + "|" + str(random.randint(10, 20)) + "|" + \
+                  str(random.randint(60, 95)) + "|" + str(random.randint(100, 140))
         try:
             r = requests.post(HOSPITAL_ENDPOINT, data=message, verify=SERVER_CERT, cert=VALID_CERT)
             print(r.status_code)

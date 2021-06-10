@@ -36,15 +36,15 @@ public class Message {
 	private double respirationRate;
 	
 	@Column
-	private double bloodPressure;
+	private double bloodPressureDiastolic;
 	
 	@Column
-	private double heartRate;
+	private double bloodPressureSystolic;
 	
 	public Message() {}
 
 	public Message(Long id, Date timestamp, Long patientId, double bodyTemperature, double pulseRaye,
-			double respirationRate, double bloodPressure, double heartRate) {
+			double respirationRate, double bloodPressureDiastolic, double bloodPressureSystolic) {
 		super();
 		this.id = id;
 		this.timestamp = timestamp;
@@ -52,8 +52,8 @@ public class Message {
 		this.bodyTemperature = bodyTemperature;
 		this.pulseRaye = pulseRaye;
 		this.respirationRate = respirationRate;
-		this.bloodPressure = bloodPressure;
-		this.heartRate = heartRate;
+		this.bloodPressureDiastolic = bloodPressureDiastolic;
+		this.bloodPressureSystolic = bloodPressureSystolic;
 	}
 
 	public Long getId() {
@@ -104,20 +104,20 @@ public class Message {
 		this.respirationRate = respirationRate;
 	}
 
-	public double getBloodPressure() {
-		return bloodPressure;
+	public double getBloodPressureDiastolic() {
+		return bloodPressureDiastolic;
 	}
 
-	public void setBloodPressure(double bloodPressure) {
-		this.bloodPressure = bloodPressure;
+	public void setBloodPressureDiastolic(double bloodPressureDiastolic) {
+		this.bloodPressureDiastolic = bloodPressureDiastolic;
 	}
 
-	public double getHeartRate() {
-		return heartRate;
+	public double getBloodPressureSystolic() {
+		return bloodPressureSystolic;
 	}
 
-	public void setHeartRate(double heartRate) {
-		this.heartRate = heartRate;
+	public void setBloodPressureSystolic(double bloodPressureSystolic) {
+		this.bloodPressureSystolic = bloodPressureSystolic;
 	}
 	
 	

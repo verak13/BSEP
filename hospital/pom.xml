@@ -139,6 +139,12 @@
 			    <groupId>com.google.code.gson</groupId>
 			    <artifactId>gson</artifactId>
 			</dependency>
+			
+			<dependency>
+	            <groupId>org.apache.maven.shared</groupId>
+	            <artifactId>maven-invoker</artifactId>
+	            <version>3.1.0</version>
+	        </dependency>
         
 	</dependencies>
 	
@@ -160,6 +166,18 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
 		</plugins>
 	</build>
 
