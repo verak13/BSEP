@@ -1,5 +1,7 @@
 package hospital.hospital.services;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -10,6 +12,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import hospital.hospital.model.cep.alarms.MessageAlarm;
 
 @Service
 public class MailService {
@@ -22,6 +26,9 @@ public class MailService {
 
     @Autowired
     private TemplateEngine templateEngine;
+    
+    @Autowired
+    private MessageAlarmService messageAlarmService;
 
 
     public String build(String msg) {
@@ -48,4 +55,14 @@ public class MailService {
             e.printStackTrace();
         }
     }
+    
+    @Async
+    public void notifyDoctors(MessageAlarm ma) throws MailException {
+
+    	ma.setDate(new Date());
+        System.out.println(ma);
+        messageAlarmService.saveMessageAlarm(ma);
+        
+    }
+       
 }

@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnTransformer;
+
 import hospital.hospital.enums.BloodType;
 import hospital.hospital.enums.Gender;
 
@@ -24,21 +26,39 @@ public class Patient {
 	@Column
 	private Long id;
 	
-	@Column(unique = true)
+	@ColumnTransformer(forColumn = "jmbg", 
+			read = "pgp_sym_decrypt(jmbg, 'secret')", 
+			write = "pgp_sym_encrypt(?, 'secret'")
+			/*read="AES_DECRYPT(UNHEX(jmbg), UNHEX(SHA2('secret', 512)))",
+			write="HEX(AES_ENCRYPT(?, UNHEX(SHA2('secret', 512))))")*/
+	@Column(unique = true/*, columnDefinition = "bytea"*/)
 	private String jmbg;
+	
 	@Column
+	@ColumnTransformer(forColumn = "first_name", 
+			read = "pgp_sym_decrypt(first_name, 'secret')", 
+			write = "pgp_sym_encrypt(?, 'secret'")
 	private String firstName;
+	
 	@Column
+	@ColumnTransformer(forColumn = "last_name", 
+			read = "pgp_sym_decrypt(last_name, 'secret')", 
+			write = "pgp_sym_encrypt(?, 'secret'")
 	private String lastName;
+	
 	@Column
 	private Date birthDate;
+	
 	@Column
 	private double height;
+	
 	@Column
 	private double weight;
+	
 	@Column
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
+	
 	@Column	
 	@Enumerated(EnumType.STRING)
 	private BloodType bloodType;
