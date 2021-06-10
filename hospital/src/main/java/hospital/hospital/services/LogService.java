@@ -12,7 +12,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import hospital.hospital.model.Patient;
+import hospital.hospital.model.cep.LogEvent;
 import org.apache.commons.io.input.ReversedLinesFileReader;
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -36,6 +39,9 @@ public class LogService {
 	
 	@Autowired
 	LogRepository logRepository;
+
+	@Autowired
+	private KieSession kieSession;
 	
 	@Value("${pathkeycloak}")
 	private String pathKeycloak;
@@ -58,6 +64,10 @@ public class LogService {
 	
 	
 	public void save(List<Log> logs) {
+		for (Log log: logs) {
+			kieSession.insert(new LogEvent(log));
+		}
+		kieSession.fireAllRules();
 		this.logRepository.saveAll(logs);
 	}
 	

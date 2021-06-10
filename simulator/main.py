@@ -55,9 +55,9 @@ class NormalState(State):
 class BruteForceAttackState(State):
     def run(self, context):
         now = datetime.now()
-        path = random.choice(PATHS)
-        for i in range(4):
-            log = now.strftime("%Y-%m-%d %H:%M:%S") + " SOURCE LOGIN TRACE 20.20.20.20 doctor@gmail.com Unsuccessful logg in."
+        path = "simulator2.log"
+        for i in range(100):
+            log = now.strftime("%Y-%m-%d %H:%M:%S") + " SOURCE LOGIN_ERROR TRACE 20.20.20.20 doctor@gmail.com Unsuccessful logg in."
             f = open(path, "a")
             f.write(log + "\n")
             f.close()
@@ -113,5 +113,6 @@ def get_next_state():
 
 
 if __name__ == '__main__':
+    pass
     ctx = Context()
     ctx.run()

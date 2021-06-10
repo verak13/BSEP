@@ -1,0 +1,37 @@
+package hospital.hospital.rules;
+
+import hospital.hospital.model.cep.LogEvent;
+import hospital.hospital.services.SecurityService;
+
+global SecurityService securityService
+
+declare AlarmTriggered
+    username: String
+    attempts: Long
+end
+
+rule "More than 100 unsuccessful logins with same username in 60 sec, notify admin of hospital"
+    when
+          $l1: LogEvent($username: log.getUsername(), log.getType() == "LOGIN_ERROR")
+                 $attempts: Long(intValue >= 100) from accumulate(
+                            $l2: LogEvent(
+                                this != $l1,
+                                log.getUsername() == $username,
+                                log.getType() == "LOGIN_ERROR",
+                                this meets[60s] $l1
+                            ),
+                            count($l2)
+                        )
+                         not (AlarmTriggered(username == $username))
+    then
+        System.out.println("Trigerovan alarm za korisnika : " + $username);
+        System.out.println($attempts);
+        insert(new AlarmTriggered($username, $attempts));
+end
+
+rule "Alarm triggered, notify user by email"
+    when
+        AlarmTriggered($username: username, $attempts: attempts)
+    then
+        securityService.notifyAdmin($username, $attempts);
+end

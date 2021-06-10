@@ -2,7 +2,12 @@ package hospital.hospital.services;
 
 import hospital.hospital.dto.CertificateRequestDTO;
 import hospital.hospital.model.CertificateRequest;
+import hospital.hospital.model.Patient;
 import hospital.hospital.model.User;
+import org.kie.api.KieServices;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -18,7 +23,6 @@ import hospital.hospital.helper.RSA;
 @Service
 public class CertificateRequestService {
 
-
     public boolean createCSR(CertificateRequest csr) throws Exception {
         //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	//Principal user = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -31,6 +35,8 @@ public class CertificateRequestService {
             throw new Exception();
         }*/
         //csr.setUserId(Math.toIntExact(user.getId()));
+
+
     	csr.setUserId(1);
         RSA rsa = new RSA();
         KeyPair keyPair = rsa.generateKeys();
