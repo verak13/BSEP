@@ -8,7 +8,6 @@ import { push } from "connected-react-router";
 export function* getLogs(action){
     try {
         const response = yield call(logService.getLogs, action.payload);
-        console.log('ooo', response);
         yield put(setLogs(response));
 
     } catch (error) {
