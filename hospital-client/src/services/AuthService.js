@@ -100,14 +100,10 @@ class AuthService extends ApiService {
 
     getRole = () => {
         const jwt = JSON.parse(localStorage.getItem('user'));
-        console.log('ocvdeee')
-        console.log(jwt)
         let decoded ;
         let role = null;
         try {
-
             decoded = jwt_decode(jwt);
-            console.log(decoded)
             role = decoded.realm_access.roles.filter(role => ['SUPER_ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR'].includes(role))[0]
     
         } catch (error) {

@@ -12,31 +12,31 @@ import hospital.hospital.enums.LogSeverity;
 
 public class SearchLogDTO {
 	
-	@Past
+//	@Past
 	private Date from;
 	
-	@Past
+//	@Past
 	private Date to;
 	
-    @Pattern(regexp="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", message="Field must be ip address.")
+//    @Pattern(regexp="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", message="Field must be ip address.")
 	private String ip;
     
 	private String source;
 	
-    @Pattern(regexp="^$|[A-Z]+$", message="Field must include only uppercase characters.")
+//    @Pattern(regexp="^$|[A-Z]+$", message="Field must include only uppercase characters.")
 	private String type;
     
-	@Pattern(regexp = "^TRACE$|^DEBUG$|^INFO$|^WARN$|^ERROR$|^FATAL$", message = "input not allowed")
-	private LogSeverity severity;
+//	@Pattern(regexp = "^TRACE$|^DEBUG$|^INFO$|^WARN$|^ERROR$|^FATAL$", message = "input not allowed")
+	private String severity;
 	
-	@Email(message="Email must be valid.")
+//	@Email(message="Email must be valid.")
 	private String username;
 	
 	private String message;
 	
 	public SearchLogDTO() {}
 
-	public SearchLogDTO(Date from, Date to, String ip, String source, String type, LogSeverity severity,
+	public SearchLogDTO(Date from, Date to, String ip, String source, String type, String severity,
 			String username, String message) {
 		super();
 		this.from = from;
@@ -89,11 +89,11 @@ public class SearchLogDTO {
 		this.type = type;
 	}
 
-	public LogSeverity getSeverity() {
+	public String getSeverity() {
 		return severity;
 	}
 
-	public void setSeverity(LogSeverity severity) {
+	public void setSeverity(String severity) {
 		this.severity = severity;
 	}
 

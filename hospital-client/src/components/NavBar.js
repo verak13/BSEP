@@ -21,12 +21,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PhotoLibrary from '@material-ui/icons/PhotoLibrary';
 import Info from '@material-ui/icons/Info';
 import ExitToApp from '@material-ui/icons/ExitToApp';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import Settings from '@material-ui/icons/Settings';
 import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
-import { REQUESTS, ADD_DOCTOR } from '../routes';
+import { REQUESTS, LOGS } from '../routes';
 import authService from '../services/AuthService';
 
 const drawerWidth = 240;
@@ -154,6 +155,10 @@ function NavBar(props) {
                         <ListItem onClick={() => props.history.push(REQUESTS)} button key={'Requests'}>
                             <ListItemIcon><AddCircle /></ListItemIcon>
                             <ListItemText primary={'Add Request'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(LOGS)} button key={'Logs'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'See all logs'} />
                         </ListItem>
                     </List>
                     <Divider />

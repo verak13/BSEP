@@ -35,9 +35,6 @@ class HttpService {
         Object.assign(options.httpsAgent, newAgent);
         
         options.cert = CERT;
-        console.log(JSON.stringify(newAgent) + " OHJAHA");
-        console.log(JSON.stringify(options) + " TO JE TO");
-        console.log(options.httpsAgent.cert + " TO JE TO");
 
         this.client = axios.create(options);
 

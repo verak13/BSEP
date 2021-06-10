@@ -1,8 +1,9 @@
 import { all, takeLatest } from 'redux-saga/effects';
-import { LOGIN, LOGOUT, CHANGE_PASSWORD, GET_REQUESTS, ADD_REQUEST, ADD_DOCTOR} from '../actions/actionTypes';
+import { LOGIN, LOGOUT, CHANGE_PASSWORD, GET_REQUESTS, ADD_REQUEST, ADD_DOCTOR, GET_LOGS} from '../actions/actionTypes';
 import { login, logout, changePasswordSaga } from './AuthSagas';
 import { addRequest, getRequests } from './RequestSagas';
 import { addDoctor } from './DoctorSagas';
+import { getLogs } from './LogSagas';
 
 
 
@@ -14,5 +15,6 @@ export default function* rootSaga() {
         takeLatest(GET_REQUESTS, getRequests),
         takeLatest(ADD_REQUEST, addRequest),
         takeLatest(ADD_DOCTOR, addDoctor),
+        takeLatest(GET_LOGS, getLogs),
     ])
 }

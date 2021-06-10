@@ -12,3 +12,6 @@ export const SET_REQUESTS = 'SET_REQUESTS';
 export const ADD_REQUEST = 'ADD_REQUEST';
 
 export const ADD_DOCTOR = 'ADD_DOCTOR';
+
+export const GET_LOGS = 'GET_LOGS';
+export const SET_LOGS = 'SET_LOGS';

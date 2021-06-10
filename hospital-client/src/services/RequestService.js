@@ -8,13 +8,11 @@ class RequestService extends ApiService {
     
     getRequests = async () => {
         const {data} = await this.apiClient.get(ENDPOINTS.GET);
-        console.log(data);
         return data;
     }
 
     addRequest = async (payload) => {
         const {data} = await this.apiClient.post(ENDPOINTS.GET, payload);
-        console.log(data);
         return data;
     }
 }
