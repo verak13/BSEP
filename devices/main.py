@@ -1,45 +1,79 @@
 import requests
-import json
-from cryptography import x509
+from time import sleep
 from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import hashes, serialization
+
+from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA256
+from Crypto.Signature import PKCS1_v1_5
+import datetime
+import random
+
+
+def sign(private_key, data):
+    key = RSA.importKey(private_key.sign())
+
+    hash_value = SHA256.new(data)
+    signer = PKCS1_v1_5.new(key)
+    return signer.sign(hash_value)
+
+
+
 
 HOSPITAL_ENDPOINT = "https://localhost:8442/devices/send"
 SERVER_CERT = './certs/root_ca.cer'
-VALID_CERT = ('./certs/hospital_device3.cer', './certs/hospital_device3.pkcs8')
+VALID_CERT = ('./certs/hospital_device2.cer', './certs/hospital_device2.pkcs8')
 INVALID_CERT = ('./certs/revoke_me.cer', './certs/revoke_me.pkcs8')
 
+def create_message():
+    #1, 37, 120, 200, 160, 70
+    id = 1
+    temp = random.randint(36,41)
+    pulse = random.randint(80,120)
+    respiration = random.randint(10,19)
+    pressureDiastolic = random.randint(80,150)
+    pressureSystolic = random.randint(60,130)
 
-def create_message(id, temp, pulse, respiration, pressure, heartRate):
-    return json.dumps({"id": id, "temperature": temp, "pulse": pulse, "respirationRate": respiration,
-                       "bloodPressure": pressure, "heartRate": heartRate})
+    return f"{datetime.datetime.now()}|{id}|{temp}|{pulse}|{respiration}|{pressureDiastolic}|{pressureSystolic}".encode('utf-8')
 
 
-def read_key(cer_path=VALID_CERT[0]):
-    with open(cer_path, 'r') as f:
-        cert = x509.load_pem_x509_certificate(f.read().encode('utf-8'))
-        return cert.public_key()
+
+
+def read_key(key_path=VALID_CERT[1]):
+    with open(key_path, 'r') as f:
+        private_key = serialization.load_pem_private_key(
+        f.read().encode('utf-8'),
+        password = None,)
+
+        return private_key
 
 
 def send_data_valid():
-    message = create_message(1, 37, 120, 200, 160, 70)
-    pub_key = read_key()
-    encrypted = pub_key.encrypt(
-        message.encode('utf-8'),
-        padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
-        ))
+    priv_key = read_key()
 
-    print(encrypted)
+    while True:
 
-    try:
-        r = requests.post(HOSPITAL_ENDPOINT, data=encrypted, verify=SERVER_CERT, cert=VALID_CERT)
-        print(r.status_code)
+        message = create_message()
+        signature = priv_key.sign(
+            message,
+            padding.PKCS1v15(),
+            hashes.SHA256()
+            )
 
-    except Exception as error:
-        print(error)
+        data = signature + message
+
+        try:
+            r = requests.post(HOSPITAL_ENDPOINT, data=data, verify=SERVER_CERT, cert=VALID_CERT)
+
+            if r.status_code == 200:
+                print(f"{datetime.datetime.now()}  Message sent succesfuly.")
+            else:
+                print(f"{datetime.datetime.now()}  Message sending failed. Status code: " + r.status_code)
+
+        except Exception as error:
+            print(error)
+
+        sleep(4)
 
 
 def send_data_invalid():
@@ -62,5 +96,6 @@ def send_data_XSS():
 
 if __name__ == '__main__':
     send_data_valid()
-    send_data_invalid()
-    send_data_XSS()
+    #send_data_invalid()
+    #send_data_XSS()
+

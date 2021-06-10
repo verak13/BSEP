@@ -35,8 +35,10 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.MGF1ParameterSpec;
+import java.util.Arrays;
 
 @Service
 public class DevicesService {
@@ -83,38 +85,35 @@ public class DevicesService {
 		kieSession.fireAllRules();
 		return true;
     }
-    
-    
 
 
-    public boolean receiveMessage(byte[] msg, String alias){
-        System.out.println(msg);
-        PrivateKey pk = keyStoreReaderService.readPrivateKey(alias);
+	private boolean verifySignature(byte[] data, byte[] signature, PublicKey publicKey) {
+		try {
+			Signature sig = Signature.getInstance("SHA256withRSA");
+			sig.initVerify(publicKey);
+			sig.update(data);
+			return sig.verify(signature);
+		} catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
-        if(pk == null){
-            return false;
-        }
-        try {
+    public boolean receiveMessage(byte[] msg, PublicKey pk){
+        byte[] sig = Arrays.copyOfRange(msg, 0, 256);
+        byte[] message = Arrays.copyOfRange(msg, 256, msg.length);
 
-            System.out.println(msg.length + "JE SIZE");
+		if(!verifySignature(message, sig, pk)){
+			return false;
+		}
 
-            Cipher c = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
-            c.init(Cipher.DECRYPT_MODE, pk, new OAEPParameterSpec("SHA-256",
-                    "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT));
+		String plainText = new String(message, StandardCharsets.UTF_8);
+		parseMessage(plainText);
 
-            byte[] plainText = c.doFinal(msg);
+		// XSS filter...
 
-            System.out.println(plainText + " DESIFROVAO WOWOWOOWOWOWO");
-            //tu negdje kad se dobije poruka kao string pozvati parseMessage
+		return true;
 
-            return plainText == plainText;
-        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalStateException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        }
-
-
-
-        return true;
     }
 
 
