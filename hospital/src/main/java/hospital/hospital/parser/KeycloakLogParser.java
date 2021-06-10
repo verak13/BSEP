@@ -38,7 +38,6 @@ public class KeycloakLogParser {
 		} else {
 			type = "KEYCLOAK";
 		}
-		System.out.println("OVO JE tiiip " + type);
 		String severity = tokens[2];
 		String message = String.join(" ", Arrays.asList(tokens).subList(5, Arrays.asList(tokens).size()));
 		if (message.contains("isAddress=")) {

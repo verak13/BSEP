@@ -34,7 +34,6 @@ public class MailService {
     @Async
     public void notifyAdmin(String adminEmail, String msg) throws MailException {
 
-        System.out.println("ovdee");
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(env.getProperty("spring.mail.username"));

@@ -3,19 +3,18 @@ package hospital.hospital.rules;
 import hospital.hospital.model.cep.LogEvent;
 import hospital.hospital.model.cep.UserLoginEvent;
 import hospital.hospital.services.MailService;
-
+import hospital.hospital.model.BlackListedIP;
 
 import hospital.hospital.model.cep.alarms.InactiveUserAlarm;
+import hospital.hospital.model.cep.alarms.BruteForceLoginAlarm;
+import hospital.hospital.model.cep.alarms.ErrorLogAlarm;
+import hospital.hospital.model.cep.alarms.BlackListedIPAlarm;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 global MailService mailService
 
-declare AlarmTriggered
-    username: String
-    attempts: Long
-end
 
 rule "More than 100 unsuccessful logins with same username in 60 sec, notify admin of hospital"
     when
@@ -29,19 +28,19 @@ rule "More than 100 unsuccessful logins with same username in 60 sec, notify adm
                             ),
                             count($l2)
                         )
-                         not (AlarmTriggered(username == $username))
+                         not (BruteForceLoginAlarm(username == $username))
     then
         System.out.println("==== TRIGEROVAN ALARM ZA 100 POKUSAJA U MINUTI ===");
         System.out.println("username: " + $username);
-        System.out.println($attempts);
-        insert(new AlarmTriggered($username, $attempts));
+        insert(new BruteForceLoginAlarm($username, $attempts));
 end
 
-rule "Alarm triggered, notify user by email"
+rule "Brute force login alarm triggered, notify user by email"
     when
-        AlarmTriggered($username: username, $attempts: attempts)
+        $alarm: BruteForceLoginAlarm($username: username, $attempts: attempts)
     then
-       System.out.println("daa");
+       String msg = "User with email : " + $username + " tried to log in more than " + $attempts + " times in less than one minute.";
+       mailService.notifyAdmin($alarm.getAdminEmail(), msg);
 end
 
 rule "User logged in after more than 90 days from last login, triger NotActiveAlarm"
@@ -60,4 +59,44 @@ rule "Inactive user alarm triggered, notify admin by email"
     then
         String msg = "User with email : " + $userEmail + " hasn't been active for more than 90 days and tried to log in today.";
         mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+end
+
+rule "Error log appears, trigger ErrorLogAlarm"
+    no-loop
+  when
+       $error: LogEvent(log.getType() == "ERROR", $message: log.getMessage())
+       not (ErrorLogAlarm(errorMsg == $message))
+    then
+        insert(new ErrorLogAlarm(LocalDate.now(), $message));
+        System.out.println("==== TRIGEROVAN ALARM ZA ERROR LOG ====");
+        System.out.println("message: " + $message);
+end
+
+rule "Error log alarm triggered, notify admin"
+no-loop
+    when
+        $alarm : ErrorLogAlarm($message: errorMsg, $date: date)
+    then
+       String msg = "ERROR log appeared with error message : " + $message + " date: " + $date + " . ";
+       mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+end
+
+rule "User tried to login with ip address from blacklisted ip addresses, trigger BlackListedIPAlarm"
+    when
+        $l : LogEvent(log.getType() == "LOGIN" || log.getType()  == "LOGIN_ERROR", $ip : log.getIp(), $username: log.getUsername())
+        BlackListedIP(list contains $ip)
+
+    then
+        insert(new BlackListedIPAlarm($ip, $username, LocalDate.now()));
+        System.out.println("==== TRIGEROVAN ALARM ZA BLACK LISTED IP ====");
+        System.out.println("ip: " + $ip);
+end
+
+rule "Black listed ip alarm triggered, notify admin"
+no-loop
+    when
+        $alarm : BlackListedIPAlarm($ip: ip, $userEmail: userEmail, $date: date)
+    then
+       String msg = "User with email " + $userEmail + " tried to log in on date " + $date + " from ip address: " + $ip + " which is blacklisted.";
+       mailService.notifyAdmin($alarm.getAdminEmail(), msg);
 end

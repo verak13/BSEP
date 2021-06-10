@@ -1,5 +1,6 @@
 package hospital.hospital;
 
+import hospital.hospital.model.BlackListedIP;
 import hospital.hospital.services.MailService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
@@ -16,6 +17,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
+import org.springframework.util.ResourceUtils;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class HospitalApplication/* implements CommandLineRunner*/ {
@@ -25,7 +31,10 @@ public class HospitalApplication/* implements CommandLineRunner*/ {
 
 	@Autowired
 	private MailService mailService;
-	
+
+	@Autowired
+	private KieSession kieSession;
+
 	private static final Logger logger = LoggerFactory.getLogger(HospitalApplication.class);
 
 	@Bean
@@ -45,7 +54,25 @@ public class HospitalApplication/* implements CommandLineRunner*/ {
 
 
 	@EventListener(ApplicationReadyEvent.class)
-	public void doSomethingAfterStartup() {
+	public void loadBlackListedIPs() {
+		List<String> ips = new ArrayList<>();
+		try {
+			File file = ResourceUtils.getFile("classpath:blacklisted-ip.txt");
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line = reader.readLine();
+			while (null != line) {
+				line = line.replace("\n", "");
+				ips.add(line);
+				line = reader.readLine();
+			}
+			BlackListedIP blackListedIP = new BlackListedIP(ips);
+
+			kieSession.insert(blackListedIP);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 

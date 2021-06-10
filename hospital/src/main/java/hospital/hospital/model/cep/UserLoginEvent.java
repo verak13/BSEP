@@ -15,9 +15,17 @@ public class UserLoginEvent implements Serializable {
 
     private LocalDate lastLogin;
 
+    private String ipAddres;
+
     public UserLoginEvent(String email, LocalDate lastLogin) {
         this.email = email;
         this.lastLogin = lastLogin;
+    }
+
+    public UserLoginEvent(String email, LocalDate lastLogin, String ipAddres) {
+        this.email = email;
+        this.lastLogin = lastLogin;
+        this.ipAddres = ipAddres;
     }
 
     public String getEmail() {
@@ -34,5 +42,13 @@ public class UserLoginEvent implements Serializable {
 
     public void setLastLogin(LocalDate lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public String getIpAddres() {
+        return ipAddres;
+    }
+
+    public void setIpAddres(String ipAddres) {
+        this.ipAddres = ipAddres;
     }
 }
