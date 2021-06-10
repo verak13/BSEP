@@ -85,44 +85,35 @@ public class DevicesService {
 		kieSession.fireAllRules();
 		return true;
     }
-    
-    
 
 
-    public boolean receiveMessage(byte[] msg, String alias){
-        System.out.println(msg);
-        PrivateKey pk = keyStoreReaderService.readPrivateKey(alias);
+	private boolean verifySignature(byte[] data, byte[] signature, PublicKey publicKey) {
+		try {
+			Signature sig = Signature.getInstance("SHA256withRSA");
+			sig.initVerify(publicKey);
+			sig.update(data);
+			return sig.verify(signature);
+		} catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
+    public boolean receiveMessage(byte[] msg, PublicKey pk){
+        byte[] sig = Arrays.copyOfRange(msg, 0, 256);
+        byte[] message = Arrays.copyOfRange(msg, 256, msg.length);
 
-        byte[] key = Arrays.copyOfRange(msg, 0, 256);
-        byte[] cipher = Arrays.copyOfRange(msg, 256, msg.length);
+		if(!verifySignature(message, sig, pk)){
+			return false;
+		}
 
+		String plainText = new String(message, StandardCharsets.UTF_8);
+		parseMessage(plainText);
 
-        System.out.println("DUZINA KLJUCA JE " + key.length);
+		// XSS filter...
 
-        if(pk == null){
-            return false;
-        }
-        try {
+		return true;
 
-
-            Cipher c = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
-            c.init(Cipher.DECRYPT_MODE, pk, new OAEPParameterSpec("SHA-256",
-                    "MGF1", MGF1ParameterSpec.SHA256, new PSource.PSpecified("OAEP Encrypted".getBytes(StandardCharsets.UTF_8))));
-
-            byte[] plainText = c.doFinal(key);
-
-            System.out.println(plainText + " DESIFROVAO WOWOWOOWOWOWO");
-            //tu negdje kad se dobije poruka kao string pozvati parseMessage
-
-            return plainText == plainText;
-        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalStateException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        }
-
-
-
-        return true;
     }
 
 

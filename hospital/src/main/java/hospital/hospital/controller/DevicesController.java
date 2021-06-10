@@ -34,10 +34,11 @@ public class DevicesController {
 
     @RequestMapping(value="/send", method= RequestMethod.POST)
     public ResponseEntity<?> sendMsg(@Valid @RequestBody byte[] message, HttpServletRequest servlet) throws Exception {
+
         X509Certificate[] certs = (X509Certificate[]) servlet.getAttribute("javax.servlet.request.X509Certificate");
         String cerAlias = certs[0].getSubjectDN().getName().substring(3);
 
-        if (devicesService.receiveMessage(message, cerAlias)){
+        if (devicesService.receiveMessage(message, certs[0].getPublicKey())){
         	logger.trace("New message received.");
         	return new ResponseEntity<>(HttpStatus.OK);
         } else {

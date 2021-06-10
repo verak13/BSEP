@@ -26,15 +26,20 @@ public class XSSFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        XSSRequestWrapper wrappedRequest = new XSSRequestWrapper((HttpServletRequest) request);
-
-        String body = IOUtils.toString(wrappedRequest.getReader());
-        if (!StringUtils.isBlank(body)) {
-            body = XSSUtils.stripXSS(body);
-            wrappedRequest.resetInputStream(body.getBytes());
-        }
-
-        chain.doFilter(wrappedRequest, response);
+        chain.doFilter(request, response);
+//        XSSRequestWrapper wrappedRequest = new XSSRequestWrapper((HttpServletRequest) request);
+//
+//        String body = IOUtils.toString(wrappedRequest.getReader());
+//
+//        System.out.println("BODY SAD ");
+//        System.out.println(body);
+//
+//        if (!StringUtils.isBlank(body)) {
+//            body = XSSUtils.stripXSS(body);
+//            wrappedRequest.resetInputStream(body.getBytes());
+//        }
+//
+//        chain.doFilter(wrappedRequest, response);
     }
 
 }
