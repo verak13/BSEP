@@ -60,19 +60,19 @@ public class CertificateRequest implements Serializable  {
     @Column(name = "email", unique = false, nullable = false)
     private String email;
     
-    @Column(name = "userId", unique = false, nullable = false)
-    private int userId;
+    /*@Column(name = "userId", unique = false, nullable = false)
+    private int userId;*/
 
     @Transient
     private String publicKeyEncoded;
 
-	public int getUserId() {
+	/*public int getUserId() {
 		return userId;
 	}
 
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
+	}*/
 
 	public int getId() {
 		return id;
@@ -161,7 +161,7 @@ public class CertificateRequest implements Serializable  {
 	}
 
 	public CertificateRequest(String commonName, String countryName, String organization,
-							  String organizationUnitName, String stateName, String localityName, String email, int userId) {
+							  String organizationUnitName, String stateName, String localityName, String email/*, int userId*/) {
 		super();
 		this.commonName = commonName;
 		this.countryName = countryName;
@@ -170,7 +170,7 @@ public class CertificateRequest implements Serializable  {
 		this.stateName = stateName;
 		this.localityName = localityName;
 		this.email = email;
-		this.userId = userId;
+		//this.userId = userId;
 	}
 	
 	public CertificateRequest() {}
@@ -179,7 +179,7 @@ public class CertificateRequest implements Serializable  {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.id);
 		sb.append(this.getEmail());
-		sb.append(this.getUserId());
+		//sb.append(this.getUserId());
 		sb.append(this.getCommonName());
 		sb.append(this.getCountryName());
 		sb.append(this.getLocalityName());

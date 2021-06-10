@@ -305,7 +305,7 @@ public class CertificateService {
 		builder.addRDN(BCStyle.ST, cerRequestInfo.getStateName());
 		builder.addRDN(BCStyle.L, cerRequestInfo.getLocalityName());
 
-		builder.addRDN(BCStyle.UID, String.valueOf(cerRequestInfo.getUserId()));
+		//builder.addRDN(BCStyle.UID, String.valueOf(cerRequestInfo.getUserId()));
 
 		return new SubjectData(builder.build(), serialNumber, startDate, endDate);
 

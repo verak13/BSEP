@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,11 @@ import org.springframework.stereotype.Service;
 
 import hospital.hospital.dto.FilterMessagesDTO;
 import hospital.hospital.dto.MessageResponseDTO;
+import hospital.hospital.model.Log;
 import hospital.hospital.model.Message;
 import hospital.hospital.model.Patient;
+import hospital.hospital.model.cep.LogEvent;
+import hospital.hospital.model.cep.MessageEvent;
 import hospital.hospital.repository.MessageRepository;
 import hospital.hospital.repository.PatientRepository;
 
@@ -29,6 +33,9 @@ public class DevicesService {
 
 	@Autowired
 	private MessageRepository messageRepository;
+	
+	@Autowired
+	private KieSession kieSession;
 	
 	@Autowired
 	PatientRepository patientRepository;
@@ -52,6 +59,9 @@ public class DevicesService {
 		message.setBloodPressure(Double.parseDouble(array[5]));
 		message.setHeartRate(Double.parseDouble(array[6]));
 		messageRepository.save(message);
+		kieSession.insert(new MessageEvent(message));
+        kieSession.getAgenda().getAgendaGroup("doctor_alarms").setFocus();
+		kieSession.fireAllRules();
         return true;
     }
 
