@@ -38,6 +38,7 @@ public class Log {
 	@Indexed
 	private String username;
 	
+	
 	public Log() {}
 
 	public Log(BigInteger id, Date timestamp, String source, String type, LogSeverity severity, String ip, String message,

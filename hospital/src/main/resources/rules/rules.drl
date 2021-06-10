@@ -1,9 +1,16 @@
 package hospital.hospital.rules;
 
 import hospital.hospital.model.cep.LogEvent;
-import hospital.hospital.services.SecurityService;
+import hospital.hospital.model.cep.UserLoginEvent;
+import hospital.hospital.services.MailService;
 
-global SecurityService securityService
+
+import hospital.hospital.model.cep.alarms.InactiveUserAlarm;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+global MailService mailService
 
 declare AlarmTriggered
     username: String
@@ -24,7 +31,8 @@ rule "More than 100 unsuccessful logins with same username in 60 sec, notify adm
                         )
                          not (AlarmTriggered(username == $username))
     then
-        System.out.println("Trigerovan alarm za korisnika : " + $username);
+        System.out.println("==== TRIGEROVAN ALARM ZA 100 POKUSAJA U MINUTI ===");
+        System.out.println("username: " + $username);
         System.out.println($attempts);
         insert(new AlarmTriggered($username, $attempts));
 end
@@ -33,5 +41,23 @@ rule "Alarm triggered, notify user by email"
     when
         AlarmTriggered($username: username, $attempts: attempts)
     then
-        securityService.notifyAdmin($username, $attempts);
+       System.out.println("daa");
+end
+
+rule "User logged in after more than 90 days from last login, triger NotActiveAlarm"
+    when
+        $e : UserLoginEvent($email: email, $lastLogin: lastLogin)
+        eval(ChronoUnit.DAYS.between($lastLogin, LocalDate.now()) >= 90)
+    then
+        insert(new InactiveUserAlarm($email, ChronoUnit.DAYS.between($lastLogin, LocalDate.now())));
+        System.out.println("==== TRIGEROVAN ALARM ZA NEAKTIVNOG KORISNIKA ====");
+        System.out.println("username: " + $email);
+end
+
+rule "Inactive user alarm triggered, notify admin by email"
+  when
+        $alarm : InactiveUserAlarm($userEmail: userEmail, $daysInactive: daysInactive)
+    then
+        String msg = "User with email : " + $userEmail + " hasn't been active for more than 90 days and tried to log in today.";
+        mailService.notifyAdmin($alarm.getAdminEmail(), msg);
 end

@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.*;
+
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
@@ -22,5 +24,20 @@ public class UserService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", email));
         }
+    }
+
+    public LocalDate saveLastLogin(String email) {
+        User user = userRepository.findByEmail(email);
+        LocalDate lastLogin = LocalDate.now();
+
+        if (user == null) {
+            user = new User(email, LocalDate.now());
+        } else {
+            lastLogin = user.getLastLogin();
+            user.setLastLogin(LocalDate.now());
+        }
+        userRepository.save(user);
+
+        return lastLogin;
     }
 }

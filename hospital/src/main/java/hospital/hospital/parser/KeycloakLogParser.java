@@ -27,11 +27,18 @@ public class KeycloakLogParser {
 		String ip = "";
 		String username = "";
 		String type = "";
-		if (tokens[5].split("=")[0].equals("type")){
-			type = tokens[5].split("=")[1];
+
+		if (tokens[7].split("=")[0].equals("type")){
+			type = tokens[7].split("=")[1].replace(",", "");
+			int usernameIndex = log.indexOf("username");
+			if (usernameIndex != -1) {
+				String subStr = log.substring(usernameIndex);
+				username = subStr.split("=")[1].split(",")[0];
+			}
 		} else {
 			type = "KEYCLOAK";
 		}
+		System.out.println("OVO JE tiiip " + type);
 		String severity = tokens[2];
 		String message = String.join(" ", Arrays.asList(tokens).subList(5, Arrays.asList(tokens).size()));
 		if (message.contains("isAddress=")) {

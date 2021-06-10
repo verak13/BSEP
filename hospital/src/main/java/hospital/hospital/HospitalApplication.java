@@ -1,20 +1,14 @@
 package hospital.hospital;
 
-import java.util.Date;
-import java.util.List;
-
-import hospital.hospital.model.User;
-import hospital.hospital.services.SecurityService;
+import hospital.hospital.services.MailService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieRuntime;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import hospital.hospital.model.Log;
 import hospital.hospital.repository.LogRepository;
 
 import org.slf4j.Logger;
@@ -30,7 +24,7 @@ public class HospitalApplication/* implements CommandLineRunner*/ {
 	private LogRepository logRepository;
 
 	@Autowired
-	private SecurityService securityService;
+	private MailService mailService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HospitalApplication.class);
 
@@ -39,7 +33,7 @@ public class HospitalApplication/* implements CommandLineRunner*/ {
 		KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
 		KieSession kieSession = kc.newKieSession("rulesSession");
 		KieRuntime kieRuntime = (KieRuntime) kieSession;
-		kieRuntime.setGlobal("securityService", securityService);
+		kieRuntime.setGlobal("mailService", mailService);
 
 		return kieSession;
 	}
