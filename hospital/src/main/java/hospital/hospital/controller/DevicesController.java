@@ -1,6 +1,7 @@
 package hospital.hospital.controller;
 
 
+import hospital.hospital.dto.DeviceMessageDTO;
 import hospital.hospital.keystore.KeyStoreReader;
 import hospital.hospital.model.CertificateRequest;
 import hospital.hospital.services.DevicesService;
