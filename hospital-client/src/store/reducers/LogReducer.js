@@ -1,5 +1,6 @@
 import { SET_LOGS } from "../actions/actionTypes";
 
+import { formatTimestamp } from '../../utils/index';
 
 const initialState = {
     all: [],
@@ -12,7 +13,7 @@ export default function logReducer(state = initialState, action) {
         case SET_LOGS:
             let logs = action.payload.content
             logs = logs.map (log => {
-                log.timestamp = formatDate(log.timestamp)
+                log.timestamp = formatTimestamp(log.timestamp)
                 return log;
             })
             return {...state, all: logs, total: action.payload.totalElements, page: action.payload.pageable.pageNumber }
@@ -20,12 +21,4 @@ export default function logReducer(state = initialState, action) {
             return state
     }
 
-}
-
-const formatDate = timestamp => {
-   const arr = timestamp.split("T");
-   const date = arr[0].split("-");
-   const datestr = date[2] + "." + date[1] + "." + date[0] + ".";
-
-   return datestr
 }

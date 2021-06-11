@@ -40,7 +40,7 @@ public class CertificateController {
     public ResponseEntity<?> createCertificate(@Valid @RequestBody CreateCertificateDTO certificateCreationDTO) throws OperatorCreationException, CertificateException {
 		
         try {
-	        if (certificateService.createAdminCertificate(certificateCreationDTO, "superadmin@admin.com")) {
+	        if (certificateService.createAdminCertificate(certificateCreationDTO, "root-ca")) {
 	        	certificateRequestService.delete(certificateCreationDTO.getRequestId());
 		        return new ResponseEntity<>(HttpStatus.CREATED);
 	        } else {

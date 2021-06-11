@@ -25,6 +25,8 @@ public interface LogRepository extends MongoRepository<Log, Integer> {
 	List<Log> findAllBySeverityAndTimestampBetween(LogSeverity string, Date from, Date to);
 	
     int countBySeverityEqualsAndTimestampBetween(LogSeverity severity, Date startDate, Date endDate);
+
+    long countByType(String type);
     
     @Query("{$and:[" +
     "{$or:[{$expr: {$eq: [?1, null]}}, {'timestamp':{$lt:?1}}]}, {$or:[{$expr: {$eq: [?0, null]}}, {'timestamp':{$gt:?0}}]}, " +

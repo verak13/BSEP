@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import hospital.hospital.enums.BloodType;
+import hospital.hospital.enums.Gender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ public class PatientController {
     @PreAuthorize("hasRole('DOCTOR')")
     @RequestMapping(value= "/by-page",method = RequestMethod.GET)
     public ResponseEntity<?> getPatients(Pageable pageable)throws Exception {
+
 
     	Page<Patient> reqs = patientService.findAll(pageable);
     	logger.trace("Patients view requested.");

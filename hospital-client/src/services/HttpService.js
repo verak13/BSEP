@@ -37,7 +37,6 @@ class HttpService {
         options.cert = CERT;
 
         this.client = axios.create(options);
-
     }
 
     attachHeaders = headers => {

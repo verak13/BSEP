@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 2021-06-10 02:07:17,877 ERROR [org.keycloak.events] (default task-16) type=LOGIN_ERROR, realmId=admin-portal, clientId=null, userId=null, ipAddress=127.0.0.1, error=expired_code, restart_after_timeout=true, authSessionParentId=ed98118e-4c95-442e-8309-4312feccbdcf, authSessionTabId=A_lHnJ_hJjI
 2021-06-10 02:07:35,458 ERROR [org.keycloak.events] (default task-16) type=LOGIN_ERROR, realmId=admin-portal, clientId=hospital-portal-client, userId=null, ipAddress=127.0.0.1, error=user_not_found, auth_method=openid-connect, redirect_uri=https://localhost:3001/request, code_id=ed98118e-4c95-442e-8309-4312feccbdcf, username=admin11@gmail.com, authSessionParentId=ed98118e-4c95-442e-8309-4312feccbdcf, authSessionTabId=A_lHnJ_hJjI
 2021-06-10 02:54:29,066 ERROR [org.keycloak.events] (default task-16) type=LOGIN_ERROR, realmId=admin-portal, clientId=null, userId=null, ipAddress=127.0.0.1, error=expired_code, restart_after_timeout=true, authSessionParentId=63b490a0-b4b1-4e2c-9f62-127cece86529, authSessionTabId=0UHIAoMfZ0g
@@ -2720,3 +2721,5 @@ WFLYCTL0448: 13 additional services are down due to their dependencies being mis
 2021-06-11 22:58:57,834 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 78) WFLYCLINF0003: Stopped http-remoting-connector cache from ejb container
 2021-06-11 22:58:57,835 INFO  [org.infinispan.manager.DefaultCacheManager] (ServerService Thread Pool -- 78) Stopping cache manager null on null
 2021-06-11 22:58:57,847 INFO  [org.jboss.as] (MSC service thread 1-4) WFLYSRV0050: Keycloak 13.0.0 (WildFly Core 15.0.1.Final) stopped in 360ms
+=======
+>>>>>>> f8b9f018a317a35449217a0388763d2ffbbff1ef

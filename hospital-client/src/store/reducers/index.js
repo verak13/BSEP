@@ -13,6 +13,7 @@ import MessageAlarmReducer from './MessageAlarmReducer';
 import PatientReducer from './PatientReducer';
 import RulesReducer from './RulesReducer';
 
+import ReportReducer from './ReportReducer';
 
 export default history =>
     combineReducers({
@@ -25,5 +26,6 @@ export default history =>
         messageAlarms: MessageAlarmReducer,
         patients: PatientReducer,
         rules: RulesReducer,
+        report: ReportReducer,
         router: connectRouter(history),
     });
