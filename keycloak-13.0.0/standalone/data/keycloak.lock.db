@@ -1,6 +1,0 @@
-#FileLock
-#Fri Jun 11 00:45:17 CEST 2021
-hostName=192.168.1.15
-id=179f819dcf0c3ff3c37c496c6d57600fc6a925e376e
-method=file
-server=192.168.1.15\:62121
