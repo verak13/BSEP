@@ -9,7 +9,7 @@ import { getAlarmsBlacklisted, getAlarmsBruteforce, getAlarmsError, getAlarmsIna
 import { getMessages } from './MessageSagas';
 import { getMessageAlarms } from './MessageAlarmSagas';
 import { getPatients } from './PatientSagas';
-import { addTemperatureRule, addPressureRule } from './RulesSagas';
+import { pressureRuleAdd, temperatureRuleAdd } from './RulesSagas';
 
 
 export default function* rootSaga() {
@@ -28,7 +28,7 @@ export default function* rootSaga() {
         takeLatest(GET_MESSAGES, getMessages),
         takeLatest(GET_MESSAGE_ALARMS, getMessageAlarms),
         takeLatest(GET_PATIENTS, getPatients),
-        takeLatest(ADD_TEMPERATURE_RULE, addTemperatureRule),
-        takeLatest(ADD_PRESSURE_RULE, addPressureRule),
+        takeLatest(ADD_TEMPERATURE_RULE, temperatureRuleAdd),
+        takeLatest(ADD_PRESSURE_RULE, pressureRuleAdd),
     ])
 }

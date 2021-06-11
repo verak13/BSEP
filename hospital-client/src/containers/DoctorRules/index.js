@@ -11,18 +11,9 @@ import Footer from '../../components/Footer';
 import { addTemperatureRule, addPressureRule } from '../../store/actions/rulesActions';
 import { makeStyles } from '@material-ui/core/styles';
 
-
 const FormikTextField = withFormikField(TextField);
 
 function DoctorRules(props) {
-
-    /*const initialState = {
-        patientIdTemperature: 0,
-        patientIdPressure: 0,
-        value: 0.0,
-        diastolic: 0.0,
-        systolic: 0.0,
-      };*/
 
     const handleSubmitTemperature = values => {
        console.log(values);
@@ -115,7 +106,7 @@ function DoctorRules(props) {
                             />
                         </Grid>
                         <Grid container justify='center' style={{ margin: '10px 0px' }}>
-                            <Button variant='contained' color='primary' type="submit">Add Pressure Rule</Button>
+                            <Button variant='contained' color='primary' type="submit">Add Pressure Alarm</Button>
                         </Grid>
                     </Grid>
                 </Form>
@@ -127,29 +118,23 @@ function DoctorRules(props) {
             <Grid>
             <Formik
                     initialValues={{ 
-                        patientIdPressure: 0,
-                        diastolic: 0.0,
-                        systolic: 0.0
+                        patientIdTemperature: 0,
+                        value: 0.0,
                     }}
                     validationSchema={Yup.object().shape({
-                        patientIdPressure: Yup.string().required('Required')
+                        patientIdTemperature: Yup.string().required('Required')
                         .matches(
                             /^$|[0-9]+$/,
                             "Must Be Integer"
                         ),
-                        diastolic: Yup.string().required('Required')
-                        .matches(
-                            /^[0-9]+.[0-9]+$/,
-                            "Must Be Double"
-                        ),
-                        systolic: Yup.string().required('Required')
+                        value: Yup.string().required('Required')
                         .matches(
                             /^[0-9]+.[0-9]+$/,
                             "Must Be Double"
                         ),
                     })
                     }
-                    onSubmit={handleSubmitPressure}
+                    onSubmit={handleSubmitTemperature}
                 >
                     <Form >
                         <Grid container spacing={2}>
@@ -159,7 +144,7 @@ function DoctorRules(props) {
                                 <Field
                                     component={FormikTextField}
                                     type="text"
-                                    name="patientIdPressure"
+                                    name="patientIdTemperature"
                                     variant="outlined"
                                     required
                                     fullWidth
@@ -170,26 +155,15 @@ function DoctorRules(props) {
                                 <Field
                                     component={FormikTextField}
                                     type="text"
-                                    name="diastolic"
+                                    name="value"
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    label="Diastolic Blood Pressure Value"
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Field
-                                    component={FormikTextField}
-                                    type="text"
-                                    name="systolic"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    label="Syastolic Blood Pressure Value"
+                                    label="Value"
                                 />
                             </Grid>
                             <Grid container justify='center' style={{ margin: '10px 0px' }}>
-                                <Button variant='contained' color='primary' type="submit">Add Pressure Rule</Button>
+                                <Button variant='contained' color='primary' type="submit">Add High Temperature Alarm</Button>
                             </Grid>
                         </Grid>
                     </Form>
@@ -205,9 +179,9 @@ function DoctorRules(props) {
 
 }
 
-/*const mapStateToProps = state => ({
-    requests: state.requests.requests
-});*/
+const mapStateToProps = state => ({
+    //requests: state.requests.requests
+});
 
 const mapDispatchToProps = {
   addTemperatureRule,
@@ -215,3 +189,4 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DoctorRules);
+

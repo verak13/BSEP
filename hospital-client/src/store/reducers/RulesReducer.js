@@ -5,6 +5,6 @@ const initialState = {
 }
 
 export default function rulesReducer(state = initialState, action) {
-
+    return state;
 
 }
