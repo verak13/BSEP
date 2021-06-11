@@ -36,3 +36,9 @@ export const SET_PATIENTS = 'SET_PATIENTS';
 
 export const ADD_TEMPERATURE_RULE = 'ADD_TEMPERATURE_RULE';
 export const ADD_PRESSURE_RULE = 'ADD_PRESSURE_RULE';
+
+export const GENERATE_REPORT = 'GENERATE_REPORT';
+export const SET_REPORT = 'SET_REPORT';
+
+export const GET_REPORTS = 'GET_REPORTS';
+export const SET_REPORTS = 'SET_REPORTS';

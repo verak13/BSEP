@@ -1,5 +1,6 @@
 import { SET_MESSAGES } from "../actions/actionTypes";
 
+import { formatTimestamp } from '../../utils/index';
 
 const initialState = {
     all: [],
@@ -12,7 +13,7 @@ export default function messageReducer(state = initialState, action) {
         case SET_MESSAGES:
             let messages = action.payload.content
             messages = messages.map (message => {
-                message.timestamp = formatDate(message.timestamp)
+                message.timestamp = formatTimestamp(message.timestamp)
                 return message;
             })
             return {...state, all: messages, total: action.payload.totalElements, page: action.payload.pageable.pageNumber }
@@ -20,12 +21,4 @@ export default function messageReducer(state = initialState, action) {
             return state
     }
 
-}
-
-const formatDate = timestamp => {
-   const arr = timestamp.split("T");
-   const date = arr[0].split("-");
-   const datestr = date[2] + "." + date[1] + "." + date[0] + ".";
-
-   return datestr
 }

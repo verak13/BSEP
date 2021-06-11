@@ -46,8 +46,8 @@ function AlarmsBlacklisted(props) {
         title="Alarm list"
         columns={[
             { title: 'IP Address', field: 'ip' },
-            { title: 'User Email', field: 'userEmail' },
-            { title: 'Date', field: 'date' }
+            { title: 'User Email', field: 'username' },
+            { title: 'Date', field: 'timestamp' }
         ]}
         data={props.alarms}        
         options={{

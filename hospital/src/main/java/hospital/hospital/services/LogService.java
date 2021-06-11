@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 
@@ -35,6 +32,12 @@ import com.google.gson.Gson;
 
 @Service
 public class LogService {
+
+	public static final String ERROR_LOG = "ERROR_LOG";
+	public static final String LOGIN_ERROR_LOG = "LOGIN_ERROR_LOG";
+	public static final String LOGIN_LOG = "LOGIN_LOG";
+	public static final String APPLICATION_LOG = "APPLICATION_LOG";
+	public static final String TOTAL = "TOTAL";
 	
 	@Autowired
 	LogRepository logRepository;
@@ -260,4 +263,15 @@ public class LogService {
 		return newFlagDate;
 	}
 
+	public HashMap<String, Long> countLogs() {
+
+		HashMap<String, Long> map = new HashMap<>();
+		map.put(APPLICATION_LOG, logRepository.countByType("APPLICATION"));
+		map.put(LOGIN_LOG, logRepository.countByType("LOGIN"));
+		map.put(LOGIN_ERROR_LOG, logRepository.countByType("LOGIN_ERROR"));
+		map.put(ERROR_LOG, logRepository.countByType("ERROR"));
+		map.put(TOTAL, logRepository.count());
+
+		return map;
+	}
 }
