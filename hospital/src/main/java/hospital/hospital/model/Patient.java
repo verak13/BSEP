@@ -3,15 +3,9 @@ package hospital.hospital.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import hospital.hospital.helper.AttributeEncryptor;
 import org.hibernate.annotations.ColumnTransformer;
 
 import hospital.hospital.enums.BloodType;
@@ -25,41 +19,35 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
-	
-	@ColumnTransformer(forColumn = "jmbg", 
-			read = "pgp_sym_decrypt(jmbg, 'secret')", 
-			write = "pgp_sym_encrypt(?, 'secret'")
-			/*read="AES_DECRYPT(UNHEX(jmbg), UNHEX(SHA2('secret', 512)))",
-			write="HEX(AES_ENCRYPT(?, UNHEX(SHA2('secret', 512))))")*/
-	@Column(unique = true/*, columnDefinition = "bytea"*/)
+
+	@Convert(converter = AttributeEncryptor.class)
+	@Column(unique = true, name="jmbg")
 	private String jmbg;
-	
-	@Column
-	@ColumnTransformer(forColumn = "first_name", 
-			read = "pgp_sym_decrypt(first_name, 'secret')", 
-			write = "pgp_sym_encrypt(?, 'secret'")
+
+
+	@Convert(converter = AttributeEncryptor.class)
+	@Column(name = "first_name")
 	private String firstName;
-	
-	@Column
-	@ColumnTransformer(forColumn = "last_name", 
-			read = "pgp_sym_decrypt(last_name, 'secret')", 
-			write = "pgp_sym_encrypt(?, 'secret'")
+
+
+	@Convert(converter = AttributeEncryptor.class)
+	@Column(name = "last_name")
 	private String lastName;
 	
-	@Column
+	@Column(name = "birth_date")
 	private Date birthDate;
 	
-	@Column
+	@Column(name = "height")
 	private double height;
 	
-	@Column
+	@Column(name = "weight")
 	private double weight;
 	
-	@Column
+	@Column(name = "gender")
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 	
-	@Column	
+	@Column(name = "blood_type")
 	@Enumerated(EnumType.STRING)
 	private BloodType bloodType;
 	
