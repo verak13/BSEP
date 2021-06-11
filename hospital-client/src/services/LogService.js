@@ -6,20 +6,10 @@ const ENDPOINTS = {
 
 class LogService extends ApiService {
 
-    getLogs = async ({ pageSize, page }) => {
-        console.log('u servisu', pageSize)
+    getLogs = async ({ pageSize, page, search }) => {
         let uri = ENDPOINTS.GET.replace(":size", pageSize)
         uri = uri.replace(":page", page)
-        const { data } = await this.apiClient.post(uri, {
-            from : null,
-            to: null,
-            ip : "",
-            source: "",
-            type: "",
-            severity: "",
-            username: "",
-            message: ""
-        });
+        const { data } = await this.apiClient.post(uri, search);
 
         return data;
     }

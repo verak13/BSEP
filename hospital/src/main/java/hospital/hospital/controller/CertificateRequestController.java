@@ -32,11 +32,7 @@ public class CertificateRequestController {
     @PreAuthorize("hasRole('HOSPITAL_ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) throws Exception {
-//        UserModel userModel = session.users().getUserById("1", session.realms().getRealmByName("admin-portal"));
-//        userModel.setSingleAttribute("LAST_LOGIN_TIME_KEY", String.valueOf(new Date().getTime()));
 
-        System.out.println("POGODJEN CTRL");
-        
         if (certificateRequestService.createCSR(csr)) {
         	logger.trace("New CSR created.");
             return new ResponseEntity<>(HttpStatus.OK);

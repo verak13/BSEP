@@ -19,6 +19,7 @@ public class SearchLogDTO {
 	private Date to;
 	
     @Pattern(regexp="^$|^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", message="Field must be ip address.")
+    //@Pattern(regexp="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", message="Field must be ip address.")
 	private String ip;
     
 	private String source;
@@ -29,7 +30,7 @@ public class SearchLogDTO {
 	@Pattern(regexp = "^$|^TRACE$|^DEBUG$|^INFO$|^WARN$|^ERROR$|^FATAL$", message = "input not allowed")
 	private String severity;
 	
-	@Pattern(regexp="^$|[a-zA-Z@]+$", message="Email must be valid.")
+	@Pattern(regexp="^$|[a-zA-Z@]+$", message="Email must be valid.")	
 	private String username;
 	
 	private String message;
