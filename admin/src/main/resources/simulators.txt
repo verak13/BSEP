@@ -1,0 +1,3 @@
+SIMULATOR1 C:\\\\bezb\\BSEP\\simulator\\simulator1.log
+SIMULATOR2 C:\\\\bezb\\BSEP\\simulator\\simulator2.log
+SIMULATOR3 C:\\\\bezb\\BSEP\\simulator\\simulator3.log

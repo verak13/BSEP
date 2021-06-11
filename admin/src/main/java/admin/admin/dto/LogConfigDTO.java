@@ -1,17 +1,24 @@
-package admin.admin.model;
+package admin.admin.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
-public class LogConfig {
+public class LogConfigDTO {
 	
+	@NotBlank
+	@Pattern(regexp = "^SIMULATOR1$|^SIMULATOR2$|^SIMULATOR3$", message = "input not allowed")
 	private String file;
 	
+	@NotBlank
+	@Min(1)
 	private long interval;
 	
+	@NotBlank
 	private String regexp;
 	
+	@NotBlank
+	@Min(1)
 	private Long hospitalId;
 	
 	
@@ -39,7 +46,7 @@ public class LogConfig {
 	public void setRegexp(String regexp) {
 		this.regexp = regexp;
 	}
-	public LogConfig(String file, long interval, String regexp, Long hospitalId) {
+	public LogConfigDTO(String file, long interval, String regexp, Long hospitalId) {
 		super();
 		this.file = file;
 		this.interval = interval;
@@ -47,5 +54,5 @@ public class LogConfig {
 		this.hospitalId = hospitalId;
 	}
 
-	public LogConfig() {}
+	public LogConfigDTO() {}
 }

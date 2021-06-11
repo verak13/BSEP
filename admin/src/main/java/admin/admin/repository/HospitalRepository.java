@@ -8,4 +8,5 @@ import admin.admin.model.Hospital;
 @Repository
 public interface HospitalRepository extends JpaRepository<Hospital, Integer>  {
 
+	Hospital findById(long id);
 }

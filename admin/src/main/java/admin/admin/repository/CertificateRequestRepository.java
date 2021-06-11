@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface CertificateRequestRepository extends JpaRepository<CertificateRequest, Integer> {
-	CertificateRequest findByUserId(int id);
+	//CertificateRequest findByUserId(int id);
 
 	CertificateRequest findByEmail(String email);
 }

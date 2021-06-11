@@ -4,7 +4,7 @@ import PrivateRoute from '../../containers/Routes/PrivateRoute';
 import PublicRoute from '../../containers/Routes/PublicRoute';
 import HomePage from '../../Pages/HomePage';
 import LoginPage from '../../Pages/LoginPage';
-import { REQUESTS, HOME, LOGIN, ADD_DOCTOR, LOGS, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGES, MESSAGE_ALARMS, PATIENTS, DOCTOR_RULES } from '../../assets/routes';
+import { REQUESTS, HOME, LOGIN, ADD_DOCTOR, LOGS, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGES, MESSAGE_ALARMS, PATIENTS, DOCTOR_RULES, CUSTOM_MESSAGE_RULE } from '../../assets/routes';
 import Requests from '../../containers/Requests';
 import AddDoctor from '../../containers/Doctors';
 import Logs from '../../containers/Logs';
@@ -16,6 +16,7 @@ import Messages from '../../containers/Messages';
 import MessageAlarms from '../../containers/MessageAlarms';
 import Patients from '../../containers/Patients';
 import DoctorRules from '../../containers/DoctorRules';
+import CustomMessageRule from '../../containers/CustomMessageRule';
 
 
 export default function Routes() {
@@ -33,6 +34,7 @@ export default function Routes() {
             <PrivateRoute path={MESSAGE_ALARMS} role="DOCTOR" component={MessageAlarms} exact />
             <PrivateRoute path={PATIENTS} role="DOCTOR" component={Patients} exact />
             <PrivateRoute path={DOCTOR_RULES} role="DOCTOR" component={DoctorRules} exact />
+            <PrivateRoute path={CUSTOM_MESSAGE_RULE} role="DOCTOR" component={CustomMessageRule} exact />
         </Switch>
     )
 }

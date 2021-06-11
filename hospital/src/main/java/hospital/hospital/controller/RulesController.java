@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import hospital.hospital.dto.CustomMessageRuleDTO;
 import hospital.hospital.dto.RuleBloodPressureDTO;
 import hospital.hospital.dto.RuleDTO;
 import hospital.hospital.model.Patient;
@@ -49,6 +50,19 @@ public class RulesController {
     public ResponseEntity<?> createBloodPressureRule(@Valid @RequestBody RuleBloodPressureDTO dto) throws Exception {
 
     	if (rulesService.createBloodPressureRule(dto)) {
+        	logger.trace("Added new doctor rule.");
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+        	logger.error("Adding rule failed.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @PreAuthorize("hasRole('DOCTOR')")
+    @RequestMapping(value = "/custom-message-rule", method = RequestMethod.POST)
+    public ResponseEntity<?> createCustomMessageRule(@Valid @RequestBody CustomMessageRuleDTO dto) throws Exception {
+
+    	if (rulesService.createCustomMessageRule(dto)) {
         	logger.trace("Added new doctor rule.");
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

@@ -8,6 +8,10 @@ const ENDPOINT_PRESSURE_RULE = {
     GET: '/rules/blood-pressure',
 }
 
+const ENDPOINT_CUSTOM_MESSAGE_RULE = {
+    GET: '/rules/custom-message-rule',
+}
+
 class RulesService extends ApiService {
     
     addTemperatureRule = async (payload) => {
@@ -17,6 +21,11 @@ class RulesService extends ApiService {
 
     addPressureRule = async (payload) => {
         const {data} = await this.apiClient.post(ENDPOINT_PRESSURE_RULE.GET, payload);
+        return data;
+    }
+
+    addCustomMessageRule = async (payload) => {
+        const {data} = await this.apiClient.post(ENDPOINT_CUSTOM_MESSAGE_RULE.GET, payload);
         return data;
     }
 }
