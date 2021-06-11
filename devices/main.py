@@ -1,22 +1,9 @@
 import requests
+import datetime
+import random
 from time import sleep
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes, serialization
-
-from Crypto.PublicKey import RSA
-from Crypto.Hash import SHA256
-from Crypto.Signature import PKCS1_v1_5
-import datetime
-import random
-
-
-def sign(private_key, data):
-    key = RSA.importKey(private_key.sign())
-
-    hash_value = SHA256.new(data)
-    signer = PKCS1_v1_5.new(key)
-    return signer.sign(hash_value)
-
 
 
 
@@ -35,8 +22,6 @@ def create_message():
     pressureSystolic = random.randint(60,130)
 
     return f"{datetime.datetime.now()}|{id}|{temp}|{pulse}|{respiration}|{pressureDiastolic}|{pressureSystolic}".encode('utf-8')
-
-
 
 
 def read_key(key_path=VALID_CERT[1]):
