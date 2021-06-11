@@ -94,34 +94,34 @@ public class RulesService {
 	public boolean createCustomMessageRule(CustomMessageRuleDTO dto) {
 		try {
 			if (dto.getMinDiastolic().equals("")) {
-				dto.setMinDiastolic("0.0");
+				dto.setMinDiastolic("1000.0");
 			}
 			if (dto.getMinSystolic().equals("")) {
-				dto.setMinSystolic("0.0");
+				dto.setMinSystolic("1000.0");
 			}
 			if (dto.getMinTemperature().equals("")) {
-				dto.setMinTemperature("0.0");
+				dto.setMinTemperature("1000.0");
 			}
 			if (dto.getMinPulse().equals("")) {
-				dto.setMinPulse("0.0");
+				dto.setMinPulse("1000.0");
 			}
 			if (dto.getMinRespiration().equals("")) {
-				dto.setMinRespiration("0.0");
+				dto.setMinRespiration("1000.0");
 			}
 			if (dto.getMaxSystolic().equals("")) {
-				dto.setMaxSystolic("1000.0");
+				dto.setMaxSystolic("0.0");
 			}
 			if (dto.getMaxDiastolic().equals("")) {
-				dto.setMaxDiastolic("1000.0");
+				dto.setMaxDiastolic("0.0");
 			}
 			if (dto.getMaxPulse().equals("")) {
-				dto.setMaxPulse("1000.0");
+				dto.setMaxPulse("0.0");
 			}
 			if (dto.getMaxTemperature().equals("")) {
-				dto.setMaxTemperature("1000.0");
+				dto.setMaxTemperature("0.0");
 			}
 			if (dto.getMaxRespiration().equals("")) {
-				dto.setMaxRespiration("1000.0");
+				dto.setMaxRespiration("0.0");
 			}
 			
             InputStream template = new FileInputStream(
