@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,7 @@ public class AlarmController {
 	@Autowired
 	AlarmService alarmService;
 	
+	@PreAuthorize("hasRole('HOSPITAL_ADMIN')")
 	@RequestMapping(value= "/blacklisted-ip/by-page",method = RequestMethod.GET)
     public ResponseEntity<Page<BlackListedIPAlarm>> findAllBlackListedIPAlarms(Pageable pageable) {
 
@@ -36,6 +38,7 @@ public class AlarmController {
         return new ResponseEntity<>(alarmService.findAllBlackListedIPAlarms(pageable), HttpStatus.OK);
     }
 	
+	@PreAuthorize("hasRole('HOSPITAL_ADMIN')")
 	@RequestMapping(value= "/bruteforce-login/by-page",method = RequestMethod.GET)
     public ResponseEntity<Page<BruteForceLoginAlarm>> findAllBruteForceLoginAlarms(Pageable pageable) {
 
@@ -43,6 +46,7 @@ public class AlarmController {
         return new ResponseEntity<>(alarmService.findAllBruteForceLoginAlarms(pageable), HttpStatus.OK);
     }
 	
+	@PreAuthorize("hasRole('HOSPITAL_ADMIN')")
 	@RequestMapping(value= "/error-log/by-page",method = RequestMethod.GET)
     public ResponseEntity<Page<ErrorLogAlarm>> findAllErrorLogAlarms(Pageable pageable) {
 
@@ -50,6 +54,7 @@ public class AlarmController {
         return new ResponseEntity<>(alarmService.findAllErrorLogAlarms(pageable), HttpStatus.OK);
     }
 	
+	@PreAuthorize("hasRole('HOSPITAL_ADMIN')")
 	@RequestMapping(value= "/inactive-user/by-page",method = RequestMethod.GET)
     public ResponseEntity<Page<InactiveUserAlarm>> findAllInactiveUserAlarms(Pageable pageable) {
 

@@ -10,6 +10,7 @@ public class XSSUtils {
         if (value == null) {
             return null;
         }
+
         value = ESAPI.encoder()
                 .canonicalize(value)
                 .replaceAll("\0", "");

@@ -21,12 +21,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PhotoLibrary from '@material-ui/icons/PhotoLibrary';
 import Info from '@material-ui/icons/Info';
 import ExitToApp from '@material-ui/icons/ExitToApp';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import Settings from '@material-ui/icons/Settings';
 import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
-import { REQUESTS, ADD_DOCTOR } from '../routes';
+import { REQUESTS, LOGS, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGE_ALARMS, MESSAGES, PATIENTS, DOCTOR_RULES } from '../routes';
 import authService from '../services/AuthService';
 
 const drawerWidth = 240;
@@ -154,6 +155,48 @@ function NavBar(props) {
                         <ListItem onClick={() => props.history.push(REQUESTS)} button key={'Requests'}>
                             <ListItemIcon><AddCircle /></ListItemIcon>
                             <ListItemText primary={'Add Request'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(LOGS)} button key={'Logs'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'See all logs'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(ALARMS_BLACKLISTED)} button key={'AlarmsBlacklisted'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'Alarms: Blacklisted IP Adresses'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(ALARMS_BRUTEFORCE)} button key={'AlarmsBruteforce'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'Alarms: Brute Force Login Attack'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(ALARMS_ERROR)} button key={'AlarmsError'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'Alarms: Error Log'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(ALARMS_INACTIVE)} button key={'AlarmsInactive'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'Alarms: Inactive User'} />
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    </>
+                : null }
+                {keycloak?.authenticated && authService.getRole() === 'DOCTOR' ? <>
+                    <List>                        
+                        <ListItem onClick={() => props.history.push(MESSAGES)} button key={'Messages'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'See Messages from Devices'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(MESSAGE_ALARMS)} button key={'MessageAlarms'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'Alarms: Patients'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(PATIENTS)} button key={'Patients'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'See Patients\' Medical Records'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(DOCTOR_RULES)} button key={'DoctorRules'}>
+                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemText primary={'Create Alarms for Specific Patients'} />
                         </ListItem>
                     </List>
                     <Divider />

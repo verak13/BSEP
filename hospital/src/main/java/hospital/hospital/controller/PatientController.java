@@ -32,8 +32,8 @@ public class PatientController {
 	@Autowired
     PatientService patientService;
 
-    @PreAuthorize("hasRole('HOSPITAL_ADMIN')")
-    @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("hasRole('DOCTOR')")
+    @RequestMapping(value= "/by-page",method = RequestMethod.GET)
     public ResponseEntity<?> getPatients(Pageable pageable)throws Exception {
 
     	Page<Patient> reqs = patientService.findAll(pageable);

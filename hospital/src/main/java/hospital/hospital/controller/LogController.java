@@ -32,7 +32,7 @@ public class LogController {
 
 	@PreAuthorize("hasRole('HOSPITAL_ADMIN')")
 	@PostMapping(value = "/by-page")
-	public ResponseEntity<?> getLogs(Pageable pageable, @Valid @RequestBody SearchLogDTO searchLog) {
+	public ResponseEntity<?> getLogs(Pageable pageable, @RequestBody SearchLogDTO searchLog) {
 		try {
 			logger.trace("View logs requested");
 			return new ResponseEntity<Page<Log>>(logService.findAll(pageable, searchLog), HttpStatus.OK);

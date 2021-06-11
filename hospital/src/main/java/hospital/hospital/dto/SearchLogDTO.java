@@ -27,7 +27,7 @@ public class SearchLogDTO {
 	private String type;
     
 	@Pattern(regexp = "^$|^TRACE$|^DEBUG$|^INFO$|^WARN$|^ERROR$|^FATAL$", message = "input not allowed")
-	private LogSeverity severity;
+	private String severity;
 	
 	@Pattern(regexp="^$|[a-zA-Z@]+$", message="Email must be valid.")
 	private String username;
@@ -36,7 +36,7 @@ public class SearchLogDTO {
 	
 	public SearchLogDTO() {}
 
-	public SearchLogDTO(Date from, Date to, String ip, String source, String type, LogSeverity severity,
+	public SearchLogDTO(Date from, Date to, String ip, String source, String type, String severity,
 			String username, String message) {
 		super();
 		this.from = from;
@@ -89,11 +89,11 @@ public class SearchLogDTO {
 		this.type = type;
 	}
 
-	public LogSeverity getSeverity() {
+	public String getSeverity() {
 		return severity;
 	}
 
-	public void setSeverity(LogSeverity severity) {
+	public void setSeverity(String severity) {
 		this.severity = severity;
 	}
 

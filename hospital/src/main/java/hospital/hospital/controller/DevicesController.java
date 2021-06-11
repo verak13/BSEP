@@ -1,6 +1,5 @@
 package hospital.hospital.controller;
 
-
 import hospital.hospital.dto.FilterMessagesDTO;
 import hospital.hospital.dto.MessageResponseDTO;
 import hospital.hospital.keystore.KeyStoreReader;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,10 +35,11 @@ public class DevicesController {
 
     @RequestMapping(value="/send", method= RequestMethod.POST)
     public ResponseEntity<?> sendMsg(@Valid @RequestBody byte[] message, HttpServletRequest servlet) throws Exception {
+
         X509Certificate[] certs = (X509Certificate[]) servlet.getAttribute("javax.servlet.request.X509Certificate");
         String cerAlias = certs[0].getSubjectDN().getName().substring(3);
 
-        if (devicesService.receiveMessage(message, cerAlias)){
+        if (devicesService.receiveMessage(message, certs[0].getPublicKey())){
         	logger.trace("New message received.");
         	return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -47,6 +48,7 @@ public class DevicesController {
         }
     }
     
+    @PreAuthorize("hasRole('DOCTOR')")
     @RequestMapping(value= "/by-page",method = RequestMethod.POST)
     public ResponseEntity<Page<MessageResponseDTO>> getAllCulturalOffersPaged(Pageable pageable, @RequestBody FilterMessagesDTO filter) {
 

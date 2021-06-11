@@ -31,7 +31,7 @@ public class RulesController {
 	@Autowired
 	RulesService rulesService;
 
-    //@PreAuthorize("hasRole('DOCTOR')")
+    @PreAuthorize("hasRole('DOCTOR')")
     @RequestMapping(value="/high-temperature", method= RequestMethod.POST)
     public ResponseEntity<?> createHighTemperatureRule(@Valid @RequestBody RuleDTO dto) throws Exception {
 
@@ -44,7 +44,7 @@ public class RulesController {
         }
     }
     
-    //@PreAuthorize("hasRole('DOCTOR')")
+    @PreAuthorize("hasRole('DOCTOR')")
     @RequestMapping(value = "/blood-pressure", method = RequestMethod.POST)
     public ResponseEntity<?> createBloodPressureRule(@Valid @RequestBody RuleBloodPressureDTO dto) throws Exception {
 
