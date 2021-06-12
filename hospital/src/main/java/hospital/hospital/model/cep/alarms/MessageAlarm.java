@@ -53,26 +53,39 @@ public class MessageAlarm implements Serializable {
 		this.date = date;
 	}
 
-	public MessageAlarm(Long patientId, String variable) {
+	public MessageAlarm(int patientId, String variable) {
 		super();
-		this.patientId = patientId;
+		this.patientId = (long) patientId;
 		this.variable = variable;
 	}
 
-	public MessageAlarm(Long patientId, String variable, double value) {
+	public MessageAlarm(int patientId, String variable, double value) {
 		super();
-		this.patientId = patientId;
+		this.patientId = (long) patientId ;
 		this.variable = variable;
 		this.value = value;
 	}
-	
-	public MessageAlarm(Long patientId, String variable, double value, double otherValue) {
+	public MessageAlarm(Long patientId, String variable, double value) {
 		super();
-		this.patientId = patientId;
+		this.patientId =  patientId ;
+		this.variable = variable;
+		this.value = value;
+	}
+	public MessageAlarm(int patientId, String variable, double value, double otherValue) {
+		super();
+		this.patientId =  (long)patientId;
 		this.variable = variable;
 		this.value = value;
 		this.otherValue = otherValue;
 	}
+	public MessageAlarm(Long patientId, String variable, double value, double otherValue) {
+		super();
+		this.patientId =  patientId;
+		this.variable = variable;
+		this.value = value;
+		this.otherValue = otherValue;
+	}
+
 
 	public Long getPatientId() {
 		return patientId;

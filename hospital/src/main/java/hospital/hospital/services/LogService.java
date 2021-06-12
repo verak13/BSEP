@@ -70,6 +70,7 @@ public class LogService {
 		for (Log log: logs) {
 			kieSession.insert(new LogEvent(log));
 		}
+		kieSession.getAgenda().getAgendaGroup("log-alarms").setFocus();
 		kieSession.fireAllRules();
 		this.logRepository.saveAll(logs);
 	}

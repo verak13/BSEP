@@ -8,7 +8,7 @@ import org.kie.api.definition.type.Role;
 import hospital.hospital.model.Message;
 
 @Role(Role.Type.EVENT)
-@Expires("1s")
+@Expires("60s")
 public class MessageEvent implements Serializable {
 	
 	private Message message;

@@ -1,26 +1,25 @@
 template header
 
+
 patient
 value
 
 package hospital.hospital.rules;
 
 import hospital.hospital.model.cep.MessageEvent;
-import hospital.hospital.services.MailService;
 import hospital.hospital.model.cep.alarms.MessageAlarm;
-
-template "high-temperature"
-
+import hospital.hospital.services.MailService;
 
 global MailService mailService
 
+template "high-temperature"
 
-rule "High temperature_@{row.rowNumber}."
+rule "High temperature_@{row.rowNumber}"
 	agenda-group "doctor-alarms"
     when
-        $e : MessageEvent(message.getPatientId() == Long.parseLong("@{patient}"), $value: message.getBodyTemperature(), $value > Double.parseDouble("@{value}"))
+        $e : MessageEvent(message.getPatientId() == @{patient}, $patientTemp: message.getBodyTemperature(), $patientTemp > @{value})
     then
-        insert(new MessageAlarm(Long.parseLong("@{patient}"), "bodyTemperature", $value));
+        insert(new MessageAlarm(@{patient}, "bodyTemperature", $patientTemp));
         System.out.println("==== TRIGEROVAN ALARM ZA PREVISOKU TEMPERATURU ====");
 end
 

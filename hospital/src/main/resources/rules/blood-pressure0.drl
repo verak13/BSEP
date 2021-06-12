@@ -1,34 +1,22 @@
-template header
-
-patient
-diastolic
-systolic
-
 package hospital.hospital.rules;
-
 import hospital.hospital.model.cep.MessageEvent;
 import hospital.hospital.services.MailService;
 import hospital.hospital.model.cep.alarms.MessageAlarm;
-
 global MailService mailService
 
-
-template "blood-pressure"
-
-rule "Blood Pressure@{row.rowNumber}"
+rule "Blood Pressure0"
 	agenda-group "doctor-alarms"
     when
-        $e : MessageEvent(message.getPatientId() == @{patient}, $value1: message.getBloodPressureSystolic(), $value1 < @{systolic}, $value2: message.getBloodPressureDiastolic(), $value2 > @{diastolic})
+        $e : MessageEvent(message.getPatientId() == 1, $value1: message.getBloodPressureSystolic(), $value1 < 120.0, $value2: message.getBloodPressureDiastolic(), $value2 > 80.0)
     then
-        insert(new MessageAlarm(@{patient}, "bloodPressure", $value1, $value2));
+        insert(new MessageAlarm(1, "bloodPressure", $value1, $value2));
         System.out.println("==== TRIGEROVAN ALARM ZA PREVISOK DONJI I PRENIZAK GORNJI PRITISAK ====");
 end
-
-rule "Message alarm triggered, notify doctor (blood pressure)@{row.rowNumber}"
+rule "Message alarm triggered, notify doctor (blood pressure)0"
     when
         $alarm : MessageAlarm(variable == "bloodPressure")
     then
         mailService.notifyDoctors($alarm);
 end
 
-end template
+

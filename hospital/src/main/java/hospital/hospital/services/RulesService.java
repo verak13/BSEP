@@ -29,17 +29,16 @@ public class RulesService {
 		try {
             InputStream template = new FileInputStream(
                     "src\\main\\resources\\rules\\high-temperature.drt");
-
             List<RuleDTO> arguments = new ArrayList<>();
-            arguments.add(new RuleDTO("1", "41"));
+            arguments.add(new RuleDTO(1L, 20.3));
             ObjectDataCompiler compiler = new ObjectDataCompiler();
+            System.out.println(arguments);
+            System.out.println(template);
             String drl = compiler.compile(arguments, template);
-
             FileOutputStream drlFile = new FileOutputStream(new File(
             		"src\\main\\resources\\rules\\high-temperature" + dto.getPatient() + ".drl"), false);
             drlFile.write(drl.getBytes());
             drlFile.close();
-
             InvocationRequest request = new DefaultInvocationRequest();
             //request.setInputStream(InputStream.nullInputStream());
             request.setPomFile(new File("../hospital/pom.xml"));
@@ -64,7 +63,7 @@ public class RulesService {
                     "src\\main\\resources\\rules\\blood-pressure.drt");
 
             List<RuleBloodPressureDTO> arguments = new ArrayList<>();
-            arguments.add(new RuleBloodPressureDTO("1", "120", "80"));
+            arguments.add(new RuleBloodPressureDTO(1, 120.0, 80.0));
             ObjectDataCompiler compiler = new ObjectDataCompiler();
             String drl = compiler.compile(arguments, template);
 

@@ -17,6 +17,7 @@ global MailService mailService
 
 
 rule "More than 100 unsuccessful logins with same username in 60 sec, notify admin of hospital"
+agenda-group "log-alarms"
     when
           $l1: LogEvent($username: log.getUsername(), log.getType() == "LOGIN_ERROR")
                  $attempts: Long(intValue >= 100) from accumulate(
@@ -36,6 +37,7 @@ rule "More than 100 unsuccessful logins with same username in 60 sec, notify adm
 end
 
 rule "Brute force login alarm triggered, notify user by email"
+agenda-group "log-alarms"
     when
         $alarm: BruteForceLoginAlarm($username: username, $attempts: attempts)
     then
@@ -44,6 +46,7 @@ rule "Brute force login alarm triggered, notify user by email"
 end
 
 rule "User logged in after more than 90 days from last login, triger NotActiveAlarm"
+agenda-group "log-alarms"
     when
         $e : UserLoginEvent($email: email, $lastLogin: lastLogin)
         eval(ChronoUnit.DAYS.between($lastLogin, LocalDate.now()) >= 90)
@@ -54,6 +57,7 @@ rule "User logged in after more than 90 days from last login, triger NotActiveAl
 end
 
 rule "Inactive user alarm triggered, notify admin by email"
+agenda-group "log-alarms"
   when
         $alarm : InactiveUserAlarm($userEmail: userEmail, $daysInactive: daysInactive)
     then
@@ -62,6 +66,7 @@ rule "Inactive user alarm triggered, notify admin by email"
 end
 
 rule "Error log appears, trigger ErrorLogAlarm"
+agenda-group "log-alarms"
     no-loop
   when
        $error: LogEvent(log.getType() == "ERROR", $message: log.getMessage())
@@ -73,6 +78,7 @@ rule "Error log appears, trigger ErrorLogAlarm"
 end
 
 rule "Error log alarm triggered, notify admin"
+agenda-group "log-alarms"
 no-loop
     when
         $alarm : ErrorLogAlarm($message: errorMsg, $date: date)
@@ -82,6 +88,7 @@ no-loop
 end
 
 rule "User tried to login with ip address from blacklisted ip addresses, trigger BlackListedIPAlarm"
+agenda-group "log-alarms"
     when
         $l : LogEvent(log.getType() == "LOGIN" || log.getType()  == "LOGIN_ERROR", $ip : log.getIp(), $username: log.getUsername())
         BlackListedIP(list contains $ip)
@@ -93,6 +100,7 @@ rule "User tried to login with ip address from blacklisted ip addresses, trigger
 end
 
 rule "Black listed ip alarm triggered, notify admin"
+agenda-group "log-alarms"
 no-loop
     when
         $alarm : BlackListedIPAlarm($ip: ip, $userEmail: userEmail, $date: date)
