@@ -26,6 +26,8 @@ public class LogConfigController {
 	//@PreAuthorize("hasRole('HOSPITAL_ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveConfig(@RequestBody LogConfig logConfig) {
+        System.out.println("USLO");
+
 		try {
 			this.logConfigService.saveConfig(logConfig);
 			logger.trace("New simulator file added.");

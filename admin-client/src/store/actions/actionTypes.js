@@ -18,3 +18,7 @@ export const REVOKE_CERTIFICATE = 'REVOKE_CERTIFICATE';
 
 export const GET_USERS = 'GET_USERS';
 export const SET_USERS = 'SET_USERS';
+
+export const GET_HOSPITALS = 'GET_HOSPITALS';
+export const SET_HOSPITALS = 'SET_HOSPITALS';
+export const ADD_CONFIG = 'ADD_CONFIG';

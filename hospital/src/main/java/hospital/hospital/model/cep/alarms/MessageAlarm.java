@@ -53,7 +53,11 @@ public class MessageAlarm implements Serializable {
 		this.date = date;
 	}
 
-
+	public MessageAlarm(Long patientId, String variable) {
+		super();
+		this.patientId = patientId;
+		this.variable = variable;
+	}
 
 	public MessageAlarm(Long patientId, String variable, double value) {
 		super();

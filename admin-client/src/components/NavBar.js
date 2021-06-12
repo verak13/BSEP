@@ -26,7 +26,8 @@ import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import PersonIcon from '@material-ui/icons/Person';
 import { CERTIFICATES } from '../assets/routes';
-import { REQUESTS, USERS } from '../routes';
+import { REQUESTS, ADD_CONFIG, HOSPITALS } from '../routes';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 
 const drawerWidth = 240;
 
@@ -150,25 +151,27 @@ function NavBar(props) {
                 {keycloak?.authenticated ? <>
                     <List>
                         <ListItem onClick={() => props.history.push(CERTIFICATES)} button key={'Certificates'}>
-                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
                             <ListItemText primary={'Certificates'} />
                         </ListItem>
 
                         <ListItem onClick={() => props.history.push(REQUESTS)} button key={'Requests'}>
-                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
                             <ListItemText primary={'Requests'} />
                         </ListItem>
-                        <ListItem onClick={() => props.history.push(USERS)} button key={'Users'}>
-                            <ListItemIcon><PersonIcon /></ListItemIcon>
-                            <ListItemText primary={'Users'} />
+
+                        <ListItem onClick={() => props.history.push(HOSPITALS)} button key={'Hospitals'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'See Hospitals'} />
+                        </ListItem>
+
+                        <ListItem onClick={() => props.history.push(ADD_CONFIG)} button key={'AddConfig'}>
+                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemText primary={'Add Configuration for Hospital'} />
                         </ListItem>
                     </List>
                     <Divider />
                     <List>
-
-
-                        
-
                         <ListItem onClick={() => keycloak.logout()} button key={'Log Out'}>
                             <ListItemIcon><ExitToApp /></ListItemIcon>
                             <ListItemText primary={'Log Out'} />

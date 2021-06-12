@@ -33,7 +33,20 @@ public class LogConfigService {
 		File file = ResourceUtils.getFile("classpath:configuration.json");
 		
 		LogConfigs configs = gson.fromJson(new FileReader(file), LogConfigs.class);
-		configs.getLogConfigs().add(logConfig);
+		
+		boolean found = false;
+		for (LogConfig conf : configs.getLogConfigs()) {
+			if (conf.getFile().equals(logConfig.getFile()) && conf.getHospitalId().equals(logConfig.getHospitalId())) {
+				found = true;
+				conf.setInterval(logConfig.getInterval());
+				conf.setRegexp(logConfig.getRegexp());
+			}
+		}
+		if (!found) {
+			configs.getLogConfigs().add(logConfig);
+	        this.logService.addNewConfig(logConfig);
+		}
+		
 		
 		Writer writer = new FileWriter(file.getAbsolutePath());
 		gson.toJson(configs, writer);
@@ -41,7 +54,6 @@ public class LogConfigService {
         
         logger.info("New log configuration saved to log config file.");
         
-        this.logService.addNewConfig(logConfig);
 	}
 
 }

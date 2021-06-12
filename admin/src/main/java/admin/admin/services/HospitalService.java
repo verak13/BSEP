@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,8 @@ public class HospitalService {
 	@Autowired
 	HospitalRepository hospitalRepository;
 
-	public List<Hospital> findAll() {
-		return hospitalRepository.findAll();
+	public Page<Hospital> findAll(Pageable pageable) {
+		return hospitalRepository.findAll(pageable);
 	}
 
 

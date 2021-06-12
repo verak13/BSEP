@@ -5,6 +5,7 @@ import NotificationReducer from './NotificationReducer';
 import RequestReducer from './RequestReducer';
 import CertificateReducer from './CertificateReducer';
 import UserReducer from './UserReducer';
+import HospitalConfigurationReducer from './HospitalConfigurationReducer';
 
 export default history => 
     combineReducers({
@@ -13,5 +14,6 @@ export default history =>
         requests: RequestReducer,   
         certificates: CertificateReducer,
         users: UserReducer,
+        hospitals: HospitalConfigurationReducer,
         router: connectRouter(history),
     });

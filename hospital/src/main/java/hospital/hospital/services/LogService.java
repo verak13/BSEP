@@ -54,9 +54,7 @@ public class LogService {
 	private static ApplicationLogParser applicationLogParser = new ApplicationLogParser();
 	private static SimulatorLogParser simulatorLogParser = new SimulatorLogParser();
 	private static KeycloakLogParser keycloakLogParser = new KeycloakLogParser();
-	/*private Date applicationLogDate = null; 
-	private Date simulatorLogDate = null; 
-	private Date keycloakLogDate = null; */
+
 
 	public Page<Log> findAll(Pageable pageable, SearchLogDTO search) {
 		Page<Log> logPage = logRepository.searchLogs(search.getFrom(), search.getTo(), search.getIp(), search.getType(), search.getSeverity().toString(), search.getMessage(), search.getSource(), search.getUsername(), pageable);
@@ -83,6 +81,7 @@ public class LogService {
 			File file = ResourceUtils.getFile("classpath:configuration.json");
 			LogConfigs configs = gson.fromJson(new FileReader(file), LogConfigs.class);
 			for (LogConfig lc : configs.getLogConfigs()) {
+				//threadu se proslijedi logConfig i u svakom whileTrue se provjerava da li je promijenjen inerval ili regex
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -179,6 +178,17 @@ public class LogService {
 	private void readSimulatorLogs(String path, long interval, String regexp) throws Exception {
 		Date flagDate = new Date();
 		while (true) {
+			
+			Gson gson = new Gson();
+			File file = ResourceUtils.getFile("classpath:configuration.json");
+			LogConfigs configs = gson.fromJson(new FileReader(file), LogConfigs.class);
+			for (LogConfig lc : configs.getLogConfigs()) {
+				if (lc.getFile().equals(path)) {
+					interval = lc.getInterval();
+					regexp = lc.getRegexp();
+				}
+			}
+				
 			flagDate = this.readSimulatorLogs(flagDate, regexp, path);
 			Thread.sleep(interval);
 		}
@@ -194,6 +204,11 @@ public class LogService {
 			System.out.println(line);
 			boolean setNewFlagDate = false;
 			while (line != null) {
+				if (!line.matches(regexp)) {
+					line = reader.readLine();
+					System.out.println("NE MECUJE LINIJA " + line);
+					continue;
+				}
 				Log log = simulatorLogParser.parse(line);
 				if (!setNewFlagDate) {
 					newFlagDate = log.getTimestamp();
@@ -202,9 +217,9 @@ public class LogService {
 				if (!log.getTimestamp().after(flagDate)) {
 					break;
 				}
-				if (log.getMessage().matches(regexp)) {
+				/*if (log.getMessage().matches(regexp)) {
 					logs.add(log);
-				}
+				}*/
 
 				line = reader.readLine();
 			}

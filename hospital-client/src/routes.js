@@ -11,4 +11,5 @@ export const PATIENTS = '/patients';
 export const MESSAGE_ALARMS = '/message-alarms';
 export const MESSAGES = '/devices';
 export const DOCTOR_RULES = '/rules';
+export const CUSTOM_MESSAGE_RULE = '/custom-message-rule';
 export const REPORT = '/report'

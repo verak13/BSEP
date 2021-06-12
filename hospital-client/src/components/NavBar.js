@@ -27,7 +27,7 @@ import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
-import { REQUESTS, LOGS, REPORT, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGE_ALARMS, MESSAGES, PATIENTS, DOCTOR_RULES } from '../routes';
+import { REQUESTS, LOGS, REPORT, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGE_ALARMS, MESSAGES, PATIENTS, DOCTOR_RULES, CUSTOM_MESSAGE_RULE } from '../routes';
 import authService from '../services/AuthService';
 
 const drawerWidth = 240;
@@ -202,7 +202,11 @@ function NavBar(props) {
                             <ListItemIcon><AddCircle /></ListItemIcon>
                             <ListItemText primary={'Create Alarms for Specific Patients'} />
                         </ListItem>
-                
+                        <ListItem onClick={() => props.history.push(CUSTOM_MESSAGE_RULE)} button key={'CustomMessageRule'}>
+                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemText primary={'Create Custom Message Alarm'} />
+                        </ListItem>
+
                     </List>
                     <Divider />
                     </>
