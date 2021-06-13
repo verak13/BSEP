@@ -34,6 +34,8 @@ import com.google.gson.GsonBuilder;
 import hospital.hospital.dto.CustomMessageRuleDTO;
 import hospital.hospital.dto.CustomMessageRuleDTODouble;
 import hospital.hospital.model.BlackListedIP;
+import hospital.hospital.model.LogConfig;
+import hospital.hospital.model.LogConfigs;
 import hospital.hospital.model.Message;
 import hospital.hospital.model.cep.MessageEvent;
 import hospital.hospital.repository.LogRepository;
@@ -46,7 +48,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
-public class HospitalApplication/* implements CommandLineRunner */ {
+public class HospitalApplication/* implements CommandLineRunner*/  {
 
 	
 	@Autowired
