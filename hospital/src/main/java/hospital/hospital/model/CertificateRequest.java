@@ -53,8 +53,8 @@ public class CertificateRequest implements Serializable {
     private String localityName;
     
 	@NotBlank(message="Field must not be empty")
-    @Size(min=2, max=20)
-    @Email(message="Email must be valid.")
+	@Size(min=2, max=20)
+	@Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
     private String email;
     
     //private Integer userId;

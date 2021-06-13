@@ -59,7 +59,7 @@ public class CertificateController {
         //User loggedIn = (User) authentication.getPrincipal();
 
         try {
-            certificateService.revokeCertificate(revokeCertificateDTO, "superadmin@admin.com");
+            certificateService.revokeCertificate(revokeCertificateDTO);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
