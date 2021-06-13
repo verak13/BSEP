@@ -14,18 +14,18 @@ global MailService mailService
 
 template "high-temperature"
 
-rule "High temperature_@{row.rowNumber}"
+rule "High temperature new_@{patient}"
 	agenda-group "doctor-alarms"
     when
         $e : MessageEvent(message.getPatientId() == @{patient}, $patientTemp: message.getBodyTemperature(), $patientTemp > @{value})
     then
-        insert(new MessageAlarm(@{patient}, "bodyTemperature", $patientTemp));
+        insert(new MessageAlarm(@{patient}, "bodyTemperature@{patient}", $patientTemp));
         System.out.println("==== TRIGEROVAN ALARM ZA PREVISOKU TEMPERATURU ====");
 end
 
-rule "Message alarm triggered, notify doctor (high temperature)@{row.rowNumber}"
+rule "Message alarm triggered, notify doctor (high temperature)@{patient}"
     when
-        $alarm : MessageAlarm(variable == "bodyTemperature")
+        $alarm : MessageAlarm(variable == "bodyTemperature@{patient}")
     then
         mailService.notifyDoctors($alarm);
 end

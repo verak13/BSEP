@@ -36,5 +36,5 @@ build/
 .vscode/
 
 
-application.properties
+
 logs/*
