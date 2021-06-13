@@ -69,21 +69,22 @@ function Certificates(props) {
     };
 
     const handleRevoke = () => {
-        if(reason == ""){
+        if(revokeCert.reason == ""){
             alert("Pick a reason");
             return;
         }
-        const alias = certID !== "none" ? certID : "none@none.com";
-        props.revokeCertificateAction({alias: alias, reason});
+        
+        props.revokeCertificateAction(revokeCert);
         setOpen(false);
         props.getCertificatesAction();
     }
     
-    const [certID, setCertID] = React.useState('');
-    const [reason, setReason] = React.useState('');
+    const [revokeCert, setRevokeCert] = React.useState({alias:'', reason:'', issuer:''});
+    
+    
 
     const handleChange = (event) => {
-        setReason(event.target.value);
+        setRevokeCert({...revokeCert, reason: event.target.value});
       };
 
     return (
@@ -126,7 +127,7 @@ function Certificates(props) {
                         <TableCell align="right">{row.ca + ''}</TableCell>
                         <TableCell align="right">{row.revoked + ''}</TableCell>
                         
-                        <TableCell align="right"><Button variant='outlined' color='secondary' onClick={() => {setOpen(true); setCertID(row.email)}}>REVOKE</Button></TableCell>
+                        <TableCell align="right"><Button variant='outlined' color='secondary' onClick={() => {setOpen(true); setRevokeCert({...revokeCert, alias:row.commonName, issuer:row.issuer})}}>REVOKE</Button></TableCell>
                         
                             </TableRow>
                             ))}
@@ -148,7 +149,7 @@ function Certificates(props) {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={reason}
+          value={revokeCert.reason}
           onChange={handleChange}
         >
             {REVOKE_REASONS.map(rs => (

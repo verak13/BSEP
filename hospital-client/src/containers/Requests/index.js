@@ -36,8 +36,10 @@ function Requests(props) {
       };
 
     const handleSubmit = values => {
-       console.log({...values, id:999, userId:999});
-       props.addRequest(values);
+        values.email = values.email === 'superadmin@admin.com' ? 'root-ca' : 'hospital-server';
+        console.log({...values, id:999, userId:999});
+        props.addRequest(values);
+        console.log(values);
     }
 
 
