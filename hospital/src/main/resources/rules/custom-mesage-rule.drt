@@ -17,13 +17,11 @@ package hospital.hospital.rules;
 import hospital.hospital.model.cep.MessageEvent;
 import hospital.hospital.services.MailService;
 import hospital.hospital.model.cep.alarms.MessageAlarm;
+global MailService mailService
 
 template "custom-message-rule"
 
-
-global MailService mailService
-
-rule "Custom message rule@{row.rowNumber}."
+rule "Custom message rule@{description}."
 	agenda-group "doctor-alarms"
     when
         $e : MessageEvent($patientId: message.getPatientId(), 
@@ -38,7 +36,7 @@ rule "Custom message rule@{row.rowNumber}."
         System.out.println("==== TRIGEROVAN CUSTOM ALARM ====");
 end
 
-rule "Message alarm triggered, notify doctor-@{row.rowNumber}"
+rule "Message alarm triggered, notify doctor custom-@{description}"
     when
         $alarm : MessageAlarm(variable == "@{description}")
     then
