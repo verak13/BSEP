@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Role(Role.Type.EVENT)
 @Expires("60s")
 @Entity
-@Table(name="inactive_user_alarm")
+@Table(name="blacklisted_ip_alarm")
 public class BlackListedIPAlarm  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
