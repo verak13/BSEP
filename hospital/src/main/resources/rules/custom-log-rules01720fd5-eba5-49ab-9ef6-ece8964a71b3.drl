@@ -5,12 +5,11 @@ import hospital.hospital.model.cep.alarms.CustomLogAlarm;
 import java.util.Date;
 global MailService mailService
 
-rule "feefwe_0"
+rule "praviloo_0"
     when
-        $time :  Date()
         $previous: LogEvent(log.getType() in ("ERROR","LOGIN_ERROR","APPLICATION","LOGIN"))
         $l1 : LogEvent(
-                log.getType() in ("APPLICATION"),
+                log.getType() in ("LOGIN"),
                 log.getSeverity().name() in ("WARN","INFO","ERROR","TRACE"),
                 this != $previous,
                 this after[0, 10000] $previous
@@ -18,7 +17,7 @@ rule "feefwe_0"
         $appearance: Long(intValue >= 0) from accumulate(
                                     $l2: LogEvent(
                                         this != $l1,
-                                        log.getType() in ("APPLICATION"),
+                                        log.getType() in ("LOGIN"),
                                         log.getSeverity().name() in ("WARN","INFO","ERROR","TRACE")
                                     )
                                     over window:time(60s),
@@ -29,13 +28,13 @@ rule "feefwe_0"
                    this != $l1,
                    this after[0, 10000] $l1
                    )
-            not (CustomLogAlarm(date == $time))
+            not (CustomLogAlarm(date == $l1.getLog().getTimestamp()))
     then
        System.out.println("\n\n==== TRIGEROVAN CUSTOM LOG ALARM  ===");
-       System.out.println("RULE NAME: " + "feefwe");
-       insert(new CustomLogAlarm($time, "wfwfwf"));
+       System.out.println("RULE NAME: " + "praviloo");
+       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "porukaa"));
 end
-rule "Custom log alarm triggered, notify admin by email_feefwe_"
+rule "Custom log alarm triggered, notify admin by email_praviloo_"
   when
         $alarm : CustomLogAlarm($message: errorMsg, $date: date)
     then

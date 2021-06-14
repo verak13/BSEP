@@ -23,7 +23,6 @@ template "custom-log-rules"
 
 rule "@{name}_@{row.rowNumber}"
     when
-        $time : Date()
         $previous: LogEvent(log.getType() in @{precTypes})
         $l1 : LogEvent(
                 log.getType() in @{type},
@@ -46,11 +45,11 @@ rule "@{name}_@{row.rowNumber}"
                    this != $l1,
                    this after[0, @{succSec}] $$l1
                    )
-            not (CustomLogAlarm(date == $time))
+            not (CustomLogAlarm(date == $l1.getLog().getTimestamp()))
     then
        System.out.println("\n\n==== TRIGEROVAN CUSTOM LOG ALARM  ===");
        System.out.println("RULE NAME: " + "@{name}");
-       insert(new CustomLogAlarm($time, "@{msg}"));
+       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "@{msg}"));
 end
 
 rule "Custom log alarm triggered, notify admin by email_@{name}_"

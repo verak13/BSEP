@@ -264,7 +264,6 @@ public class LogService {
 				}
 				if (log.getType().equalsIgnoreCase("LOGIN")) {
 					LocalDate lastLogin = userService.saveLastLogin(log.getUsername());
-					kieSession.insert(new LogEvent(log));
 					kieSession.insert(new UserLoginEvent(log.getUsername(), lastLogin));
 				}
 				if (!setNewFlagDate) {
