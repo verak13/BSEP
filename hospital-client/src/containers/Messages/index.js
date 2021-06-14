@@ -18,7 +18,7 @@ function Messages(props) {
 
     const FormikTextField = withFormikField(TextField);
 
-    const [pageSize, setPageSize] = React.useState(10);
+    const [pageSize, setPageSize] = React.useState(5);
 
     const handleChangePage = (event, newPage) => {
         console.log('ee', newPage)
@@ -91,7 +91,7 @@ function Messages(props) {
         </Formik>
 
         <MaterialTable
-        title="Message alarms list"
+        title="Message list"
         columns={[
             { title: 'Patient Id', field: 'patientId' },
             { title: 'Patient', field: 'patient' },

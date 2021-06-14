@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Grid} from '@material-ui/core';
 import { getMessageAlarms } from '../../store/actions/messageAlarmActions';
+import { formatTimestampWithTime } from '../../utils';
 
 import TablePagination from '@material-ui/core/TablePagination';
 
@@ -13,7 +14,7 @@ import MaterialTable from 'material-table';
 
 function MessageAlarms(props) {
 
-    const [pageSize, setPageSize] = React.useState(10);
+    const [pageSize, setPageSize] = React.useState(5);
 
     const handleChangePage = (event, newPage) => {
         console.log('ee', newPage)
@@ -28,10 +29,6 @@ function MessageAlarms(props) {
         props.getMessageAlarms({ pageSize, page: 0 });
     }, []);
 
-    useEffect(() => {
-        console.log(props.total, 'tttooo')
-    })
-  
     return (
     <>
     <NavBar />

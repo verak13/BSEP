@@ -1,6 +1,6 @@
 import { SET_MESSAGE_ALARMS } from "../actions/actionTypes";
 
-import { formatTimestamp } from '../../utils/index';
+import { formatTimestampWithTime } from '../../utils/index';
 
 const initialState = {
     all: [],
@@ -13,7 +13,7 @@ export default function messageAlarmReducer(state = initialState, action) {
         case SET_MESSAGE_ALARMS:
             let messageAlarms = action.payload.content
             messageAlarms = messageAlarms.map (messageAlarm => {
-                messageAlarm.date = formatTimestamp(messageAlarm.date)
+                messageAlarm.date = formatTimestampWithTime(messageAlarm.date)
                 return messageAlarm;
             })
             return {...state, all: messageAlarms, total: action.payload.totalElements, page: action.payload.pageable.pageNumber }

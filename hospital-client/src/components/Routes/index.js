@@ -26,21 +26,21 @@ export default function Routes() {
     return (
         <Switch>
             <PublicRoute path={HOME} component={HomePage} exact />
-            <PrivateRoute path={REQUESTS} role='HOSPITAL_ADMIN' component={Requests} exact />
+            <PrivateRoute path={REQUESTS} role={['HOSPITAL_ADMIN']} component={Requests} exact />
             <PrivateRoute path={ADD_DOCTOR} component={AddDoctor} exact />
-            <PrivateRoute path={LOGS} role="HOSPITAL_ADMIN" component={Logs} exact />
-            <PrivateRoute path={ALARMS_BLACKLISTED} role="HOSPITAL_ADMIN" component={AlarmsBlacklisted} exact />
-            <PrivateRoute path={ALARMS_BRUTEFORCE} role="HOSPITAL_ADMIN" component={AlarmsBruteforce} exact />
-            <PrivateRoute path={ALARMS_ERROR} role="HOSPITAL_ADMIN" component={AlarmsError} exact />
-            <PrivateRoute path={ALARMS_INACTIVE} role="HOSPITAL_ADMIN" component={AlarmsInactive} exact />
-            <PrivateRoute path={MESSAGES} role="DOCTOR" component={Messages} exact />
-            <PrivateRoute path={MESSAGE_ALARMS} role="DOCTOR" component={MessageAlarms} exact />
-            <PrivateRoute path={PATIENTS} role="DOCTOR" role="SUPER_ADMIN" component={Patients} exact />
-            <PrivateRoute path={DOCTOR_RULES} role="DOCTOR" component={DoctorRules} exact />
-            <PrivateRoute path={CUSTOM_MESSAGE_RULE} role="DOCTOR" component={CustomMessageRule} exact />
-            <PrivateRoute path={REPORT} role="HOSPITAL_ADMIN" component={Report} exact />
-            <PrivateRoute path={REPORT_LIST} role="HOSPITAL_ADMIN" component={ReportList} exact />
-            <PrivateRoute path={LOG_RULES} role="HOSPITAL_ADMIN" component={LogRules} exact />
+            <PrivateRoute path={LOGS} role={["HOSPITAL_ADMIN"]} component={Logs} exact />
+            <PrivateRoute path={ALARMS_BLACKLISTED} role={["HOSPITAL_ADMIN"]} component={AlarmsBlacklisted} exact />
+            <PrivateRoute path={ALARMS_BRUTEFORCE} role={["HOSPITAL_ADMIN"]} component={AlarmsBruteforce} exact />
+            <PrivateRoute path={ALARMS_ERROR} role={["HOSPITAL_ADMIN"]} component={AlarmsError} exact />
+            <PrivateRoute path={ALARMS_INACTIVE} role={["HOSPITAL_ADMIN"]} component={AlarmsInactive} exact />
+            <PrivateRoute path={MESSAGES} role={["DOCTOR"]} component={Messages} exact />
+            <PrivateRoute path={MESSAGE_ALARMS} role={["DOCTOR"]} component={MessageAlarms} exact />
+            <PrivateRoute path={PATIENTS} role={["DOCTOR", "SUPER_ADMIN"]} component={Patients} exact />
+            <PrivateRoute path={DOCTOR_RULES} role={["DOCTOR"]} component={DoctorRules} exact />
+            <PrivateRoute path={CUSTOM_MESSAGE_RULE} role={["DOCTOR"]} component={CustomMessageRule} exact />
+            <PrivateRoute path={REPORT} role={["HOSPITAL_ADMIN"]} component={Report} exact />
+            <PrivateRoute path={REPORT_LIST} role={["HOSPITAL_ADMIN"]} component={ReportList} exact />
+            <PrivateRoute path={LOG_RULES} role={["HOSPITAL_ADMIN"]} component={LogRules} exact />
 
         </Switch>
     )

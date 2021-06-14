@@ -30,10 +30,15 @@ public class MessageAlarmController {
 	
 	@PreAuthorize("hasRole('DOCTOR')")
     @RequestMapping(value= "/by-page",method = RequestMethod.GET)
-    public ResponseEntity<Page<MessageAlarm>> getAllCulturalOffersPaged(Pageable pageable) {
-
+    public ResponseEntity<Page<MessageAlarm>> getAllMessageAlarms(Pageable pageable) {
+		System.out.println("dadddadaaad");
     	logger.trace("View message alarms requested.");
-        return new ResponseEntity<>(messageAlarmService.findAll(pageable), HttpStatus.OK);
+    	try {
+			return new ResponseEntity<>(messageAlarmService.findAll(pageable), HttpStatus.OK);
+		} catch (Exception e) {
+    		e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
     }
 
 

@@ -7,6 +7,7 @@ import { push } from "connected-react-router";
 
 export function* getMessages(action){
     try {
+        console.log('sagaaa', action)
         const response = yield call(messageService.getMessages, action.payload);
         console.log('ooo', response);
         yield put(setMessages(response));

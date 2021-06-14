@@ -1,7 +1,7 @@
 import ApiService from './ApiService';
 
 const ENDPOINTS = {
-    GET: '/message/by-page?page=:page&size=:size',
+    POST: '/devices/by-page?page=:page&size=:size',
 }
 
 class MessageService extends ApiService {
@@ -10,9 +10,9 @@ class MessageService extends ApiService {
         console.log('u servisu', pageSize)
         let uri = ENDPOINTS.POST.replace(":size", pageSize)
         uri = uri.replace(":page", page)
-        const { data } = await this.apiClient.post(uri, {
+        const { data } = await this.apiClient.post(uri, JSON.stringify({
             patientId: patient
-        });
+        }));
 
         return data;
     }

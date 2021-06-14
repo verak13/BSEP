@@ -31,10 +31,10 @@ public class MessageAlarm implements Serializable {
 	private String variable;
 	
 	@Column
-	private double value;
+	private Double value;
 	
 	@Column
-	private double otherValue;
+	private Double otherValue;
 	
 	@Column
 	private Date date;
@@ -43,7 +43,7 @@ public class MessageAlarm implements Serializable {
 	
 	
 
-	public MessageAlarm(Long id, Long patientId, String variable, double value, double otherValue, Date date) {
+	public MessageAlarm(Long id, Long patientId, String variable, Double value, Double otherValue, Date date) {
 		super();
 		this.id = id;
 		this.patientId = patientId;
@@ -65,26 +65,26 @@ public class MessageAlarm implements Serializable {
 		this.variable = variable;
 	}
 
-	public MessageAlarm(int patientId, String variable, double value) {
+	public MessageAlarm(int patientId, String variable, Double value) {
 		super();
 		this.patientId = (long) patientId ;
 		this.variable = variable;
 		this.value = value;
 	}
-	public MessageAlarm(Long patientId, String variable, double value) {
+	public MessageAlarm(Long patientId, String variable, Double value) {
 		super();
 		this.patientId =  patientId ;
 		this.variable = variable;
 		this.value = value;
 	}
-	public MessageAlarm(int patientId, String variable, double value, double otherValue) {
+	public MessageAlarm(int patientId, String variable, Double value, Double otherValue) {
 		super();
 		this.patientId =  (long)patientId;
 		this.variable = variable;
 		this.value = value;
 		this.otherValue = otherValue;
 	}
-	public MessageAlarm(Long patientId, String variable, double value, double otherValue) {
+	public MessageAlarm(Long patientId, String variable, Double value, Double otherValue) {
 		super();
 		this.patientId =  patientId;
 		this.variable = variable;
@@ -109,11 +109,11 @@ public class MessageAlarm implements Serializable {
 		this.variable = variable;
 	}
 
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
@@ -125,11 +125,11 @@ public class MessageAlarm implements Serializable {
 		this.date = date;
 	}
 
-	public double getOtherValue() {
+	public Double getOtherValue() {
 		return otherValue;
 	}
 
-	public void setOtherValue(double otherValue) {
+	public void setOtherValue(Double otherValue) {
 		this.otherValue = otherValue;
 	}
 

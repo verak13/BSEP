@@ -118,12 +118,41 @@ public class DevicesService {
 
 
 
+
 	public Page<MessageResponseDTO> findAll(Pageable pageable, FilterMessagesDTO filter) {
+
 		Page<Message> messages = filter.getPatientId() == 0L ? 
 				messageRepository.findAll(pageable) : messageRepository.findAllByPatientId(filter.getPatientId(), pageable);
 
 		ArrayList<MessageResponseDTO> forReturn = new ArrayList<MessageResponseDTO>();
-    	
+
+//		Patient p0 = new Patient();
+//		p0.setJmbg("1220202802020");
+//		p0.setFirstName("Milena");
+//		p0.setLastName("Laketic");
+//
+//		Patient p1 = new Patient();
+//		p1.setJmbg("1220200202111");
+//		p1.setFirstName("Markro");
+//		p1.setLastName("Markovic");
+//
+//		Patient p2 = new Patient();
+//		p2.setJmbg("12270200202330");
+//		p2.setFirstName("Jovana");
+//		p2.setLastName("Jovanovic");
+//
+//		Patient p3 = new Patient();
+//		p3.setJmbg("12202001202330");
+//		p3.setFirstName("Milena");
+//		p3.setLastName("Laketic");
+//
+//		patientRepository.save(p1);
+//		patientRepository.save(p2);
+//		patientRepository.save(p3);
+//		patientRepository.save(p0);
+
+
+
 		for (Message m : messages.toList()) {
 			MessageResponseDTO messageDTO = new MessageResponseDTO();
 			messageDTO.setId(m.getId());

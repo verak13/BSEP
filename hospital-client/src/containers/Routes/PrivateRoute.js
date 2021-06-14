@@ -12,7 +12,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         <Route {...rest}
             render={props => {
                 return  !keycloak?.authenticated ?  keycloak.login():
-                authService.getRole() == role ? <Component {...props} /> : <Redirect to={HOME} />
+                role.includes( authService.getRole()) ? <Component {...props} /> : <Redirect to={HOME} />
             }}
         />
     )
