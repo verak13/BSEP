@@ -11,17 +11,13 @@ import hospital.hospital.model.Log;
 public class KeycloakLogParser {
 	
 	public Log parse(String log) {
-		System.out.println("KEYCLOAK LINE");
-		System.out.println(log);
 		String[] tokens = log.split(" ");
 		if (tokens.length < 2) return null;
 
 		Date date = null;
 		try {
-			System.out.println("1" + tokens[0] + " p " + tokens[1]);
 			String toParse = tokens[0] + " " + tokens[1].split(",")[0];
 			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(toParse);
-			System.out.println(date.toString());
 		} catch (ParseException e) {
 			return null;
 		}
@@ -32,16 +28,26 @@ public class KeycloakLogParser {
 
 		if (tokens[7].split("=")[0].equals("type")){
 			type = tokens[7].split("=")[1].replace(",", "");
-			int usernameIndex = log.indexOf("username");
-			if (usernameIndex != -1) {
-				String subStr = log.substring(usernameIndex);
-				username = subStr.split("=")[1].split(",")[0];
-			}
 		} else {
-			type = "KEYCLOAK";
+			int typeIndex = log.indexOf("type");
+			if (typeIndex != -1) {
+				String subStr = log.substring(typeIndex);
+				type = subStr.split("=")[1].split(",")[0];
+			}
+		}
+		int usernameIndex = log.indexOf("username");
+		if (usernameIndex != -1) {
+			String subStr = log.substring(usernameIndex);
+			username = subStr.split("=")[1].split(",")[0];
 		}
 		String severity = tokens[2];
-		String message = String.join(" ", Arrays.asList(tokens).subList(5, Arrays.asList(tokens).size()));
+		int messageIndex = log.indexOf("message");
+		String message = "";
+		if (messageIndex != -1) {
+			String subStr = log.substring(usernameIndex);
+			message = subStr.split("=")[1].split(",")[0];
+		}
+
 		if (message.contains("isAddress=")) {
 			ip = message.substring(message.indexOf("ipAddress=")+10, message.indexOf(",", message.indexOf("ipAddress=")));
 		}

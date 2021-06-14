@@ -1,9 +1,6 @@
 package hospital.hospital.services;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,12 +8,20 @@ import java.util.List;
 import java.util.UUID;
 
 import hospital.hospital.dto.*;
+import hospital.hospital.model.cep.LogEvent;
 import hospital.hospital.model.cep.UserLoginEvent;
+import org.apache.maven.shared.invoker.*;
+import org.drools.compiler.kproject.ReleaseIdImpl;
 import org.drools.core.impl.InternalKnowledgeBase;
 import org.drools.template.DataProvider;
 import org.drools.template.ObjectDataCompiler;
 import org.drools.template.objects.ArrayDataProvider;
+import org.kie.api.KieServices;
+import org.kie.api.builder.ReleaseId;
+import org.kie.api.io.Resource;
 import org.kie.api.io.ResourceType;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieRuntime;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.KnowledgeBase;
 import org.kie.internal.KnowledgeBaseFactory;
@@ -25,7 +30,9 @@ import org.kie.internal.builder.KnowledgeBuilderError;
 import org.kie.internal.builder.KnowledgeBuilderErrors;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
+import org.kie.internal.utils.KieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import hospital.hospital.dto.CustomMessageRuleDTO;
@@ -33,46 +40,26 @@ import hospital.hospital.dto.CustomMessageRuleDTODouble;
 import hospital.hospital.dto.RuleBloodPressureDTO;
 import hospital.hospital.dto.RuleDTO;
 
-import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.DefaultInvoker;
-import org.apache.maven.shared.invoker.InvocationRequest;
-import org.apache.maven.shared.invoker.InvocationResult;
-import org.apache.maven.shared.invoker.Invoker;
-
 @Service
 public class RulesService {
 
     @Autowired
     private KieSession kieSession;
+
+    @Value("${pathdrools}")
+    private String pathDrools;
 	
 	public boolean createHighTemperatureRule(RuleDTO dto) {
+        String templatePath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\template";
 		try {
-            InputStream template = new FileInputStream(
-                    "src\\main\\resources\\rules\\high-temperature.drt");
+            InputStream template = new FileInputStream(templatePath + "\\high-temperature.drt");
             List<RuleDTO> arguments = new ArrayList<>();
             arguments.add(dto);
             ObjectDataCompiler compiler = new ObjectDataCompiler();
-            System.out.println(arguments);
-            System.out.println(template);
             String drl = compiler.compile(arguments, template);
-            FileOutputStream drlFile = new FileOutputStream(new File(
-            		"src\\main\\resources\\rules\\high-temperature" + dto.getPatient() + ".drl"), false);
-            drlFile.write(drl.getBytes());
-            drlFile.close();
 
-            KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
-            System.out.println(drl);
-            kb.add(ResourceFactory.newByteArrayResource(drl.getBytes("utf-8")), ResourceType.DRL);
-
-            KnowledgeBuilderErrors errors = kb.getErrors();
-            for (KnowledgeBuilderError error : errors) {
-                System.out.println(error);
-            }
-            KnowledgeBase kBase =  KnowledgeBaseFactory.newKnowledgeBase();
-            kBase.addKnowledgePackages(kb.getKnowledgePackages());
-            kieSession = kBase.newKieSession();
-            kieSession.fireAllRules();
-
+            String outputPath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\high-temperature" + dto.getPatient() + ".drl";
+            reloadKjar(drl, outputPath);
 
             return true;
 
@@ -82,35 +69,19 @@ public class RulesService {
             return false;
         }
 	}
-	
-	
+
 	public boolean createBloodPressureRule(RuleBloodPressureDTO dto) {
+        String templatePath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\template";
 		try {
-            InputStream template = new FileInputStream(
-                    "src\\main\\resources\\rules\\blood-pressure.drt");
+            InputStream template = new FileInputStream(templatePath + "\\blood-pressure.drt");
 
             List<RuleBloodPressureDTO> arguments = new ArrayList<>();
             arguments.add(new RuleBloodPressureDTO((int)dto.getPatient(), dto.getDiastolic(), dto.getSystolic()));
             ObjectDataCompiler compiler = new ObjectDataCompiler();
             String drl = compiler.compile(arguments, template);
 
-            FileOutputStream drlFile = new FileOutputStream(new File(
-            		"src\\main\\resources\\rules\\blood-pressure" + dto.getPatient() + ".drl"), false);
-            drlFile.write(drl.getBytes());
-            drlFile.close();
-
-            KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
-            System.out.println(drl);
-            kb.add(ResourceFactory.newByteArrayResource(drl.getBytes("utf-8")), ResourceType.DRL);
-
-            KnowledgeBuilderErrors errors = kb.getErrors();
-            for (KnowledgeBuilderError error : errors) {
-                System.out.println(error);
-            }
-            KnowledgeBase kBase =  KnowledgeBaseFactory.newKnowledgeBase();
-            kBase.addKnowledgePackages(kb.getKnowledgePackages());
-            kieSession = kBase.newKieSession();
-            kieSession.fireAllRules();
+            String outputPath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\blood-pressure" + dto.getPatient() + ".drl";
+            reloadKjar(drl, outputPath);
 
             return true;
 
@@ -120,9 +91,9 @@ public class RulesService {
             return false;
         }
 	}
-	
-	
+
 	public boolean createCustomMessageRule(CustomMessageRuleDTO dto) {
+        String templatePath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\template";
 		try {
 			if (dto.getMinDiastolic().equals("") && dto.getMaxDiastolic().equals("")) {
 				dto.setMinDiastolic("1000.0");
@@ -175,34 +146,17 @@ public class RulesService {
 				dto.setMaxRespiration("17.0");
 			}
 			
-            InputStream template = new FileInputStream(
-                    "src\\main\\resources\\rules\\custom-mesage-rule.drt");
+            InputStream template = new FileInputStream(templatePath + "\\custom-mesage-rule.drt");
 
             List<CustomMessageRuleDTODouble> arguments = new ArrayList<>();
             arguments.add(new CustomMessageRuleDTODouble(dto));
             ObjectDataCompiler compiler = new ObjectDataCompiler();
             String drl = compiler.compile(arguments, template);
 
-            FileOutputStream drlFile = new FileOutputStream(new File(
-            		"src\\main\\resources\\rules\\custom-mesage-rule" + UUID.randomUUID().toString() + ".drl"), false);
-            drlFile.write(drl.getBytes());
-            drlFile.close();
-
-            KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
-            System.out.println(drl);
-            kb.add(ResourceFactory.newByteArrayResource(drl.getBytes("utf-8")), ResourceType.DRL);
-
-            KnowledgeBuilderErrors errors = kb.getErrors();
-            for (KnowledgeBuilderError error : errors) {
-                System.out.println(error);
-            }
-            KnowledgeBase kBase =  KnowledgeBaseFactory.newKnowledgeBase();
-            kBase.addKnowledgePackages(kb.getKnowledgePackages());
-            kieSession = kBase.newKieSession();
-            kieSession.fireAllRules();
+            String outputPath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\custom-mesage-rule" + UUID.randomUUID().toString() + ".drl";
+            reloadKjar(drl, outputPath);
 
             return true;
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -211,11 +165,14 @@ public class RulesService {
 	}
 
 	public boolean createLogRule(LogRuleDTO dto) {
+        String templatePath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\template";
+	    String drlPath = templatePath + "\\custom-log-rules.drt";
+
 	    if (dto.getTimes() != 0) {
 	        dto.setTimes(dto.getTimes() - 1);
         }
 	    if (dto.getSeconds() == 0) {
-	        dto.setSeconds(60);
+	        dto.setSeconds(0);
         }
 	    if (dto.getType().getList().size() == 0) {
 	        return false;
@@ -228,7 +185,10 @@ public class RulesService {
 	        list.add("TRACE");
 	        dto.setSeverity(new TypeList(list));
         }
-        if (dto.getPrecTypes().getList() == null) {
+        if (dto.getPrecTypes().getList() == null && dto.getSuccTypes().getList() == null) {
+            drlPath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\template\\custom-log-rules-simple.drt";
+
+        } else if(dto.getPrecTypes().getList() == null) {
             ArrayList<String> list = new ArrayList<>();
             list.add("ERROR");
             list.add("LOGIN_ERROR");
@@ -236,8 +196,7 @@ public class RulesService {
             list.add("LOGIN");
             dto.setPrecTypes(new TypeList(list));
             dto.setPrecSec(10000);
-        }
-        if (dto.getSuccTypes().getList() == null) {
+        } else if (dto.getSuccTypes().getList() == null) {
             ArrayList<String> list = new ArrayList<>();
             list.add("ERROR");
             list.add("LOGIN_ERROR");
@@ -247,35 +206,18 @@ public class RulesService {
             dto.setSuccSec(10000);
         }
 	    try {
-            InputStream template = new FileInputStream(
-                    "src\\main\\resources\\rules\\custom-log-rules.drt");
-
+            InputStream template = new FileInputStream(drlPath);
             List<LogRuleDTO> arguments = new ArrayList<>();
-
             arguments.add(dto);
 
             ObjectDataCompiler compiler = new ObjectDataCompiler();
             String drl = compiler.compile(arguments, template);
 
-            KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
-            System.out.println(drl);
-            kb.add(ResourceFactory.newByteArrayResource(drl.getBytes("utf-8")), ResourceType.DRL);
+            String outputPath = pathDrools + "\\src\\main\\resources\\hospital.hospital\\rules\\custom-log-rules" + UUID.randomUUID().toString() + ".drl";
 
-            KnowledgeBuilderErrors errors = kb.getErrors();
-            for (KnowledgeBuilderError error : errors) {
-                System.out.println(error);
-            }
-            KnowledgeBase kBase =  KnowledgeBaseFactory.newKnowledgeBase();
-            kBase.addKnowledgePackages(kb.getKnowledgePackages());
-            kieSession = kBase.newKieSession();
-            kieSession.fireAllRules();
-
-            FileOutputStream drlFile = new FileOutputStream(new File(
-                    "src\\main\\resources\\rules\\custom-log-rules" + UUID.randomUUID().toString() + ".drl"), false);
-            drlFile.write(drl.getBytes());
-            drlFile.close();
-
+            reloadKjar(drl, outputPath);
             return true;
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -283,4 +225,18 @@ public class RulesService {
         }
     }
 
+
+    public void reloadKjar(String drl, String outputPath) throws IOException, MavenInvocationException {
+        FileOutputStream drlFile = new FileOutputStream(new File(outputPath), false);
+        drlFile.write(drl.getBytes());
+        drlFile.close();
+
+        InvocationRequest request = new DefaultInvocationRequest();
+        request.setPomFile(new File(pathDrools+ "\\pom.xml"));
+        request.setGoals(Arrays.asList("clean", "install"));
+
+        Invoker invoker = new DefaultInvoker();
+        invoker.setMavenHome(new File(System.getenv("M2_HOME")));
+        invoker.execute(request);
+    }
 }

@@ -27,15 +27,21 @@ public class UserService implements UserDetailsService {
     }
 
     public LocalDate saveLastLogin(String email) {
-        System.out.println("ovde trazim po emailu : " + email);
+        System.out.println("email " + email);
         User user = userRepository.findByEmail(email);
         LocalDate lastLogin = LocalDate.now();
 
         if (user == null) {
+            System.out.println("user je null ");
             user = new User(email, LocalDate.now());
+            System.out.println("user last login je ");
+            System.out.println(user.getLastLogin());
         } else {
+            System.out.println("user nije null ");
             lastLogin = user.getLastLogin();
             user.setLastLogin(LocalDate.now());
+            System.out.println("user last login je ");
+            System.out.println(user.getLastLogin());
         }
         userRepository.save(user);
 

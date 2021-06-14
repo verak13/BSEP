@@ -5,14 +5,16 @@ import hospital.hospital.model.cep.alarms.CustomLogAlarm;
 import java.util.Date;
 global MailService mailService
 
-rule "praviloo_0"
+rule "hehe_0"
+no-loop true
     when
-        $previous: LogEvent(log.getType() in ("ERROR","LOGIN_ERROR","APPLICATION","LOGIN"))
+        $previous: LogEvent(log.getType() in ("LOGIN_ERROR"))
+
         $l1 : LogEvent(
                 log.getType() in ("LOGIN"),
                 log.getSeverity().name() in ("WARN","INFO","ERROR","TRACE"),
                 this != $previous,
-                this after[0, 10000] $previous
+                this after[0, 100s] $previous
                 )
         $appearance: Long(intValue >= 0) from accumulate(
                                     $l2: LogEvent(
@@ -20,27 +22,24 @@ rule "praviloo_0"
                                         log.getType() in ("LOGIN"),
                                         log.getSeverity().name() in ("WARN","INFO","ERROR","TRACE")
                                     )
-                                    over window:time(60s),
+                                    over window:time(1s),
                                     count($l2)
                                 )
-         $next: LogEvent(
-                   log.getType() in ("ERROR","LOGIN_ERROR","APPLICATION","LOGIN"),
-                   this != $l1,
-                   this after[0, 10000] $l1
-                   )
-            not (CustomLogAlarm(date == $l1.getLog().getTimestamp()))
+               not (CustomLogAlarm(ruleName == "hehe"))
     then
        System.out.println("\n\n==== TRIGEROVAN CUSTOM LOG ALARM  ===");
-       System.out.println("RULE NAME: " + "praviloo");
-       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "porukaa"));
+       System.out.println("RULE NAME: " + "ovo je sa previous");
+       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "login error se pojavio 10 sekundi pre login", "hehe"));
 end
-rule "Custom log alarm triggered, notify admin by email_praviloo_"
+rule "Custom log alarm triggered, notify admin by email_hehe_"
+no-loop true
   when
-        $alarm : CustomLogAlarm($message: errorMsg, $date: date)
+        $alarm : CustomLogAlarm($message: errorMsg, $date: date, sentEmail == false)
     then
-        System.out.println("Salje se mejl");
-        String msg = "Custom log alarm triggered on date : " + $date + ". Alarm message: " + $message + ".";
+        System.out.println("\n\nSENDING EMAIL...");
+        String msg = "Custom log alarm triggered on date : " + $date + ". Alarm message: " + $message + ".Rule name: " + $alarm.getRuleName();
         mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+        modify($alarm) { setSentEmail(true); }
 end
 
 

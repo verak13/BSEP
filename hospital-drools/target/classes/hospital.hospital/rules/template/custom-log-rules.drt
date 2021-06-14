@@ -22,13 +22,17 @@ global MailService mailService
 template "custom-log-rules"
 
 rule "@{name}_@{row.rowNumber}"
+no-loop true
     when
         $previous: LogEvent(log.getType() in @{precTypes})
+        $next: LogEvent(log.getType() in @{succTypes}, this != $previous)
         $l1 : LogEvent(
                 log.getType() in @{type},
                 log.getSeverity().name() in @{severity},
                 this != $previous,
-                this after[0, @{precSec}] $$previous
+                this != $next,
+                this after[0, @{precSec}s] $$previous,
+                $next after[0, @{succSec}s] this
                 )
         $appearance: Long(intValue >= @{times}) from accumulate(
                                     $l2: LogEvent(
@@ -40,25 +44,23 @@ rule "@{name}_@{row.rowNumber}"
                                     count($l2)
                                 )
 
-         $next: LogEvent(
-                   log.getType() in @{succTypes},
-                   this != $l1,
-                   this after[0, @{succSec}] $$l1
-                   )
-            not (CustomLogAlarm(date == $l1.getLog().getTimestamp()))
+
+               not (CustomLogAlarm(ruleName == "@{name}"))
     then
        System.out.println("\n\n==== TRIGEROVAN CUSTOM LOG ALARM  ===");
        System.out.println("RULE NAME: " + "@{name}");
-       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "@{msg}"));
+       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "@{msg}", "@{name}"));
 end
 
 rule "Custom log alarm triggered, notify admin by email_@{name}_"
+no-loop true
   when
-        $alarm : CustomLogAlarm($message: errorMsg, $date: date)
+        $alarm : CustomLogAlarm($message: errorMsg, $date: date, sentEmail == false)
     then
-        System.out.println("Salje se mejl");
-        String msg = "Custom log alarm triggered on date : " + $date + ". Alarm message: " + $message + ".";
+        System.out.println("\n\nSENDING EMAIL...");
+        String msg = "Custom log alarm triggered on date : " + $date + ". Alarm message: " + $message + ".Rule name: " + $alarm.getRuleName();
         mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+        modify($alarm) { setSentEmail(true); }
 end
 
 end template

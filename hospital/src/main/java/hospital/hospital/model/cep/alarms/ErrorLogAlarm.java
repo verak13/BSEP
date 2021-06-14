@@ -11,7 +11,7 @@ import java.util.Date;
 @Role(Role.Type.EVENT)
 @Expires("5s")
 @Entity
-@Table(name="inactive_user_alarm")
+@Table(name="error_log_alarm")
 public class ErrorLogAlarm  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

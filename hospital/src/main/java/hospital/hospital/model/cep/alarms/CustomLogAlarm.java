@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Role(Role.Type.EVENT)
-@Expires("5s")
+@Expires("60s")
 @Entity
 @Table(name="custom_log_alarm")
 public class CustomLogAlarm {
@@ -24,12 +24,36 @@ public class CustomLogAlarm {
     @Column(name = "errorMsg")
     private String errorMsg;
 
+    @Column(name = "ruleName")
+    private String ruleName;
+
+    @Transient
+    private boolean sentEmail;
+
     @Transient
     private String adminEmail = "laketic.milena98@gmail.com";
 
-    public CustomLogAlarm(Date date, String errorMsg) {
+    public CustomLogAlarm(Date date, String errorMsg, String ruleName) {
         this.date = date;
         this.errorMsg = errorMsg;
+        this.ruleName = ruleName;
+        this.sentEmail = false;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public boolean isSentEmail() {
+        return sentEmail;
+    }
+
+    public void setSentEmail(boolean sentEmail) {
+        this.sentEmail = sentEmail;
     }
 
     public Long getId() {

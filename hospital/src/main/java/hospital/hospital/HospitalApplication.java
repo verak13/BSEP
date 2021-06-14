@@ -11,6 +11,7 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.drools.template.ObjectDataCompiler;
 import org.kie.api.KieServices;
+import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieRuntime;
 import org.kie.api.runtime.KieSession;
@@ -67,8 +68,14 @@ public class HospitalApplication/* implements CommandLineRunner*/  {
 
 	@Bean
 	public KieSession kieSession() {
-		KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
-		KieSession kieSession = kc.newKieSession("rulesSession");
+
+		KieServices ks = KieServices.Factory.get();
+		KieContainer kContainer = ks
+				.newKieContainer(ks.newReleaseId("project", "hospital-drools", "0.0.1-SNAPSHOT"));
+		KieScanner kScanner = ks.newKieScanner(kContainer);
+		kScanner.start(10_000);
+
+		KieSession kieSession = kContainer.newKieSession("rulesSession");
 		KieRuntime kieRuntime = (KieRuntime) kieSession;
 		kieRuntime.setGlobal("mailService", mailService);
 
@@ -91,10 +98,12 @@ public class HospitalApplication/* implements CommandLineRunner*/  {
 			while (null != line) {
 				line = line.replace("\n", "");
 				ips.add(line);
+				System.out.println(line);
 				line = reader.readLine();
 			}
 			BlackListedIP blackListedIP = new BlackListedIP(ips);
-
+			System.out.println("ubavceeeno ");
+			System.out.println(blackListedIP.getList().size());
 			kieSession.insert(blackListedIP);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

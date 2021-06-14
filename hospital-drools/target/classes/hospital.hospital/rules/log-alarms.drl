@@ -82,7 +82,6 @@ no-loop
 end
 
 rule "User tried to login with ip address from blacklisted ip addresses, trigger BlackListedIPAlarm"
-agenda-group "log-alarms"
     when
         $l : LogEvent(log.getType() == "LOGIN" || log.getType()  == "LOGIN_ERROR", $ip : log.getIp(), $username: log.getUsername())
         BlackListedIP(list contains $ip)
@@ -94,8 +93,7 @@ agenda-group "log-alarms"
 end
 
 rule "Black listed ip alarm triggered, notify admin"
-agenda-group "log-alarms"
-no-loop
+no-loop true
     when
         $alarm : BlackListedIPAlarm($ip: ip, $userEmail: userEmail, $date: date)
     then
