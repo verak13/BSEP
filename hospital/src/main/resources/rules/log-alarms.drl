@@ -17,7 +17,6 @@ global MailService mailService
 
 
 rule "More than 100 unsuccessful logins with same username in 60 sec, notify admin of hospital"
-agenda-group "log-alarms"
     when
           $l1: LogEvent($username: log.getUsername(), log.getType() == "LOGIN_ERROR")
                  $attempts: Long(intValue >= 100) from accumulate(
@@ -31,13 +30,12 @@ agenda-group "log-alarms"
                         )
                          not (BruteForceLoginAlarm(username == $username))
     then
-        System.out.println("==== TRIGEROVAN ALARM ZA 100 POKUSAJA U MINUTI ===");
+        System.out.println("\n\n==== TRIGEROVAN ALARM ZA 100 POKUSAJA U MINUTI ===");
         System.out.println("username: " + $username);
         insert(new BruteForceLoginAlarm($username, $attempts));
 end
 
 rule "Brute force login alarm triggered, notify user by email"
-agenda-group "log-alarms"
     when
         $alarm: BruteForceLoginAlarm($username: username, $attempts: attempts)
     then
@@ -46,18 +44,16 @@ agenda-group "log-alarms"
 end
 
 rule "User logged in after more than 90 days from last login, triger NotActiveAlarm"
-agenda-group "log-alarms"
     when
         $e : UserLoginEvent($email: email, $lastLogin: lastLogin)
         eval(ChronoUnit.DAYS.between($lastLogin, LocalDate.now()) >= 90)
     then
         insert(new InactiveUserAlarm($email, ChronoUnit.DAYS.between($lastLogin, LocalDate.now())));
-        System.out.println("==== TRIGEROVAN ALARM ZA NEAKTIVNOG KORISNIKA ====");
+        System.out.println("\n\n==== TRIGEROVAN ALARM ZA NEAKTIVNOG KORISNIKA ====");
         System.out.println("username: " + $email);
 end
 
 rule "Inactive user alarm triggered, notify admin by email"
-agenda-group "log-alarms"
   when
         $alarm : InactiveUserAlarm($userEmail: userEmail, $daysInactive: daysInactive)
     then
@@ -66,19 +62,17 @@ agenda-group "log-alarms"
 end
 
 rule "Error log appears, trigger ErrorLogAlarm"
-agenda-group "log-alarms"
     no-loop
   when
        $error: LogEvent(log.getType() == "ERROR", $message: log.getMessage())
        not (ErrorLogAlarm(errorMsg == $message))
     then
         insert(new ErrorLogAlarm(LocalDate.now(), $message));
-        System.out.println("==== TRIGEROVAN ALARM ZA ERROR LOG ====");
+        System.out.println("\n\n==== TRIGEROVAN ALARM ZA ERROR LOG ====");
         System.out.println("message: " + $message);
 end
 
 rule "Error log alarm triggered, notify admin"
-agenda-group "log-alarms"
 no-loop
     when
         $alarm : ErrorLogAlarm($message: errorMsg, $date: date)
@@ -95,7 +89,7 @@ agenda-group "log-alarms"
 
     then
         insert(new BlackListedIPAlarm($ip, $username, LocalDate.now()));
-        System.out.println("==== TRIGEROVAN ALARM ZA BLACK LISTED IP ====");
+        System.out.println("\n\n==== TRIGEROVAN ALARM ZA BLACK LISTED IP ====");
         System.out.println("ip: " + $ip);
 end
 

@@ -23,11 +23,12 @@ import Info from '@material-ui/icons/Info';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import Settings from '@material-ui/icons/Settings';
+import AddIcon from '@material-ui/icons/Add';
 import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
-import { REQUESTS, LOGS, REPORT, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGE_ALARMS, MESSAGES, PATIENTS, DOCTOR_RULES, CUSTOM_MESSAGE_RULE } from '../routes';
+import { REQUESTS, LOG_RULES, LOGS, REPORT, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGE_ALARMS, MESSAGES, PATIENTS, DOCTOR_RULES, CUSTOM_MESSAGE_RULE } from '../routes';
 import authService from '../services/AuthService';
 
 const drawerWidth = 240;
@@ -179,6 +180,10 @@ function NavBar(props) {
                         <ListItem onClick={() => props.history.push(REPORT)} button key={'Reports'}>
                             <ListItemIcon><AssessmentIcon /></ListItemIcon>
                             <ListItemText primary={'Reports'} />
+                        </ListItem>
+                        <ListItem onClick={() => props.history.push(LOG_RULES)} button key={'Add log rule'}>
+                            <ListItemIcon><AddIcon /></ListItemIcon>
+                            <ListItemText primary={'Add log rule'} />
                         </ListItem>
                     </List>
                     <Divider />

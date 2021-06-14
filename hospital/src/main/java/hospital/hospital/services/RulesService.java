@@ -4,17 +4,29 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import hospital.hospital.dto.*;
+import hospital.hospital.model.cep.UserLoginEvent;
+import org.drools.core.impl.InternalKnowledgeBase;
+import org.drools.template.DataProvider;
 import org.drools.template.ObjectDataCompiler;
+import org.drools.template.objects.ArrayDataProvider;
+import org.kie.api.io.ResourceType;
+import org.kie.api.runtime.KieSession;
+import org.kie.internal.KnowledgeBase;
+import org.kie.internal.KnowledgeBaseFactory;
+import org.kie.internal.builder.KnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderError;
+import org.kie.internal.builder.KnowledgeBuilderErrors;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.kie.internal.io.ResourceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import hospital.hospital.dto.CustomMessageRuleDTO;
-import hospital.hospital.dto.RuleBloodPressureDTO;
-import hospital.hospital.dto.RuleDTO;
 
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
@@ -24,6 +36,9 @@ import org.apache.maven.shared.invoker.Invoker;
 
 @Service
 public class RulesService {
+
+    @Autowired
+    private KieSession kieSession;
 	
 	public boolean createHighTemperatureRule(RuleDTO dto) {
 		try {
@@ -39,14 +54,21 @@ public class RulesService {
             		"src\\main\\resources\\rules\\high-temperature" + dto.getPatient() + ".drl"), false);
             drlFile.write(drl.getBytes());
             drlFile.close();
-            InvocationRequest request = new DefaultInvocationRequest();
-            //request.setInputStream(InputStream.nullInputStream());
-            request.setPomFile(new File("../hospital/pom.xml"));
-            request.setGoals(Arrays.asList("clean", "install"));
 
-            Invoker invoker = new DefaultInvoker();
-            invoker.setMavenHome(new File(System.getenv("M2_HOME")));
-            invoker.execute(request);
+            KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
+            System.out.println(drl);
+            kb.add(ResourceFactory.newByteArrayResource(drl.getBytes("utf-8")), ResourceType.DRL);
+
+            KnowledgeBuilderErrors errors = kb.getErrors();
+            for (KnowledgeBuilderError error : errors) {
+                System.out.println(error);
+            }
+            KnowledgeBase kBase =  KnowledgeBaseFactory.newKnowledgeBase();
+            kBase.addKnowledgePackages(kb.getKnowledgePackages());
+            kieSession = kBase.newKieSession();
+            kieSession.fireAllRules();
+
+
             return true;
 
         } catch (Exception e) {
@@ -72,14 +94,19 @@ public class RulesService {
             drlFile.write(drl.getBytes());
             drlFile.close();
 
-            InvocationRequest request = new DefaultInvocationRequest();
-            //request.setInputStream(InputStream.nullInputStream());
-            request.setPomFile(new File("../hospital/pom.xml"));
-            request.setGoals(Arrays.asList("clean", "install"));
+            KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
+            System.out.println(drl);
+            kb.add(ResourceFactory.newByteArrayResource(drl.getBytes("utf-8")), ResourceType.DRL);
 
-            Invoker invoker = new DefaultInvoker();
-            invoker.setMavenHome(new File(System.getenv("M2_HOME")));
-            invoker.execute(request);
+            KnowledgeBuilderErrors errors = kb.getErrors();
+            for (KnowledgeBuilderError error : errors) {
+                System.out.println(error);
+            }
+            KnowledgeBase kBase =  KnowledgeBaseFactory.newKnowledgeBase();
+            kBase.addKnowledgePackages(kb.getKnowledgePackages());
+            kieSession = kBase.newKieSession();
+            kieSession.fireAllRules();
+
             return true;
 
         } catch (Exception e) {
@@ -136,14 +163,19 @@ public class RulesService {
             drlFile.write(drl.getBytes());
             drlFile.close();
 
-            InvocationRequest request = new DefaultInvocationRequest();
-            //request.setInputStream(InputStream.nullInputStream());
-            request.setPomFile(new File("../hospital/pom.xml"));
-            request.setGoals(Arrays.asList("clean", "install"));
+            KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
+            System.out.println(drl);
+            kb.add(ResourceFactory.newByteArrayResource(drl.getBytes("utf-8")), ResourceType.DRL);
 
-            Invoker invoker = new DefaultInvoker();
-            invoker.setMavenHome(new File(System.getenv("M2_HOME")));
-            invoker.execute(request);
+            KnowledgeBuilderErrors errors = kb.getErrors();
+            for (KnowledgeBuilderError error : errors) {
+                System.out.println(error);
+            }
+            KnowledgeBase kBase =  KnowledgeBaseFactory.newKnowledgeBase();
+            kBase.addKnowledgePackages(kb.getKnowledgePackages());
+            kieSession = kBase.newKieSession();
+            kieSession.fireAllRules();
+
             return true;
 
         } catch (Exception e) {
@@ -152,5 +184,78 @@ public class RulesService {
             return false;
         }
 	}
+
+	public boolean createLogRule(LogRuleDTO dto) {
+	    if (dto.getTimes() != 0) {
+	        dto.setTimes(dto.getTimes() - 1);
+        }
+	    if (dto.getSeconds() == 0) {
+	        dto.setSeconds(60);
+        }
+	    if (dto.getType().getList().size() == 0) {
+	        return false;
+        }
+	    if (dto.getSeverity().getList() == null) {
+	        ArrayList<String> list = new ArrayList<>();
+	        list.add("WARN");
+	        list.add("INFO");
+	        list.add("ERROR");
+	        list.add("TRACE");
+	        dto.setSeverity(new TypeList(list));
+        }
+        if (dto.getPrecTypes().getList() == null) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("ERROR");
+            list.add("LOGIN_ERROR");
+            list.add("APPLICATION");
+            list.add("LOGIN");
+            dto.setPrecTypes(new TypeList(list));
+            dto.setPrecSec(10000);
+        }
+        if (dto.getSuccTypes().getList() == null) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("ERROR");
+            list.add("LOGIN_ERROR");
+            list.add("APPLICATION");
+            list.add("LOGIN");
+            dto.setSuccTypes(new TypeList(list));
+            dto.setSuccSec(10000);
+        }
+	    try {
+            InputStream template = new FileInputStream(
+                    "src\\main\\resources\\rules\\custom-log-rules.drt");
+
+            List<LogRuleDTO> arguments = new ArrayList<>();
+
+            arguments.add(dto);
+
+            ObjectDataCompiler compiler = new ObjectDataCompiler();
+            String drl = compiler.compile(arguments, template);
+
+            KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
+            System.out.println(drl);
+            kb.add(ResourceFactory.newByteArrayResource(drl.getBytes("utf-8")), ResourceType.DRL);
+
+            KnowledgeBuilderErrors errors = kb.getErrors();
+            for (KnowledgeBuilderError error : errors) {
+                System.out.println(error);
+            }
+            KnowledgeBase kBase =  KnowledgeBaseFactory.newKnowledgeBase();
+            kBase.addKnowledgePackages(kb.getKnowledgePackages());
+            kieSession = kBase.newKieSession();
+            kieSession.fireAllRules();
+
+            FileOutputStream drlFile = new FileOutputStream(new File(
+                    "src\\main\\resources\\rules\\custom-log-rules" + UUID.randomUUID().toString() + ".drl"), false);
+            drlFile.write(drl.getBytes());
+            drlFile.close();
+
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }

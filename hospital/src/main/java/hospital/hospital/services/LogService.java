@@ -70,7 +70,6 @@ public class LogService {
 		for (Log log: logs) {
 			kieSession.insert(new LogEvent(log));
 		}
-		kieSession.getAgenda().getAgendaGroup("log-alarms").setFocus();
 		kieSession.fireAllRules();
 		this.logRepository.saveAll(logs);
 	}
@@ -202,7 +201,6 @@ public class LogService {
 		try {
 			String line = reader.readLine();
 			System.out.println("SIMULATOR");
-			System.out.println(line);
 			boolean setNewFlagDate = false;
 			while (line != null) {
 				if (!line.matches(regexp)) {
@@ -221,7 +219,7 @@ public class LogService {
 				/*if (log.getMessage().matches(regexp)) {
 					logs.add(log);
 				}*/
-
+				System.out.println(log);
 				line = reader.readLine();
 			}
 		} finally {
@@ -257,6 +255,7 @@ public class LogService {
 				}
 				if (log.getType().equalsIgnoreCase("LOGIN")) {
 					LocalDate lastLogin = userService.saveLastLogin(log.getUsername());
+					kieSession.insert(new LogEvent(log));
 					kieSession.insert(new UserLoginEvent(log.getUsername(), lastLogin));
 				}
 				if (!setNewFlagDate) {

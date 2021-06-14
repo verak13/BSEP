@@ -12,6 +12,10 @@ const ENDPOINT_CUSTOM_MESSAGE_RULE = {
     GET: '/rules/custom-message-rule',
 }
 
+const ENDPOINT_LOG_RULE = {
+    POST: '/rules/log-rule',
+}
+
 class RulesService extends ApiService {
     
     addTemperatureRule = async (payload) => {
@@ -26,6 +30,12 @@ class RulesService extends ApiService {
 
     addCustomMessageRule = async (payload) => {
         const {data} = await this.apiClient.post(ENDPOINT_CUSTOM_MESSAGE_RULE.GET, payload);
+        return data;
+    }
+
+    addLogRule = async payload => {
+        const {data} = await this.apiClient.post(ENDPOINT_LOG_RULE.POST, payload);
+
         return data;
     }
 }

@@ -19,6 +19,8 @@ import DoctorRules from '../../containers/DoctorRules';
 import CustomMessageRule from '../../containers/CustomMessageRule';
 import Report from '../../containers/Report';
 import ReportList from '../../containers/Report/ReportList';
+import { LOG_RULES } from '../../routes';
+import LogRules from '../../containers/LogRules';
 
 export default function Routes() {
     return (
@@ -38,6 +40,8 @@ export default function Routes() {
             <PrivateRoute path={CUSTOM_MESSAGE_RULE} role="DOCTOR" component={CustomMessageRule} exact />
             <PrivateRoute path={REPORT} role="HOSPITAL_ADMIN" component={Report} exact />
             <PrivateRoute path={REPORT_LIST} role="HOSPITAL_ADMIN" component={ReportList} exact />
+            <PrivateRoute path={LOG_RULES} role="HOSPITAL_ADMIN" component={LogRules} exact />
+
         </Switch>
     )
 }

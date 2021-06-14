@@ -2,6 +2,7 @@ package hospital.hospital.controller;
 
 import javax.validation.Valid;
 
+import hospital.hospital.dto.LogRuleDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,19 @@ public class RulesController {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
         	logger.error("Adding rule failed.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('HOSPITAL_ADMIN')")
+    @RequestMapping(value = "/log-rule", method = RequestMethod.POST)
+    public ResponseEntity<?> createLogRume(@RequestBody LogRuleDTO dto) throws Exception {
+
+        if (rulesService.createLogRule(dto)) {
+            logger.trace("Added new log rule.");
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            logger.error("Adding log rule failed.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

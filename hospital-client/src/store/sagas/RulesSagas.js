@@ -38,3 +38,14 @@ export function* customMessageRuleAdd({payload}){
         yield put(newError("Can't make rule."));
     }
 }
+
+export function* logRuleAdd({payload}){
+    try{
+        const response = yield call(rulesService.addLogRule, payload);
+        yield put(newSuccess("Rule log made."));
+
+    }catch(error){
+        console.log(error);
+        yield put(newError("Can't make log rule."));
+    }
+}

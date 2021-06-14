@@ -27,6 +27,7 @@ public class UserService implements UserDetailsService {
     }
 
     public LocalDate saveLastLogin(String email) {
+        System.out.println("ovde trazim po emailu : " + email);
         User user = userRepository.findByEmail(email);
         LocalDate lastLogin = LocalDate.now();
 

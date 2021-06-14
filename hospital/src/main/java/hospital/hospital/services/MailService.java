@@ -55,6 +55,8 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
+
     
     @Async
     public void notifyDoctors(MessageAlarm ma) throws MailException {

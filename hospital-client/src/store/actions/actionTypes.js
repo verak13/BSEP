@@ -43,3 +43,5 @@ export const SET_REPORT = 'SET_REPORT';
 
 export const GET_REPORTS = 'GET_REPORTS';
 export const SET_REPORTS = 'SET_REPORTS';
+
+export const ADD_LOG_RULE = 'ADD_LOG_RULE';
