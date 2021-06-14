@@ -23,17 +23,23 @@ public class SslConfiguration {
 	@Value("${trust-store-password}")
 	private String trustStorePassword;
     
-    @Bean
-    RestTemplate restTemplate() throws Exception {
+    @Bean(name="appRestClient")
+
+    public RestTemplate restTemplate() throws Exception {
         SSLContext sslContext = new SSLContextBuilder()
+          .loadKeyMaterial(trustStore.getURL(), trustStorePassword.toCharArray(), trustStorePassword.toCharArray())
           .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
           .build();
+
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
+
         HttpClient httpClient = HttpClients.custom()
           .setSSLSocketFactory(socketFactory)
           .build();
+
         HttpComponentsClientHttpRequestFactory factory = 
           new HttpComponentsClientHttpRequestFactory(httpClient);
+
         return new RestTemplate(factory);
     }
 

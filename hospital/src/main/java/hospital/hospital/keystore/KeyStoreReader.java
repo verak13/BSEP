@@ -121,4 +121,20 @@ public class KeyStoreReader {
         return null;
     }
 
+
+    public boolean verifySignature(byte[] data, byte[] signature, PublicKey publicKey) {
+        try {
+            Signature sig = Signature.getInstance("SHA256withRSA");
+            sig.initVerify(publicKey);
+            sig.update(data);
+            return sig.verify(signature);
+
+
+        } catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 }

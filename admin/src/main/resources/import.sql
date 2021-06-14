@@ -6,4 +6,5 @@ insert into user_authority (user_id, authority_id) values (1, 1);
 insert into requests (common_name, country_name, organization, organization_unit_name, state_name, locality_name, email) values ('cn', 'co', 'org', 'orgU', 'sn', 'ln', 'a@gmail.com');
 insert into requests (common_name, country_name, organization, organization_unit_name, state_name, locality_name, email) values ('cn2', 'co', 'org', 'orgU', 'sn', 'ln', 'b@gmail.com');
 
+
 insert into hospitals(name) values ('Our Only Hospital');

@@ -10,14 +10,14 @@ public class LogConfigDTO {
 	@Pattern(regexp = "^SIMULATOR1$|^SIMULATOR2$|^SIMULATOR3$", message = "input not allowed")
 	private String file;
 	
-	@NotBlank
+
 	@Min(1)
 	private long interval;
 	
 	@NotBlank
 	private String regexp;
 	
-	@NotBlank
+
 	@Min(1)
 	private Long hospitalId;
 	

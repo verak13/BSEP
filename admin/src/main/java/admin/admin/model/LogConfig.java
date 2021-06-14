@@ -3,9 +3,13 @@ package admin.admin.model;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
-public class LogConfig {
-	
+public class LogConfig implements Serializable {
+
+
+	private static final long serialVersionUID = 223321221;
+
 	private String file;
 	
 	private long interval;

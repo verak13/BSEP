@@ -16,3 +16,17 @@ export function* getHospitals(){
         yield put(push(HOSPITALS));
     }
 }
+
+export function* addConfiguration({payload}){
+    try{
+        console.log("DOBIO DA SALJEM " , payload);
+        const response = yield call(hospitalConfigurationService.addConfig, payload);    
+        console.log(response);
+        yield put(newSuccess('Success!'));        
+
+    } catch (error) {
+        console.log(error);
+        yield put(newError('Failed to add.'));
+
+    }
+}

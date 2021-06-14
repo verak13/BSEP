@@ -1,27 +1,25 @@
 package admin.admin.services;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.security.PrivateKey;
+import java.security.Signature;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import admin.admin.keystore.KeyStoreReader;
+import javassist.bytecode.ByteArray;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.client.RestTemplate;
 
 import admin.admin.dto.LogConfigDTO;
 import admin.admin.model.LogConfig;
 import admin.admin.repository.HospitalRepository;
+import org.springframework.web.client.RestTemplate;
 
 
 @Service
@@ -30,12 +28,19 @@ public class LogConfigService {
 	@Autowired
 	HospitalRepository hospitalRepository;
 
-	public boolean createConfig(@Valid LogConfigDTO logConfigDTO) {
-		
+	@Autowired
+	KeyStoreReader keyStoreReaderService;
+
+	@Autowired
+	private RestTemplate appRestClient;
+
+	public boolean createConfig(@Valid LogConfigDTO logConfigDTO) throws IOException {
+
 		if (hospitalRepository.findById(logConfigDTO.getHospitalId()) == null) {
 			return false;
 		}
-		
+
+
 		String path = "";
 		try {
 			File file = ResourceUtils.getFile("classpath:simulators.txt");
@@ -43,10 +48,14 @@ public class LogConfigService {
 			String line = reader.readLine();
 			while (null != line) {
 				line = line.replace("\n", "");
-				System.out.println(line.split(" ")[0]);
-				System.out.println(line.split(" ")[1]);
-				if (line.split(" ")[0].equals(logConfigDTO.getFile())) {
-					path = line.split(" ")[1];
+
+				String[] splitted = line.split("\\\\");
+				String logFile = splitted[splitted.length-1];
+				logFile = logFile.substring(0, logFile.length()-4);
+
+				if (logFile.equalsIgnoreCase(logConfigDTO.getFile())) {
+					path = line.toString();
+					break;
 				}
 				line = reader.readLine();
 			}
@@ -58,6 +67,8 @@ public class LogConfigService {
 			e.printStackTrace();
 			return false;
 		}
+
+
 		if (path.equals("")) {
 			return false;
 		}
@@ -67,13 +78,39 @@ public class LogConfigService {
 		}
 		
 		LogConfig logConfig = new LogConfig(path, logConfigDTO.getInterval(), regex, logConfigDTO.getHospitalId());
-		
-		RestTemplate restTemplate = new RestTemplate();        
-        HttpEntity<LogConfig> request = new HttpEntity<>(logConfig);
-        ResponseEntity<?> response = restTemplate.exchange("https://localhost:8442//log-config",
-                HttpMethod.POST, request, LogConfig.class);
+		byte[] configSerialized = new byte[0];
 
-        return response.getStatusCode() == HttpStatus.OK;
+		try(ByteArrayOutputStream b = new ByteArrayOutputStream()){
+			try(ObjectOutputStream o = new ObjectOutputStream(b)){
+				o.writeObject(logConfig);
+			}
+			configSerialized = b.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		PrivateKey pk = keyStoreReaderService.readPrivateKey("root-ca");
+		byte[] signature = keyStoreReaderService.sign(configSerialized, pk);
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
+		outputStream.write(signature);
+		outputStream.write(configSerialized);
+		byte dataToSend[] = outputStream.toByteArray();
+
+
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", "application/octet-stream");
+        HttpEntity<byte[]> request = new HttpEntity<>(dataToSend, headers);
+
+		System.out.println("DATA SENDUJEM " + request.getBody().length);
+
+		ResponseEntity<?> response = appRestClient.exchange("https://localhost:8442//log-config",
+                HttpMethod.POST, request, String.class);
+
+        System.out.println(" JE ODG GG  " + response.getStatusCode());
+
+        return response.getStatusCode() == HttpStatus.CREATED;
 	}
 
 }

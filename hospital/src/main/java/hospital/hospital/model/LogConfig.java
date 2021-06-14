@@ -1,7 +1,10 @@
 package hospital.hospital.model;
 
-public class LogConfig {
-	
+import java.io.Serializable;
+
+public class LogConfig implements Serializable {
+
+	private static final long serialVersionUID = 1232123212;
 	private String file;
 	private long interval;
 	private String regexp;
