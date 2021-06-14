@@ -201,9 +201,9 @@ public class LogService {
 		Date newFlagDate = new Date();
 		try {
 			String line = reader.readLine();
-			System.out.println("SIMULATOR");
 			boolean setNewFlagDate = false;
 			while (line != null) {
+				System.out.println("\n\nSIMULATOR LOG");
 				if (!line.matches(regexp)) 
 				{
 					System.out.println("NE MECUJE LINIJA " + line);
@@ -211,6 +211,7 @@ public class LogService {
 					continue;
 				}
 				Log log = simulatorLogParser.parse(line);
+				System.out.println(log);
 				if (!setNewFlagDate) {
 					newFlagDate = log.getTimestamp();
 					setNewFlagDate = true;
@@ -228,11 +229,6 @@ public class LogService {
 			reader.close();
 		}
 		Collections.reverse(logs);
-		System.out.println("ZA BAZU");
-		for (Log ll : logs) {
-			System.out.println(ll);
-		}
-		System.out.println("ZA BAZU kraj");
 		this.save(logs);
 		return newFlagDate;
 		
@@ -270,6 +266,7 @@ public class LogService {
 					newFlagDate = log.getTimestamp();
 					setNewFlagDate = true;
 				}
+
 				if (!log.getTimestamp().after(flagDate)) {
 					break;
 				}
@@ -280,10 +277,6 @@ public class LogService {
 			reader.close();
 		}
 		Collections.reverse(logs);
-		System.out.println("KEYCLOAK ZA BAZU");
-		for (Log ll : logs)
-			System.out.println(ll);
-		System.out.println("KEYCLOAK ZA BAZU kraj");
 		this.save(logs);
 		return newFlagDate;
 	}

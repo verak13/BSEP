@@ -5,10 +5,13 @@ import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Role(Role.Type.EVENT)
 @Expires("60s")
 public class LogEvent implements Serializable {
+
+    private Date startTimestamp;
 
     private Log log;
 
@@ -16,6 +19,7 @@ public class LogEvent implements Serializable {
 
     public LogEvent(Log log) {
         this.log = log;
+        this.startTimestamp = new Date();
     }
 
     public Log getLog() {
@@ -24,5 +28,13 @@ public class LogEvent implements Serializable {
 
     public void setLog(Log log) {
         this.log = log;
+    }
+
+    public Date getStartTimestamp() {
+        return startTimestamp;
+    }
+
+    public void setStartTimestamp(Date startTimestamp) {
+        this.startTimestamp = startTimestamp;
     }
 }

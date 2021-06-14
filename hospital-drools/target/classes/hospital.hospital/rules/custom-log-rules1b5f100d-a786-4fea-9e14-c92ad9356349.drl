@@ -1,0 +1,41 @@
+package hospital.hospital.rules;
+import hospital.hospital.model.cep.LogEvent;
+import hospital.hospital.services.MailService;
+import hospital.hospital.model.cep.alarms.CustomLogAlarm;
+import java.util.Date;
+global MailService mailService
+
+rule "da li radis hehe_0"
+no-loop true
+    when
+      $l1 : LogEvent(
+                    log.getType() in ("LOGIN_ERROR","LOGIN"),
+                    log.getSeverity().name() in ("TRACE","ERROR","WARN")
+                    )
+            $appearance: Long(intValue >= 5) from accumulate(
+                                        $l2: LogEvent(
+                                            this != $l1,
+                                            log.getType() in ("LOGIN_ERROR","LOGIN"),
+                                            log.getSeverity().name() in ("TRACE","ERROR","WARN")
+                                        )
+                                        over window:time(33s),
+                                        count($l2)
+                                    )
+            not (CustomLogAlarm(ruleName == "da li radis hehe"))
+    then
+       System.out.println("\n\n==== TRIGEROVAN CUSTOM LOG ALARM  ===");
+       System.out.println("RULE NAME: " + "da li radis hehe");
+       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "sest putaa", "da li radis hehe"));
+end
+rule "Custom log alarm triggered, notify admin by email_da li radis hehe_"
+no-loop true
+  when
+        $alarm : CustomLogAlarm($message: errorMsg, $date: date, sentEmail == false)
+    then
+        System.out.println("\n\nSENDING EMAIL...");
+        String msg = "Custom log alarm triggered on date : " + $date + ". Alarm message: " + $message + ". Rule name: " + $alarm.getRuleName();
+        mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+         modify($alarm) { setSentEmail(true); }
+end
+
+

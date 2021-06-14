@@ -1,0 +1,46 @@
+template header
+
+description
+minTemperature
+maxTemperature
+minPulse
+maxPulse
+minRespiration
+maxRespiration
+minDiastolic
+maxDiastolic
+minSystolic
+maxSystolic
+
+package hospital.hospital.rules;
+
+import hospital.hospital.model.cep.MessageEvent;
+import hospital.hospital.services.MailService;
+import hospital.hospital.model.cep.alarms.MessageAlarm;
+global MailService mailService
+
+template "custom-message-rule"
+
+rule "Custom message rule@{description}."
+	agenda-group "doctor-alarms"
+    when
+        $e : MessageEvent($patientId: message.getPatientId(), 
+        	$value1: message.getBloodPressureSystolic(), ($value1 < @{minSystolic} || $value1 > @{maxSystolic}), 
+        	$value2: message.getBloodPressureDiastolic(), ($value2 < @{minDiastolic} || $value2 > @{maxDiastolic}),
+        	$value3: message.getBodyTemperature(), ($value3 < @{minTemperature} || $value3 > @{maxTemperature}),
+        	$value4: message.getPulseRaye(), ($value4 < @{minPulse} || $value4 > @{maxPulse}),
+        	$value5: message.getRespirationRate(), ($value5 < @{minRespiration} || $value5 > @{maxRespiration})
+        )
+    then
+        insert(new MessageAlarm($patientId, "@{description}"));
+        System.out.println("==== TRIGEROVAN CUSTOM ALARM ====");
+end
+
+rule "Message alarm triggered, notify doctor custom-@{description}"
+    when
+        $alarm : MessageAlarm(variable == "@{description}")
+    then
+        mailService.notifyDoctors($alarm);
+end
+
+end template
