@@ -14,7 +14,7 @@ INVALID_CERT = ('./certs/revoke_me.cer', './certs/revoke_me.pkcs8')
 
 def create_message():
     #1, 37, 120, 200, 160, 70
-    id = 1
+    id = random.randint(1,5)
     temp = random.randint(36,41)
     pulse = random.randint(80,120)
     respiration = random.randint(10,19)
