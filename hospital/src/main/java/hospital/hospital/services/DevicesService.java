@@ -87,23 +87,13 @@ public class DevicesService {
     }
 
 
-	private boolean verifySignature(byte[] data, byte[] signature, PublicKey publicKey) {
-		try {
-			Signature sig = Signature.getInstance("SHA256withRSA");
-			sig.initVerify(publicKey);
-			sig.update(data);
-			return sig.verify(signature);
-		} catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+
 
     public boolean receiveMessage(byte[] msg, PublicKey pk){
         byte[] sig = Arrays.copyOfRange(msg, 0, 256);
         byte[] message = Arrays.copyOfRange(msg, 256, msg.length);
 
-		if(!verifySignature(message, sig, pk)){
+		if(!keyStoreReaderService.verifySignature(message, sig, pk)){
 			return false;
 		}
 

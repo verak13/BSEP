@@ -1,1 +1,1 @@
-{"logConfigs":[{"file": "C:\\Users\\vincitoressa\\Desktop\\BSEP\\simulator\\simulator2.log", "interval": 5000, "regexp": ".*", "hospitalId": 1}]}
+{"logConfigs":[{"file": "C:\\\\Personal\\\\Faks\\\\Bezbednost Sistema Elektronskog Poslovanja\\\\bsep\\\\simulator\\\\simulator1.log", "interval": 30000, "regexp": ".*", "hospitalId": 1}]}

@@ -45,8 +45,10 @@ public class LogConfigController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createConfig(@Valid @RequestBody LogConfigDTO logConfigDTO) {
 		try {
-			configurationService.createConfig(logConfigDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			if(configurationService.createConfig(logConfigDTO)){
+				return new ResponseEntity<>(HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

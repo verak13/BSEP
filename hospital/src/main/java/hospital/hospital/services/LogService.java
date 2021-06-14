@@ -182,7 +182,12 @@ public class LogService {
 			
 			Gson gson = new Gson();
 			File file = ResourceUtils.getFile("classpath:configuration.json");
+			System.out.println("ODJE CITAM VEC DRUGO " + file.getAbsolutePath());
+
 			LogConfigs configs = gson.fromJson(new FileReader(file), LogConfigs.class);
+			System.out.println("IMA OVOLIKO LOGSA " + configs.getLogConfigs().size());
+
+
 			for (LogConfig lc : configs.getLogConfigs()) {
 				if (lc.getFile().equals(path)) {
 					interval = lc.getInterval();
@@ -201,7 +206,7 @@ public class LogService {
 		Date newFlagDate = new Date();
 		try {
 			String line = reader.readLine();
-			System.out.println("SIMULATOR");
+			System.out.println("SIMULATOR" + path);
 			boolean setNewFlagDate = false;
 			while (line != null) {
 				if (!line.matches(regexp)) 
