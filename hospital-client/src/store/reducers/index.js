@@ -12,7 +12,7 @@ import MessageReducer from './MessageReducer';
 import MessageAlarmReducer from './MessageAlarmReducer';
 import PatientReducer from './PatientReducer';
 import RulesReducer from './RulesReducer';
-
+import AlarmCustomReducer from './AlarmCustomReducer';
 import ReportReducer from './ReportReducer';
 
 export default history =>
@@ -21,7 +21,7 @@ export default history =>
         notification: NotificationReducer,
         requests: RequestReducer,
         logs: LogReducer,
-        alarms: AlarmBlacklistedReducer, AlarmBruteforceReducer, AlarmErrorReducer, AlarmInactiveReducer,
+        alarms: AlarmBlacklistedReducer, AlarmBruteforceReducer, AlarmErrorReducer, AlarmInactiveReducer, AlarmCustomReducer,
         messages: MessageReducer,
         messageAlarms: MessageAlarmReducer,
         patients: PatientReducer,

@@ -28,7 +28,7 @@ import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
-import { REQUESTS, LOG_RULES, LOGS, REPORT, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGE_ALARMS, MESSAGES, PATIENTS, DOCTOR_RULES, CUSTOM_MESSAGE_RULE } from '../routes';
+import { REQUESTS, LOG_RULES, LOGS, REPORT, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGE_ALARMS, MESSAGES, PATIENTS, DOCTOR_RULES, CUSTOM_MESSAGE_RULE, ALARMS_CUSTOM } from '../routes';
 import authService from '../services/AuthService';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
@@ -178,6 +178,10 @@ function NavBar(props) {
                             <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
                             <ListItemText primary={'Alarms: Inactive User'} />
                         </ListItem>
+                        <ListItem onClick={() => props.history.push(ALARMS_CUSTOM)} button key={'AlarmsCustom'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'Alarms: Custom Log Alarms'} />
+                        </ListItem>
                         <ListItem onClick={() => props.history.push(REPORT)} button key={'Reports'}>
                             <ListItemIcon><AssessmentIcon /></ListItemIcon>
                             <ListItemText primary={'Reports'} />
@@ -205,11 +209,11 @@ function NavBar(props) {
                             <ListItemText primary={'See Patients\' Medical Records'} />
                         </ListItem>
                         <ListItem onClick={() => props.history.push(DOCTOR_RULES)} button key={'DoctorRules'}>
-                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemIcon><AddIcon /></ListItemIcon>
                             <ListItemText primary={'Create Alarms for Specific Patients'} />
                         </ListItem>
                         <ListItem onClick={() => props.history.push(CUSTOM_MESSAGE_RULE)} button key={'CustomMessageRule'}>
-                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemIcon><AddIcon /></ListItemIcon>
                             <ListItemText primary={'Create Custom Message Alarm'} />
                         </ListItem>
 

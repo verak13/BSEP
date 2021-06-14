@@ -4,7 +4,7 @@ import PrivateRoute from '../../containers/Routes/PrivateRoute';
 import PublicRoute from '../../containers/Routes/PublicRoute';
 import HomePage from '../../Pages/HomePage';
 import LoginPage from '../../Pages/LoginPage';
-import { REQUESTS, HOME, REPORT, ADD_DOCTOR, LOGS, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGES, MESSAGE_ALARMS, PATIENTS, DOCTOR_RULES, REPORT_LIST, CUSTOM_MESSAGE_RULE} from '../../assets/routes';
+import { REQUESTS, HOME, REPORT, ADD_DOCTOR, LOGS, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGES, MESSAGE_ALARMS, PATIENTS, DOCTOR_RULES, REPORT_LIST, CUSTOM_MESSAGE_RULE, ALARMS_CUSTOM} from '../../assets/routes';
 import Requests from '../../containers/Requests';
 import AddDoctor from '../../containers/Doctors';
 import Logs from '../../containers/Logs';
@@ -21,6 +21,7 @@ import Report from '../../containers/Report';
 import ReportList from '../../containers/Report/ReportList';
 import { LOG_RULES } from '../../routes';
 import LogRules from '../../containers/LogRules';
+import AlarmsCustom from '../../containers/AlarmsCustom';
 
 export default function Routes() {
     return (
@@ -41,7 +42,7 @@ export default function Routes() {
             <PrivateRoute path={REPORT} role={["HOSPITAL_ADMIN"]} component={Report} exact />
             <PrivateRoute path={REPORT_LIST} role={["HOSPITAL_ADMIN"]} component={ReportList} exact />
             <PrivateRoute path={LOG_RULES} role={["HOSPITAL_ADMIN"]} component={LogRules} exact />
-
+            <PrivateRoute path={ALARMS_CUSTOM} role={["HOSPITAL_ADMIN"]} component={AlarmsCustom} exact />
         </Switch>
     )
 }

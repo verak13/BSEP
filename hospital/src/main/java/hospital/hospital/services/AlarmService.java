@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 
 import hospital.hospital.model.cep.alarms.BlackListedIPAlarm;
 import hospital.hospital.model.cep.alarms.BruteForceLoginAlarm;
+import hospital.hospital.model.cep.alarms.CustomLogAlarm;
 import hospital.hospital.model.cep.alarms.ErrorLogAlarm;
 import hospital.hospital.model.cep.alarms.InactiveUserAlarm;
 import hospital.hospital.repository.BlackListedIPAlarmRepository;
 import hospital.hospital.repository.BruteForceLoginAlarmRepository;
+import hospital.hospital.repository.CustomLogAlarmRepository;
 import hospital.hospital.repository.ErrorLogAlarmRepository;
 import hospital.hospital.repository.InactiveUserAlarmRepository;
 
@@ -24,6 +26,9 @@ public class AlarmService {
 	public static final String BLACKLISTED_IP_ALARM = "BLACKLISTED_IP_ALARM";
 	public static final String ERROR_LOG_ALARM = "ERROR_LOG_ALARM";
 	public static final String TOTAL = "TOTAL";
+	
+	@Autowired
+	CustomLogAlarmRepository customLogAlarmRepository;
 	
 	@Autowired
 	BlackListedIPAlarmRepository blackListedIPAlarmRepository;
@@ -51,6 +56,10 @@ public class AlarmService {
 	
 	public Page<InactiveUserAlarm> findAllInactiveUserAlarms(Pageable pageable) {
 		return inactiveUserAlarmRepository.findAll(pageable);
+	}
+	
+	public Page<CustomLogAlarm> findAllCustomLogAlarms(Pageable pageable) {
+		return customLogAlarmRepository.findAll(pageable);
 	}
 
 	public HashMap<String, Long> countAlarms() {

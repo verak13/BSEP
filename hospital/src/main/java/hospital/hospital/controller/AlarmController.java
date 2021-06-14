@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hospital.hospital.model.cep.alarms.BlackListedIPAlarm;
 import hospital.hospital.model.cep.alarms.BruteForceLoginAlarm;
+import hospital.hospital.model.cep.alarms.CustomLogAlarm;
 import hospital.hospital.model.cep.alarms.ErrorLogAlarm;
 import hospital.hospital.model.cep.alarms.InactiveUserAlarm;
 import hospital.hospital.model.cep.alarms.MessageAlarm;
@@ -60,5 +61,13 @@ public class AlarmController {
 
     	logger.trace("View black inactive user alarms requested.");
         return new ResponseEntity<>(alarmService.findAllInactiveUserAlarms(pageable), HttpStatus.OK);
+    }
+	
+	@PreAuthorize("hasRole('HOSPITAL_ADMIN')")
+	@RequestMapping(value= "/custom-log/by-page",method = RequestMethod.GET)
+    public ResponseEntity<Page<CustomLogAlarm>> findAllCustomLogAlarms(Pageable pageable) {
+
+    	logger.trace("View custom log alarms requested.");
+        return new ResponseEntity<>(alarmService.findAllCustomLogAlarms(pageable), HttpStatus.OK);
     }
 }
