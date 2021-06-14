@@ -2,6 +2,7 @@ package admin.admin.services;
 
 import javax.annotation.PostConstruct;
 
+import org.bouncycastle.asn1.DERSequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -141,6 +142,12 @@ public class CertificateService {
 						| keyUsageDTO.getKeyEncipherment() | keyUsageDTO.getNonRepudiation());
 
 				try {
+					List<GeneralName> altNames = new ArrayList<GeneralName>();
+					altNames.add(new GeneralName(0, "localhost"));
+					GeneralNames subjectAltNames = GeneralNames.getInstance(new DERSequence((GeneralName[]) altNames.toArray(new GeneralName[] {})));
+					rootCertBuilder.addExtension(Extension.subjectAlternativeName, false, subjectAltNames);
+
+
 					rootCertBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
 					rootCertBuilder.addExtension(Extension.keyUsage, false, k);
 				} catch (CertIOException e) {
@@ -157,14 +164,11 @@ public class CertificateService {
 				keyStoreWriter.writeRootCA("superadmin@admin.com", keyPair.getPrivate(), createdCertificate);
 				keyStoreWriter.saveKeyStore();
 
-				createCRL(keyPair.getPrivate(), rootCertIssuer);
 
-				System.out.println(isRevoked(createdCertificate));
+
 
 				//revokeCertificate(new RevokeCertificateDTO("superadmin@admin.com", "UNSPECIFIED"),
 				//		"superadmin@admin.com");
-
-				System.out.println(isRevoked(createdCertificate));
 
 				ArrayList<CertificateDTO> lista = readAllCertificates();
 			} else {
@@ -210,7 +214,7 @@ public class CertificateService {
 			e1.printStackTrace();
 		}
 
-		String alias = certificateRequestService.findOne(certificateCreationDTO.getRequestId()).getEmail();
+		String alias = certificateRequestService.findOne(certificateCreationDTO.getRequestId()).getCommonName();
 
 		KeyPair keyPair = generateKeyPair();
 		SubjectData subjectData = generateSubjectData(certificateCreationDTO.getRequestId());
@@ -231,7 +235,7 @@ public class CertificateService {
 
 		BigInteger serialNum = new BigInteger(Long.toString(new SecureRandom().nextLong()));
 
-		ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSAEncryption").setProvider("BC").build(issuerData.getPrivateKey());
+		ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSAEncryption").setProvider("BC").build(privateKey);
 
 		X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(issuerName, serialNum, startDate,
 				endDate, subjectData.getX500name(), keyPair.getPublic());
@@ -243,6 +247,12 @@ public class CertificateService {
 				| keyUsageDTO.getNonRepudiation());
 
 		try {
+			List<GeneralName> altNames = new ArrayList<GeneralName>();
+			altNames.add(new GeneralName(GeneralName.dNSName, "localhost"));
+			altNames.add(new GeneralName(GeneralName.iPAddress, "127.0.0.1"));
+			GeneralNames subjectAltNames = GeneralNames.getInstance(new DERSequence((GeneralName[]) altNames.toArray(new GeneralName[] {})));
+			builder.addExtension(Extension.subjectAlternativeName, false, subjectAltNames);
+
 			builder.addExtension(Extension.keyUsage, false, k);
 			if (keyUsageDTO.isKeyCertSign())
 				builder.addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
@@ -260,6 +270,8 @@ public class CertificateService {
 		Certificate[] newCertificateChain = ArrayUtils.insert(0, issuerCertificateChain, createdCertificate);
 		keyStoreWriter.write(alias, keyPair.getPrivate(), newCertificateChain);
 		keyStoreWriter.saveKeyStore();
+
+
 		return true;
 	}
 
@@ -301,7 +313,7 @@ public class CertificateService {
 		builder.addRDN(BCStyle.O, cerRequestInfo.getOrganization());
 		builder.addRDN(BCStyle.OU, cerRequestInfo.getOrganizationUnitName());
 		builder.addRDN(BCStyle.C, cerRequestInfo.getCountryName());
-		builder.addRDN(BCStyle.E, cerRequestInfo.getEmail());
+		builder.addRDN(BCStyle.E, "");
 		builder.addRDN(BCStyle.ST, cerRequestInfo.getStateName());
 		builder.addRDN(BCStyle.L, cerRequestInfo.getLocalityName());
 
@@ -311,13 +323,15 @@ public class CertificateService {
 
 	}
 
-	public void revokeCertificate(RevokeCertificateDTO revokeCertificateDTO, String issuerAlias)
+	public void revokeCertificate(RevokeCertificateDTO revokeCertificateDTO)
 			throws IOException, CRLException, OperatorCreationException, CertificateEncodingException {
 
 		File file = new File("src/main/resources/revoked.crl");
 		byte[] bytes = Files.readAllBytes(file.toPath());
 		X509CRLHolder holder = new X509CRLHolder(bytes);
 		X509v2CRLBuilder crlBuilder = new X509v2CRLBuilder(holder);
+
+		System.out.println("SAD TEK TRAZIM KLJUC OD ALIASA MOGA " + revokeCertificateDTO.getAlias());
 
 		Certificate certificate = keyStoreReader.readCertificate(revokeCertificateDTO.getAlias());
 		JcaX509CertificateHolder certHolder = new JcaX509CertificateHolder((X509Certificate) certificate);
@@ -327,9 +341,15 @@ public class CertificateService {
 		JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSA");
 		builder.setProvider("BC");
 
-		IssuerData issuerData = keyStoreReader.readIssuerFromStore(issuerAlias);
+
+		System.out.println("SAD TEK TRAZIM KLJUC OD " + revokeCertificateDTO.getIssuer());
+		IssuerData issuerData = keyStoreReader.readIssuerFromStore(revokeCertificateDTO.getIssuer());
+
+
+
 
 		X509CRLHolder crlHolder = crlBuilder.build(builder.build(issuerData.getPrivateKey()));
+
 		JcaX509CRLConverter converter = new JcaX509CRLConverter();
 		converter.setProvider("BC");
 
@@ -346,6 +366,7 @@ public class CertificateService {
 		File file = new File("src/main/resources/revoked.crl");
 		byte[] bytes = Files.readAllBytes(file.toPath());
 		X509CRL crl = (X509CRL) factory.generateCRL(new ByteArrayInputStream(bytes));
+
 		return crl.isRevoked(cer);
 	}
 
@@ -397,15 +418,15 @@ public class CertificateService {
 			JcaX509CertificateHolder certHolder = new JcaX509CertificateHolder((X509Certificate) c);
 			X500Name i = certHolder.getIssuer();
 			X500Name subject = certHolder.getSubject();
+
 			try {
 				certificate.setEmail(IETFUtils.valueToString(subject.getRDNs(BCStyle.E)[0].getFirst().getValue()));
 			}catch (Exception e){
-				certificate.setEmail("none");
+				certificate.setEmail("");
 			}
 			certificate.setCommonName(IETFUtils.valueToString(subject.getRDNs(BCStyle.CN)[0].getFirst().getValue()));
-			System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-			System.out.println(((X509Certificate) c).getBasicConstraints());
-			System.out.println(((X509Certificate) c).getKeyUsage());
+			certificate.setIssuer(((X509Certificate) c).getIssuerDN().getName().split("CN=")[1]);
+
 			try {
 				if (((X509Certificate) c).getBasicConstraints() != -1 || ((X509Certificate) c).getKeyUsage()[5])
 					certificate.setCA(true);
@@ -413,15 +434,39 @@ public class CertificateService {
 				certificate.setCA(false);
 			}
 
+
+
+			try {
+
+				File file = new File("src/main/resources/revoked.crl");
+				byte[] bytes = Files.readAllBytes(file.toPath());
+
+			} catch (IOException e) {
+				if(certificate.getCommonName().equals("root-ca")) {
+					try {
+						createCRL(keyStoreReader.readPrivateKey("root-ca"), i);
+					} catch (OperatorCreationException | IOException e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+
+			certificate.setRevoked(false);
 			if (isRevoked(c)) {
 				certificate.setRevoked(true);
 			}
 
 			certificates.add(certificate);
-			System.out.println(certificate.getCommonName());
-			System.out.println(certificate.getEmail());
-			System.out.println(certificate.isCA());
-			System.out.println(certificate.getRevoked());
+
+
+//			System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+//			System.out.println(((X509Certificate) c).getBasicConstraints());
+//			System.out.println(((X509Certificate) c).getKeyUsage());
+//			System.out.println(certificate.getCommonName());
+//			System.out.println(certificate.getEmail());
+//			System.out.println(certificate.isCA());
+//			System.out.println(certificate.getRevoked());
+//
 		}
 		return certificates;
 	}

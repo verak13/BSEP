@@ -80,7 +80,6 @@ def send_data_XSS():
 
 
 if __name__ == '__main__':
-    send_data_valid()
-    #send_data_invalid()
+    #send_data_valid()
+    send_data_invalid()
     #send_data_XSS()
-

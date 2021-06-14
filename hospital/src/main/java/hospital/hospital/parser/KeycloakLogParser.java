@@ -14,11 +14,13 @@ public class KeycloakLogParser {
 		System.out.println("KEYCLOAK LINE");
 		System.out.println(log);
 		String[] tokens = log.split(" ");
+		if (tokens.length < 2) return null;
 
 		Date date = null;
 		try {
-			System.out.println(tokens[0] + " " + tokens[1]);
-			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tokens[0] + " " + tokens[1].split(",")[0]);
+			System.out.println("1" + tokens[0] + " p " + tokens[1]);
+			String toParse = tokens[0] + " " + tokens[1].split(",")[0];
+			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(toParse);
 			System.out.println(date.toString());
 		} catch (ParseException e) {
 			return null;

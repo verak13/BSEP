@@ -9,14 +9,18 @@ public class CertificateDTO {
 
     private String email;
 
+	private String issuer;
+
     private boolean isCA;
     
 	private boolean revoked;
 
+
     
-    public CertificateDTO(String commonName, String email, boolean isCA, Boolean revoked, String revocationReason) {
+    public CertificateDTO(String commonName, String email, String issuer, boolean isCA, Boolean revoked, String revocationReason) {
 		super();
 		this.commonName = commonName;
+		this.issuer = issuer;
 		this.email = email;
 		this.isCA = isCA;
 		this.revoked = revoked;
@@ -45,6 +49,14 @@ public class CertificateDTO {
 
 	public void setCommonName(String commonName) {
 		this.commonName = commonName;
+	}
+
+	public String getIssuer() {
+		return issuer;
+	}
+
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
 	}
 
 	public String getEmail() {

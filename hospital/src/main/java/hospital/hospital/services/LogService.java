@@ -14,6 +14,7 @@ import hospital.hospital.model.*;
 import hospital.hospital.model.cep.LogEvent;
 import hospital.hospital.model.cep.UserLoginEvent;
 import org.apache.commons.io.input.ReversedLinesFileReader;
+import org.hibernate.boot.model.source.internal.hbm.AbstractEntitySourceImpl;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -203,9 +204,10 @@ public class LogService {
 			System.out.println("SIMULATOR");
 			boolean setNewFlagDate = false;
 			while (line != null) {
-				if (!line.matches(regexp)) {
-					line = reader.readLine();
+				if (!line.matches(regexp)) 
+				{
 					System.out.println("NE MECUJE LINIJA " + line);
+					line = reader.readLine();
 					continue;
 				}
 				Log log = simulatorLogParser.parse(line);
@@ -219,15 +221,22 @@ public class LogService {
 				/*if (log.getMessage().matches(regexp)) {
 					logs.add(log);
 				}*/
-				System.out.println(log);
+				logs.add(log);
 				line = reader.readLine();
 			}
 		} finally {
 			reader.close();
 		}
 		Collections.reverse(logs);
+		System.out.println("ZA BAZU");
+		for (Log ll : logs) {
+			System.out.println(ll);
+		}
+		System.out.println("ZA BAZU kraj");
 		this.save(logs);
 		return newFlagDate;
+		
+		
 	}
 	
 	private void readKeycloakLogs() throws Exception {
@@ -265,15 +274,17 @@ public class LogService {
 				if (!log.getTimestamp().after(flagDate)) {
 					break;
 				}
-
-
-
+				logs.add(log);
 				line = reader.readLine();
 			}
 		} finally {
 			reader.close();
 		}
 		Collections.reverse(logs);
+		System.out.println("KEYCLOAK ZA BAZU");
+		for (Log ll : logs)
+			System.out.println(ll);
+		System.out.println("KEYCLOAK ZA BAZU kraj");
 		this.save(logs);
 		return newFlagDate;
 	}
@@ -290,3 +301,6 @@ public class LogService {
 		return map;
 	}
 }
+
+		
+	

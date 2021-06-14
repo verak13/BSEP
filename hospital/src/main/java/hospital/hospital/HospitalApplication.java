@@ -1,14 +1,15 @@
 package hospital.hospital;
 
-import hospital.hospital.model.BlackListedIP;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import hospital.hospital.model.User;
-import hospital.hospital.model.cep.MessageEvent;
-import hospital.hospital.services.LogService;
-import hospital.hospital.services.MailService;
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.DefaultInvoker;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.Invoker;
+import org.drools.template.ObjectDataCompiler;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieRuntime;
@@ -18,16 +19,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import hospital.hospital.enums.BloodType;
-import hospital.hospital.enums.Gender;
-import hospital.hospital.model.Log;
-import hospital.hospital.model.LogConfig;
-import hospital.hospital.model.LogConfigs;
-import hospital.hospital.model.Message;
-import hospital.hospital.model.Patient;
 
-import hospital.hospital.repository.LogRepository;
-import hospital.hospital.repository.PatientRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +31,24 @@ import org.springframework.util.ResourceUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import hospital.hospital.dto.CustomMessageRuleDTO;
+import hospital.hospital.dto.CustomMessageRuleDTODouble;
+import hospital.hospital.model.BlackListedIP;
+import hospital.hospital.model.LogConfig;
+import hospital.hospital.model.LogConfigs;
+import hospital.hospital.model.Message;
+import hospital.hospital.model.cep.MessageEvent;
+import hospital.hospital.repository.LogRepository;
+import hospital.hospital.repository.PatientRepository;
+import hospital.hospital.services.MailService;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
-public class HospitalApplication/* implements CommandLineRunner*/ {
+public class HospitalApplication/* implements CommandLineRunner*/  {
 
 	
 	@Autowired
@@ -146,6 +150,19 @@ public class HospitalApplication/* implements CommandLineRunner*/ {
 		kieSession.insert(new MessageEvent(message));
         kieSession.getAgenda().getAgendaGroup("doctor-alarms").setFocus();
 		kieSession.fireAllRules();
+		
+		
+		Message message = new Message();
+		message.setBodyTemperature(36.0);
+		message.setPatientId(2L);
+		message.setPulseRaye(8.0);
+		message.setRespirationRate(60.0);
+		message.setBloodPressureDiastolic(95.0);
+		message.setBloodPressureSystolic(100.0);
+		kieSession.insert(new MessageEvent(message));
+        kieSession.getAgenda().getAgendaGroup("doctor-alarms").setFocus();
+		kieSession.fireAllRules();
+		System.out.println("PRAVILA IDEMOOOO");
 		
 	}*/
 	

@@ -57,8 +57,8 @@ public class KeyStoreReader {
             Certificate cert = null;
             if (keyStore.isKeyEntry(alias)) {
                 cert = keyStore.getCertificate(alias);
+
             } else {
-           
             }
 
             // Iscitava se privatni kljuc vezan za javni kljuc koji se nalazi na sertifikatu sa datim aliasom
