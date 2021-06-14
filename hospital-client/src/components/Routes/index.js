@@ -35,7 +35,7 @@ export default function Routes() {
             <PrivateRoute path={ALARMS_INACTIVE} role="HOSPITAL_ADMIN" component={AlarmsInactive} exact />
             <PrivateRoute path={MESSAGES} role="DOCTOR" component={Messages} exact />
             <PrivateRoute path={MESSAGE_ALARMS} role="DOCTOR" component={MessageAlarms} exact />
-            <PrivateRoute path={PATIENTS} role="DOCTOR" component={Patients} exact />
+            <PrivateRoute path={PATIENTS} role="DOCTOR" role="SUPER_ADMIN" component={Patients} exact />
             <PrivateRoute path={DOCTOR_RULES} role="DOCTOR" component={DoctorRules} exact />
             <PrivateRoute path={CUSTOM_MESSAGE_RULE} role="DOCTOR" component={CustomMessageRule} exact />
             <PrivateRoute path={REPORT} role="HOSPITAL_ADMIN" component={Report} exact />

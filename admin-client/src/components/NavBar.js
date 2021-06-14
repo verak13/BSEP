@@ -28,6 +28,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import { CERTIFICATES } from '../assets/routes';
 import { REQUESTS, ADD_CONFIG, HOSPITALS } from '../routes';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 
 const drawerWidth = 240;
 
@@ -169,6 +171,10 @@ function NavBar(props) {
                             <ListItemIcon><AddCircle /></ListItemIcon>
                             <ListItemText primary={'Add Configuration for Hospital'} />
                         </ListItem>
+                        <ListItem onClick={() => window.location.href = "https://localhost:3001"} button key={'SuperAdmin'}>
+                            <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                            <ListItemText primary={'Go to Hospital App'} />
+                        </ListItem>
                     </List>
                     <Divider />
                     <List>
@@ -182,10 +188,7 @@ function NavBar(props) {
                     <List>
 
 
-                        <ListItem button onClick={() => {}} key={'Kako postati admin'}>
-                            <ListItemIcon><Info /></ListItemIcon>
-                            <ListItemText primary={'Kako postati admin'} />
-                        </ListItem>
+
 
             
                     </List>}

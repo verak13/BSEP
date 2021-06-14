@@ -30,6 +30,7 @@ import { connect } from 'react-redux';
 import { logoutAction } from '../store/actions/authActions';
 import { REQUESTS, LOG_RULES, LOGS, REPORT, ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, MESSAGE_ALARMS, MESSAGES, PATIENTS, DOCTOR_RULES, CUSTOM_MESSAGE_RULE } from '../routes';
 import authService from '../services/AuthService';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const drawerWidth = 240;
 
@@ -216,6 +217,21 @@ function NavBar(props) {
                     <Divider />
                     </>
                 : null }
+                {keycloak?.authenticated && authService.getRole() === 'SUPER_ADMIN' ? <>
+                    <List>                        
+                        <ListItem onClick={() => props.history.push(PATIENTS)} button key={'Patients'}>
+                            <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                            <ListItemText primary={'See Patients\' Medical Records'} />
+                        </ListItem>
+                        <ListItem onClick={() => window.location.href = "https://localhost:3000"} button key={'SuperAdmin'}>
+                            <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                            <ListItemText primary={'Go back to Superadmin App'} />
+                        </ListItem>
+
+                    </List>
+                    <Divider />
+                    </>
+                : null }
                 {keycloak?.authenticated  ? <>
                     <List>
                         
@@ -229,10 +245,6 @@ function NavBar(props) {
                     <List>
 
 
-                        <ListItem button onClick={() => {}} key={'Kako postati admin'}>
-                            <ListItemIcon><Info /></ListItemIcon>
-                            <ListItemText primary={'Kako postati admin'} />
-                        </ListItem>
 
             
                     </List>
