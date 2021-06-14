@@ -5,6 +5,8 @@ import org.kie.api.definition.type.Role;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
+
 @Role(Role.Type.EVENT)
 @Expires("5s")
 @Entity
@@ -28,6 +30,12 @@ public class BruteForceLoginAlarm implements Serializable {
     @Column(name = "attempts")
     private long attempts;
 
+    @Column(name = "date")
+    private Date date;
+
+    public BruteForceLoginAlarm() {
+    }
+
     public BruteForceLoginAlarm(String username, long attempts) {
         this.username = username;
         this.attempts = attempts;
@@ -47,5 +55,25 @@ public class BruteForceLoginAlarm implements Serializable {
 
     public void setAttempts(long attempts) {
         this.attempts = attempts;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

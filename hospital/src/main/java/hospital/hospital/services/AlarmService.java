@@ -65,4 +65,16 @@ public class AlarmService {
 		return map;
 	}
 
+	public void saveBruteForceAlarm(BruteForceLoginAlarm alarm) {
+		this.bruteForceLoginAlarmRepository.save(alarm);
+	}
+	public void saveErroLogAlarm(ErrorLogAlarm alarm) {
+		this.errorLogAlarmRepository.save(alarm);
+	}
+	public void saveInactiveUserAlarm(InactiveUserAlarm alarm) {
+		this.inactiveUserAlarmRepository.save(alarm);
+	}
+	public void saveBlacklistedIPAlarm(BlackListedIPAlarm alarm) {
+		this.blackListedIPAlarmRepository.save(alarm);
+	}
 }

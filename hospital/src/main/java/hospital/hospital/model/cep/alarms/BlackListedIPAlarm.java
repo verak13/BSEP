@@ -6,6 +6,7 @@ import org.kie.api.definition.type.Role;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Role(Role.Type.EVENT)
 @Expires("60s")
@@ -23,7 +24,7 @@ public class BlackListedIPAlarm  implements Serializable {
     private String userEmail;
 
     @Column(name = "date")
-    private LocalDate date;
+    private Date date;
 
     @Transient
     private String adminEmail = "laketic.milena98@gmail.com";
@@ -32,10 +33,12 @@ public class BlackListedIPAlarm  implements Serializable {
         return adminEmail;
     }
 
-    public BlackListedIPAlarm(String ip, String userEmail, LocalDate date) {
+    public BlackListedIPAlarm() {};
+
+    public BlackListedIPAlarm(String ip, String userEmail) {
         this.ip = ip;
         this.userEmail = userEmail;
-        this.date = date;
+        this.date = new Date();
     }
 
     public Long getId() {
@@ -62,11 +65,11 @@ public class BlackListedIPAlarm  implements Serializable {
         this.userEmail = userEmail;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

@@ -33,6 +33,9 @@ public class CustomLogAlarm {
     @Transient
     private String adminEmail = "laketic.milena98@gmail.com";
 
+    public CustomLogAlarm() {
+    }
+
     public CustomLogAlarm(Date date, String errorMsg, String ruleName) {
         this.date = date;
         this.errorMsg = errorMsg;

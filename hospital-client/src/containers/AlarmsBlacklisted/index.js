@@ -28,9 +28,6 @@ function AlarmsBlacklisted(props) {
         props.getAlarmsBlacklisted({ pageSize, page: 0 });
     }, []);
 
-    useEffect(() => {
-        console.log(props.total, 'tttooo')
-    })
   
     return (
     <>
@@ -46,8 +43,8 @@ function AlarmsBlacklisted(props) {
         title="Alarm list"
         columns={[
             { title: 'IP Address', field: 'ip' },
-            { title: 'User Email', field: 'username' },
-            { title: 'Date', field: 'timestamp' }
+            { title: 'User Email', field: 'userEmail' },
+            { title: 'Date', field: 'date' }
         ]}
         data={props.alarms}        
         options={{
@@ -71,9 +68,9 @@ function AlarmsBlacklisted(props) {
 }
 
 const mapStateToProps = state => ({
-    alarms: state.alarms.all,
-    total : state.alarms.total || 0,
-    page: state.alarms.page
+    alarms: state.alarmBlackListed.all,
+    total : state.alarmBlackListed.total || 0,
+    page: state.alarmBlackListed.page
 });
 
 const mapDispatchToProps = {

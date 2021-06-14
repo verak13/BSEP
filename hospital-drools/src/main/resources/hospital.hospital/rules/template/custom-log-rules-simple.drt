@@ -49,6 +49,7 @@ no-loop true
         System.out.println("\n\nSENDING EMAIL...");
         String msg = "Custom log alarm triggered on date : " + $date + ". Alarm message: " + $message + ". Rule name: " + $alarm.getRuleName();
         mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+          mailService.saveCustomAlarm($alarm);
          modify($alarm) { setSentEmail(true); }
 end
 

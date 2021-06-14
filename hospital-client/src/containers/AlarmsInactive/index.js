@@ -46,7 +46,8 @@ function AlarmsInactive(props) {
         title="Alarm list"
         columns={[
             { title: 'User Email', field: 'userEmail' },
-            { title: 'Days Inactive', field: 'daysInactive' }
+            { title: 'Days Inactive', field: 'daysInactive' },
+            { title: 'Date', field: 'date' }
         ]}
         data={props.alarms}        
         options={{
@@ -70,9 +71,9 @@ function AlarmsInactive(props) {
 }
 
 const mapStateToProps = state => ({
-    alarms: state.alarms.all,
-    total : state.alarms.total || 0,
-    page: state.alarms.page
+    alarms: state.alarmInactive.all,
+    total : state.alarmInactive.total || 0,
+    page: state.alarmInactive.page
 });
 
 const mapDispatchToProps = {

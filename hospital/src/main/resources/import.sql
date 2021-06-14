@@ -26,8 +26,8 @@ insert into messages(patient_id, blood_pressure_diastolic, blood_pressure_systol
 insert into messages(patient_id, blood_pressure_diastolic, blood_pressure_systolic, body_temperature, pulse_raye, respiration_rate, timestamp) values (2, 121.0, 91.0, 36.6, 91.0, 14.0, '2021-06-10 12:00:00');
 insert into messages(patient_id, blood_pressure_diastolic, blood_pressure_systolic, body_temperature, pulse_raye, respiration_rate, timestamp) values (1, 120.0, 91.0, 37.4, 83.0, 15.0, '2021-06-10 12:30:00');
 
-insert into brute_force_alarm(attempts, username) values (100, 'doctor1@gmail.com');
-insert into brute_force_alarm(attempts, username) values (100, 'doctor2@gmail.com');
+insert into brute_force_alarm(attempts, username, date) values (100, 'doctor1@gmail.com','2021-06-10 13:00:00');
+insert into brute_force_alarm(attempts, username, date) values (100, 'doctor2@gmail.com', '2021-06-10 13:05:00');
 
 insert into custom_log_alarm(date, error_msg) values ('2021-06-10 13:00:00', 'Something is wrong!');
 insert into custom_log_alarm(date, error_msg) values ('2021-06-10 13:05:00', 'Something is wrong again!');
@@ -49,7 +49,7 @@ insert into error_log_alarm(date, error_msg) values ('2021-06-10 13:03:00', 'Uns
 insert into error_log_alarm(date, error_msg) values ('2021-06-10 13:01:00', 'Unsuccessful login');
 insert into error_log_alarm(date, error_msg) values ('2021-06-10 13:02:00', 'Unsuccessful login');
 
-insert into inactive_user_alarm(days_inactive, user_email) values (90, 'inactiveuser@gmail.com');
+insert into inactive_user_alarm(days_inactive, user_email, date) values (90, 'inactiveuser@gmail.com','2021-06-10 13:02:00');
 
 insert into message_alarms(date, patient_id, variable, value, other_value) values ('2021-06-10 13:08:00', 1, 'bodyTemperature', 40.1, null);
 insert into message_alarms(date, patient_id, variable, value, other_value) values ('2021-06-10 13:08:00', 1, 'pulseRate', 100.0, null);

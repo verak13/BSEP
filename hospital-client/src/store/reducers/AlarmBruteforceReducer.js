@@ -1,6 +1,6 @@
-import { GET_ALARMS_BLACKLISTED, SET_ALARMS_BLACKLISTED, GET_ALARMS_BRUTEFORCE, SET_ALARMS_BRUTEFORCE, 
-    GET_ALARMS_ERROR, SET_ALARMS_ERROR, GET_ALARMS_INACTIVE, SET_ALARMS_INACTIVE } from "../actions/actionTypes";
+import { SET_ALARMS_BRUTEFORCE } from "../actions/actionTypes";
 
+import { formatTimestampWithTime } from '../../utils/index';
 
 const initialState = {
     all: [],
@@ -12,6 +12,10 @@ export default function alarmBruteforceReducer(state = initialState, action) {
     switch(action.type){
         case SET_ALARMS_BRUTEFORCE:
             let alarms = action.payload.content
+            alarms = alarms.map (alarm => {
+                alarm.date = formatTimestampWithTime(alarm.date)
+                return alarm;
+            })
             return {...state, all: alarms, total: action.payload.totalElements, page: action.payload.pageable.pageNumber }
         default:
             return state

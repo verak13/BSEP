@@ -5,6 +5,7 @@ import org.kie.api.definition.type.Role;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Role(Role.Type.EVENT)
 @Expires("5s")
@@ -22,6 +23,9 @@ public class InactiveUserAlarm  implements Serializable {
     @Column(name = "daysInactive")
     private long daysInactive;
 
+    @Column(name = "date")
+    private Date date;
+
     @Transient
     private String adminEmail = "laketic.milena98@gmail.com";
 
@@ -29,9 +33,13 @@ public class InactiveUserAlarm  implements Serializable {
         return adminEmail;
     }
 
+    public InactiveUserAlarm() {
+    }
+
     public InactiveUserAlarm(String userEmail, long daysInactive) {
         this.userEmail = userEmail;
         this.daysInactive = daysInactive;
+        this.date = new Date();
     }
 
     public String getUserEmail() {
@@ -48,5 +56,25 @@ public class InactiveUserAlarm  implements Serializable {
 
     public void setDaysInactive(long daysInactive) {
         this.daysInactive = daysInactive;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
     }
 }

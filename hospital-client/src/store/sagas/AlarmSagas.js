@@ -32,9 +32,10 @@ export function* getAlarmsBruteforce(action){
 }
 
 export function* getAlarmsError(action){
+    console.log('ovdeee');
     try {
         const response = yield call(alarmService.getAlarmsError, action.payload);
-        console.log('ooo', response);
+        console.log('response za error', response);
         yield put(setAlarmsError(response));
 
     } catch (error) {

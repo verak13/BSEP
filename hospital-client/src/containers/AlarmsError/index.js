@@ -27,11 +27,8 @@ function AlarmsError(props) {
     useEffect(() => {
         props.getAlarmsError({ pageSize, page: 0 });
     }, []);
-
-    useEffect(() => {
-        console.log(props.total, 'tttooo')
-    })
   
+    console.log(props.alarms)
     return (
     <>
     <NavBar />
@@ -70,9 +67,9 @@ function AlarmsError(props) {
 }
 
 const mapStateToProps = state => ({
-    alarms: state.alarms.all,
-    total : state.alarms.total || 0,
-    page: state.alarms.page
+    alarms: state.alarmError.all,
+    total : state.alarmError.total || 0,
+    page: state.alarmError.page
 });
 
 const mapDispatchToProps = {

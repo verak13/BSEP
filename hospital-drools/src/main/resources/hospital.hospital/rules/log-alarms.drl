@@ -41,6 +41,7 @@ rule "Brute force login alarm triggered, notify user by email"
     then
        String msg = "User with email : " + $username + " tried to log in more than " + $attempts + " times in less than one minute.";
        mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+       mailService.saveBruteForceAlarm($alarm);
 end
 
 rule "User logged in after more than 90 days from last login, triger NotActiveAlarm"
@@ -51,6 +52,7 @@ rule "User logged in after more than 90 days from last login, triger NotActiveAl
         insert(new InactiveUserAlarm($email, ChronoUnit.DAYS.between($lastLogin, LocalDate.now())));
         System.out.println("\n\n==== TRIGEROVAN ALARM ZA NEAKTIVNOG KORISNIKA ====");
         System.out.println("username: " + $email);
+
 end
 
 rule "Inactive user alarm triggered, notify admin by email"
@@ -59,6 +61,7 @@ rule "Inactive user alarm triggered, notify admin by email"
     then
         String msg = "User with email : " + $userEmail + " hasn't been active for more than 90 days and tried to log in today.";
         mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+        mailService.saveInactiveUserAlarm($alarm);
 end
 
 rule "Error log appears, trigger ErrorLogAlarm"
@@ -67,7 +70,7 @@ rule "Error log appears, trigger ErrorLogAlarm"
        $error: LogEvent(log.getType() == "ERROR", $message: log.getMessage())
        not (ErrorLogAlarm(errorMsg == $message))
     then
-        insert(new ErrorLogAlarm(LocalDate.now(), $message));
+        insert(new ErrorLogAlarm($message));
         System.out.println("\n\n==== TRIGEROVAN ALARM ZA ERROR LOG ====");
         System.out.println("message: " + $message);
 end
@@ -79,6 +82,7 @@ no-loop
     then
        String msg = "ERROR log appeared with error message : " + $message + " date: " + $date + " . ";
        mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+       mailService.saveErrorLogAlarm($alarm);
 end
 
 rule "User tried to login with ip address from blacklisted ip addresses, trigger BlackListedIPAlarm"
@@ -87,7 +91,7 @@ rule "User tried to login with ip address from blacklisted ip addresses, trigger
         BlackListedIP(list contains $ip)
 
     then
-        insert(new BlackListedIPAlarm($ip, $username, LocalDate.now()));
+        insert(new BlackListedIPAlarm($ip, $username));
         System.out.println("\n\n==== TRIGEROVAN ALARM ZA BLACK LISTED IP ====");
         System.out.println("ip: " + $ip);
 end
@@ -99,4 +103,5 @@ no-loop true
     then
        String msg = "User with email " + $userEmail + " tried to log in on date " + $date + " from ip address: " + $ip + " which is blacklisted.";
        mailService.notifyAdmin($alarm.getAdminEmail(), msg);
+       mailService.saveBlacklistedIPAlarm($alarm);
 end

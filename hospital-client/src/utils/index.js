@@ -60,7 +60,6 @@ export const formatTimestamp = timestamp => {
 
  export const formatTimestampWithTime = timestamp => {
     const datetime = timestamp.split("T");
-    console.log('aaa', datetime)
     const date = datetime[0].split("-");
     const time = datetime[1].slice(0, 5);
     const datestr = date[2] + "." + date[1] + "." + date[0] + "." + " " + time;

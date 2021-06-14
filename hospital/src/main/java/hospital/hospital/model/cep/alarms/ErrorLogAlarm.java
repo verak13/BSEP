@@ -19,7 +19,7 @@ public class ErrorLogAlarm  implements Serializable {
     private Long id;
 
     @Column(name = "date")
-    private LocalDate date;
+    private Date date;
 
     @Column(name = "errorMsg")
     private String errorMsg;
@@ -27,8 +27,10 @@ public class ErrorLogAlarm  implements Serializable {
     @Transient
     private String adminEmail = "laketic.milena98@gmail.com";
 
-    public ErrorLogAlarm(LocalDate date, String errorMsg) {
-        this.date = date;
+    public ErrorLogAlarm() {
+    }
+    public ErrorLogAlarm(String errorMsg) {
+        this.date = new Date();
         this.errorMsg = errorMsg;
     }
 
@@ -40,11 +42,11 @@ public class ErrorLogAlarm  implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

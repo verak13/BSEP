@@ -1,5 +1,6 @@
 package hospital.hospital.services;
 
+import hospital.hospital.model.cep.alarms.BruteForceLoginAlarm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,4 +27,6 @@ public class MessageAlarmService {
 	public MessageAlarm saveMessageAlarm(MessageAlarm ma) {
 		return messageAlarmRepository.save(ma);
 	}
+
+
 }

@@ -2,6 +2,7 @@ package hospital.hospital.services;
 
 import java.util.Date;
 
+import hospital.hospital.model.cep.alarms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -12,8 +13,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-
-import hospital.hospital.model.cep.alarms.MessageAlarm;
 
 @Service
 public class MailService {
@@ -30,6 +29,8 @@ public class MailService {
     @Autowired
     private MessageAlarmService messageAlarmService;
 
+    @Autowired
+    private AlarmService alarmService;
 
     public String build(String msg) {
         Context context = new Context();
@@ -57,7 +58,6 @@ public class MailService {
     }
 
 
-    
     @Async
     public void notifyDoctors(MessageAlarm ma) throws MailException {
 
@@ -66,5 +66,26 @@ public class MailService {
         messageAlarmService.saveMessageAlarm(ma);
         
     }
+
+    public void saveBruteForceAlarm(BruteForceLoginAlarm alarm) {
+        alarmService.saveBruteForceAlarm(alarm);
+    }
+
+    public void saveErrorLogAlarm(ErrorLogAlarm alarm) {
+        alarmService.saveErroLogAlarm(alarm);
+    }
+
+    public void saveBlacklistedIPAlarm(BlackListedIPAlarm alarm) {
+        alarmService.saveBlacklistedIPAlarm(alarm);
+    }
+
+    public void saveInactiveUserAlarm(InactiveUserAlarm alarm) {
+        alarmService.saveInactiveUserAlarm(alarm);
+    }
+
+    public void saaveCustomAlarm(CustomLogAlarm alarm) {
+
+    }
+
        
 }

@@ -112,19 +112,19 @@ class DoSAttackState(State):
 
 #STATES = ['NORMAL_STATE', 'BRUTE_FORCE_ATTACK_STATE', 'DOS_ATTACK_STATE', 'BLACKLISTED_IP_STATE']
 def get_next_state():
-    # next = random.choice(STATES)
-    # if next == 'BRUTE_FORCE_ATTACK_STATE':
-    #     return BruteForceAttackState()
-    # elif next == 'BLACKLISTED_IP_STATE':
-    #     return BlacklistedIPState()
-    # elif next == 'DOS_ATTACK_STATE':
-    #     return DoSAttackState()
-    # elif next == 'ERROR_STATE':
-    #     return ErrorState()
-    # else:
-    #     return NormalState()
+    next = random.choice(STATES)
+    if next == 'BRUTE_FORCE_ATTACK_STATE':
+        return BruteForceAttackState()
+    elif next == 'BLACKLISTED_IP_STATE':
+        return BlacklistedIPState()
+    elif next == 'DOS_ATTACK_STATE':
+        return DoSAttackState()
+    elif next == 'ERROR_STATE':
+        return ErrorState()
+    else:
+        return NormalState()
 
-    return BlacklistedIPState()
+
 
 
 
