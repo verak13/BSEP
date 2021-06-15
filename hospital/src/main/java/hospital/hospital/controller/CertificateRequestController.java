@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import hospital.hospital.model.CertificateRequest;
 import hospital.hospital.services.CertificateRequestService;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 
 @RestController
@@ -31,7 +34,7 @@ public class CertificateRequestController {
 
     @PreAuthorize("hasRole('HOSPITAL_ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr) throws Exception {
+    public ResponseEntity<?> sendCSR(@Valid @RequestBody CertificateRequest csr, HttpServletRequest servlet) throws Exception {
 
         if (certificateRequestService.createCSR(csr)) {
         	logger.trace("New CSR created.");

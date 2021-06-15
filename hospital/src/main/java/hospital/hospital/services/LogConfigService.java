@@ -61,18 +61,16 @@ public class LogConfigService {
 
 		for (LogConfig conf : configs.getLogConfigs()) {
 			if (conf.getFile().equals(logConfig.getFile()) && conf.getHospitalId().equals(logConfig.getHospitalId())) {
-
+				System.out.println(" MIJENJAM ZA SIM " + conf.getFile());
 				found = true;
 				conf.setInterval(logConfig.getInterval());
 				conf.setRegexp(logConfig.getRegexp());
-
-
 			}
 		}
 
 		if (!found) {
 			configs.getLogConfigs().add(logConfig);
-
+			System.out.println("DODAVAM NOVI ");
 	        this.logService.addNewConfig(logConfig);
 		}
 

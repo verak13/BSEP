@@ -212,7 +212,7 @@ public class LogService {
 				System.out.println("\n\nSIMULATOR LOG");
 				if (!line.matches(regexp)) 
 				{
-					System.out.println("NE MECUJE LINIJA " + line);
+					System.out.println("NE MECUJE LINIJA " + line.toString());
 					line = reader.readLine();
 					continue;
 				}
