@@ -70,13 +70,11 @@ function LogRules(props) {
             times: logFrequency.times,
             seconds: logFrequency.sec,
             precTypes: {
-                list: precLog.type,
-               
+                list: precLog.type? precLog.type.length > 0 ? precLog.type: null:null
             },
             precSec: precLog.value,
             succTypes: {
-                list: succLog.type,
-               
+                list: succLog.type? succLog.type.length > 0? succLog.type: null:null
             },
             succSec: succLog.value,
             msg : msg

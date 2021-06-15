@@ -16,8 +16,7 @@ public class MessageAlarmService {
 	MessageAlarmRepository messageAlarmRepository;
 	
 	public Page<MessageAlarm> findAll(Pageable pageable) {
-		System.out.println("dadddadaaad");
-		return messageAlarmRepository.findAll(pageable);
+		return messageAlarmRepository.findAllByOrderByDateDesc(pageable);
 	}
 
 	public MessageAlarm findOne(long id) {

@@ -1,8 +1,8 @@
 import { newError, newSuccess } from "../actions/notificationActions";
 import { call, put } from 'redux-saga/effects';
 import alarmService from "../../services/AlarmService";
-import { setAlarmsBlacklisted, setAlarmsBruteforce, setAlarmsError, setAlarmsInactive } from '../actions/alarmActions';
-import { ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE } from "../../assets/routes";
+import { setAlarmsBlacklisted, setAlarmsBruteforce, setAlarmsError, setAlarmsInactive, setAlarmsCustom } from '../actions/alarmActions';
+import { ALARMS_BLACKLISTED, ALARMS_BRUTEFORCE, ALARMS_ERROR, ALARMS_INACTIVE, ALARMS_CUSTOM } from "../../assets/routes";
 import { push } from "connected-react-router";
 
 export function* getAlarmsBlacklisted(action){
@@ -55,5 +55,17 @@ export function* getAlarmsInactive(action){
         console.log(error);
         yield put(newError("Can't get this."));
         yield put(push(ALARMS_INACTIVE));
+    }
+}
+
+export function* getAlarmsCustom(action){
+    try {
+        const response = yield call(alarmService.getAlarmsCustom, action.payload);
+        yield put(setAlarmsCustom(response));
+
+    } catch (error) {
+        console.log(error);
+        yield put(newError("Can't get this."));
+        yield put(push(ALARMS_CUSTOM));
     }
 }

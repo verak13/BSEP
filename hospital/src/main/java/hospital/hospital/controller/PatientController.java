@@ -34,7 +34,7 @@ public class PatientController {
 	@Autowired
     PatientService patientService;
 
-    @PreAuthorize("hasRole('DOCTOR') || hasRole(SUPER_ADMIN)")
+    @PreAuthorize("hasRole('DOCTOR') || hasRole('SUPER_ADMIN')")
     @RequestMapping(value= "/by-page",method = RequestMethod.GET)
     public ResponseEntity<?> getPatients(Pageable pageable)throws Exception {
 

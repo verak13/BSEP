@@ -39,13 +39,13 @@ public class ReportService {
 
         r.setDate(new Date());
 
-        /*map = logService.countLogs();
+        map = logService.countLogs();
 
         r.setTotalLogCount(map.get(LogService.TOTAL));
         r.setApplicationLogCount(map.get(LogService.APPLICATION_LOG));
         r.setErrorLogCount(map.get(LogService.ERROR_LOG));
         r.setLoginLogCount(map.get(LogService.LOGIN_LOG));
-        r.setLoginErrorLogCount(map.get(LogService.LOGIN_ERROR_LOG));*/
+        r.setLoginErrorLogCount(map.get(LogService.LOGIN_ERROR_LOG));
 
         return reportRepository.save(r);
     }

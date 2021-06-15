@@ -5,9 +5,9 @@ import { setHospitals } from '../actions/hospitalConfigurationActions';
 import { HOSPITALS } from "../../assets/routes";
 import { push } from "connected-react-router";
 
-export function* getHospitals(){
+export function* getHospitals({ payload }){
     try {
-        const response = yield call(hospitalConfigurationService.getHospitals);
+        const response = yield call(hospitalConfigurationService.getHospitals, payload);
         yield put(setHospitals(response));
 
     } catch (error) {

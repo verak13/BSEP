@@ -1,47 +1,33 @@
-template header
-name
-type
-severity
-seconds
-times
-msg
-
 package hospital.hospital.rules;
-
 import hospital.hospital.model.cep.LogEvent;
 import hospital.hospital.services.MailService;
 import hospital.hospital.model.cep.alarms.CustomLogAlarm;
 import java.util.Date;
-
 global MailService mailService
 
-template "custom-log-rules-simple"
-
-rule "@{name}_@{row.rowNumber}"
+rule "OVOVOV_0"
 no-loop true
     when
       $l1 : LogEvent(
-                    log.getType() in @{type},
-                    log.getSeverity().name() in @{severity}
+                    log.getType() in ("LOGIN_ERROR"),
+                    log.getSeverity().name() in ("ERROR","TRACE","INFO")
                     )
-            $appearance: Long(intValue >= @{times}) from accumulate(
+            $appearance: Long(intValue >= 2) from accumulate(
                                         $l2: LogEvent(
                                             this != $l1,
-                                            log.getType() in @{type},
-                                            log.getSeverity().name() in @{severity}
+                                            log.getType() in ("LOGIN_ERROR"),
+                                            log.getSeverity().name() in ("ERROR","TRACE","INFO")
                                         )
-                                        over window:time(@{seconds}s),
+                                        over window:time(20s),
                                         count($l2)
                                     )
-
-            not (CustomLogAlarm(ruleName == "@{name}"))
+            not (CustomLogAlarm(ruleName == "OVOVOV"))
     then
        System.out.println("\n\n==== TRIGEROVAN CUSTOM LOG ALARM  ===");
-       System.out.println("RULE NAME: " + "@{name}");
-       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "@{msg}", "@{name}"));
+       System.out.println("RULE NAME: " + "OVOVOV");
+       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "aaddwaadwd", "OVOVOV"));
 end
-
-rule "Custom log alarm triggered, notify admin by email_@{name}_"
+rule "Custom log alarm triggered, notify admin by email_OVOVOV_"
 no-loop true
   when
         $alarm : CustomLogAlarm($message: errorMsg, $date: date, sentEmail == false)
@@ -53,4 +39,4 @@ no-loop true
          modify($alarm) { setSentEmail(true); }
 end
 
-end template
+

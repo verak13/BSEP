@@ -16,6 +16,10 @@ const ENDPOINT_INACTIVE = {
     GET: '/alarms/inactive-user/by-page?page=:page&size=:size',
 }
 
+const ENDPOINT_CUSTOM = {
+    GET: '/alarms/custom-log/by-page?page=:page&size=:size',
+}
+
 class AlarmService extends ApiService {
 
     getAlarmsBlacklisted = async ({ pageSize, page }) => {
@@ -45,6 +49,14 @@ class AlarmService extends ApiService {
     getAlarmsInactive = async ({ pageSize, page }) => {
         console.log('u servisu', pageSize)
         let uri = ENDPOINT_INACTIVE.GET.replace(":size", pageSize)
+        uri = uri.replace(":page", page)
+        const { data } = await this.apiClient.get(uri);
+        return data;
+    }
+
+    getAlarmsCustom = async ({ pageSize, page }) => {
+        console.log('u servisu', pageSize)
+        let uri = ENDPOINT_CUSTOM.GET.replace(":size", pageSize)
         uri = uri.replace(":page", page)
         const { data } = await this.apiClient.get(uri);
         return data;

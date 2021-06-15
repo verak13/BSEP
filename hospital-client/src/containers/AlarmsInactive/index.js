@@ -44,6 +44,7 @@ function AlarmsInactive(props) {
     >
         <MaterialTable
         title="Alarm list"
+        style={{minWidth: '70%', minHeight:'100%', overflow:true}}     
         columns={[
             { title: 'User Email', field: 'userEmail' },
             { title: 'Days Inactive', field: 'daysInactive' },
@@ -62,6 +63,7 @@ function AlarmsInactive(props) {
             onChangePage={handleChangePage}
             rowsPerPage={pageSize}
             onChangeRowsPerPage={handleChangePageSize}
+            rowsPerPageOptions={[5]}
           />
             }
          }

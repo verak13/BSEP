@@ -1,0 +1,28 @@
+package hospital.hospital.rules;
+import hospital.hospital.model.cep.MessageEvent;
+import hospital.hospital.services.MailService;
+import hospital.hospital.model.cep.alarms.MessageAlarm;
+global MailService mailService
+
+rule "Custom message ruleovo je komplikovaiji maloo."
+	agenda-group "doctor-alarms"
+    when
+        $e : MessageEvent($patientId: message.getPatientId(), 
+        	$value1: message.getBloodPressureSystolic(), ($value1 < 1000.0 || $value1 > 1.0), 
+        	$value2: message.getBloodPressureDiastolic(), ($value2 < 1000.0 || $value2 > 1.0),
+        	$value3: message.getBodyTemperature(), ($value3 < 34.0 || $value3 > 40.0),
+        	$value4: message.getPulseRaye(), ($value4 < 40.0 || $value4 > 150.0),
+        	$value5: message.getRespirationRate(), ($value5 < 1000.0 || $value5 > 1.0)
+        )
+    then
+        insert(new MessageAlarm($patientId, "ovo je komplikovaiji maloo"));
+        System.out.println("==== TRIGEROVAN CUSTOM ALARM ====");
+end
+rule "Message alarm triggered, notify doctor custom-ovo je komplikovaiji maloo"
+    when
+        $alarm : MessageAlarm(variable == "ovo je komplikovaiji maloo")
+    then
+        mailService.notifyDoctors($alarm);
+end
+
+

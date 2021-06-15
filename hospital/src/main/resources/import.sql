@@ -29,8 +29,6 @@ insert into messages(patient_id, blood_pressure_diastolic, blood_pressure_systol
 insert into brute_force_alarm(attempts, username, date) values (100, 'doctor1@gmail.com','2021-06-10 13:00:00');
 insert into brute_force_alarm(attempts, username, date) values (100, 'doctor2@gmail.com', '2021-06-10 13:05:00');
 
-insert into custom_log_alarm(date, error_msg) values ('2021-06-10 13:00:00', 'Something is wrong!');
-insert into custom_log_alarm(date, error_msg) values ('2021-06-10 13:05:00', 'Something is wrong again!');
 
 insert into blacklisted_ip_alarm(date, ip, user_email) values ('2021-06-10 13:05:00', '20.20.20.23', 'hacker1@gmail.com');
 insert into blacklisted_ip_alarm(date, ip, user_email) values ('2021-06-10 13:06:00', '20.20.20.25', 'hacker1@gmail.com');

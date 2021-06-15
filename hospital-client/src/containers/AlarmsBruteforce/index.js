@@ -43,7 +43,8 @@ function AlarmsBruteforce(props) {
         style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
     >
         <MaterialTable
-        title="Alarm list"
+        title="Brute force login alarms list"
+        style={{minWidth: '70%', minHeight:'100%', overflow:true}}     
         columns={[
             { title: 'Username', field: 'username' },
             { title: 'Attempts', field: 'attempts' },
@@ -62,6 +63,7 @@ function AlarmsBruteforce(props) {
             onChangePage={handleChangePage}
             rowsPerPage={pageSize}
             onChangeRowsPerPage={handleChangePageSize}
+            rowsPerPageOptions={[5]}
           />
             }
          }

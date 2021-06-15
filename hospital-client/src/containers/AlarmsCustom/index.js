@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Grid} from '@material-ui/core';
-import { getMessageAlarms } from '../../store/actions/messageAlarmActions';
-import { formatTimestampWithTime } from '../../utils';
+import { getAlarmsCustom } from '../../store/actions/alarmActions';
 
 import TablePagination from '@material-ui/core/TablePagination';
 
@@ -12,13 +11,13 @@ import NavBar from '../../components/NavBar';
 import MaterialTable from 'material-table';
 
 
-function MessageAlarms(props) {
+function AlarmsCustom(props) {
 
-    const [pageSize, setPageSize] = React.useState(5);
+    const [pageSize, setPageSize] = React.useState(10);
 
     const handleChangePage = (event, newPage) => {
         console.log('ee', newPage)
-        props.getMessageAlarms({ pageSize, page: newPage });
+        props.getAlarmsCustom({ pageSize, page: newPage });
     };
   
     const handleChangePageSize = (event) => {
@@ -26,9 +25,13 @@ function MessageAlarms(props) {
     };
 
     useEffect(() => {
-        props.getMessageAlarms({ pageSize, page: 0 });
+        props.getAlarmsCustom({ pageSize, page: 0 });
     }, []);
 
+    useEffect(() => {
+        console.log(props.total, 'tttooo')
+    })
+  
     return (
     <>
     <NavBar />
@@ -40,16 +43,14 @@ function MessageAlarms(props) {
         style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
     >
         <MaterialTable
-        title="Message alarms list"
+        title="Custom alarms list"
         style={{minWidth: '70%', minHeight:'100%', overflow:true}}     
         columns={[
-            { title: 'Patient Id', field: 'patientId' },
-            { title: 'Variable', field: 'variable' },
-            { title: 'Value', field: 'value' },
-            { title: 'Value', field: 'otherValue' },
-            { title: 'Timestamp', field: 'date' }
+            { title: 'Message', field: 'errorMsg' },
+            { title: 'Rule', field: 'ruleName' },
+            { title: 'Date', field: 'date' }
         ]}
-        data={props.messageAlarms}        
+        data={props.alarms}        
         options={{
             filtering: false
         }}
@@ -72,15 +73,15 @@ function MessageAlarms(props) {
 }
 
 const mapStateToProps = state => ({
-    messageAlarms: state.messageAlarms.all,
-    total : state.messageAlarms.total || 0,
-    page: state.messageAlarms.page
+    alarms: state.alarmCustom.all,
+    total : state.alarmCustom.total || 0,
+    page: state.alarmCustom.page
 });
 
 const mapDispatchToProps = {
-    getMessageAlarms
+    getAlarmsCustom
 }
 
 
  
-export default connect(mapStateToProps, mapDispatchToProps)(MessageAlarms);
+export default connect(mapStateToProps, mapDispatchToProps)(AlarmsCustom);

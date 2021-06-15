@@ -68,6 +68,7 @@ function Patients(props) {
             onChangePage={handleChangePage}
             rowsPerPage={pageSize}
             onChangeRowsPerPage={handleChangePageSize}
+            rowsPerPageOptions={[5]}
           />
             }
          }

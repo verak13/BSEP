@@ -74,6 +74,7 @@ function Logs(props) {
                 onChangePage={handleChangePage}
                 rowsPerPage={pageSize}
                 onChangeRowsPerPage={handleChangePageSize}
+                rowsPerPageOptions={[5]}
             />
             }
          }

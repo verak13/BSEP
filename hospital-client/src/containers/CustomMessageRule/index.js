@@ -10,18 +10,22 @@ import { withFormikField } from '../../utils';
 import Footer from '../../components/Footer';
 import { addCustomMessageRule } from '../../store/actions/rulesActions';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const FormikTextField = withFormikField(TextField);
 
 function CustomMessageRule(props) {
+    const [loader, setLoader] = React.useState(false);
 
     const handleSubmit = values => {
        console.log(values);
        props.addCustomMessageRule(values);
+       setLoader(true)
     }
 
     useEffect(() => {
-    }, []);
+        setLoader(false);
+    }, [props.success])
   
     return (
         <div>
@@ -32,7 +36,7 @@ function CustomMessageRule(props) {
             direction="column"
             spacing={2}
             alignItems="center"
-            style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
+            style={{ margin: '0 auto', padding: '20px',marginTop: 100, minHeight: '100vh' , width: '80%'}}
         >
             <h1>Add Custom Message Rule</h1>
         <Grid>
@@ -227,6 +231,7 @@ function CustomMessageRule(props) {
                         </Grid>
                         <Grid container justify='center' style={{ margin: '10px 0px' }}>
                             <Button variant='contained' color='primary' type="submit">Add Custom Message Alarm</Button>
+                            {loader &&    <CircularProgress style={{marginTop:'5px'}}/>}
                         </Grid>
                     </Grid>
                 </Form>
@@ -244,7 +249,7 @@ function CustomMessageRule(props) {
 }
 
 const mapStateToProps = state => ({
-    //requests: state.requests.requests
+   success : state.notification.type
 });
 
 const mapDispatchToProps = {

@@ -13,7 +13,7 @@ import MaterialTable from 'material-table';
 
 function AlarmsBlacklisted(props) {
 
-    const [pageSize, setPageSize] = React.useState(10);
+    const [pageSize, setPageSize] = React.useState(5);
 
     const handleChangePage = (event, newPage) => {
         console.log('ee', newPage)
@@ -37,18 +37,20 @@ function AlarmsBlacklisted(props) {
         direction="column"
         md={10}
         alignItems="center"
-        style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
+        style={{ margin: '0 auto', marginTop: 100, minHeight: '30vh' }}
     >
         <MaterialTable
-        title="Alarm list"
+        title="Blacklisted IP alarms list"
         columns={[
             { title: 'IP Address', field: 'ip' },
             { title: 'User Email', field: 'userEmail' },
             { title: 'Date', field: 'date' }
         ]}
-        data={props.alarms}        
+        data={props.alarms}  
+        style={{minWidth: '70%', minHeight:'100%', overflow:true}}      
         options={{
-            filtering: false
+            filtering: false,
+            
         }}
          components={{
             Pagination: () =>  
@@ -59,6 +61,7 @@ function AlarmsBlacklisted(props) {
             onChangePage={handleChangePage}
             rowsPerPage={pageSize}
             onChangeRowsPerPage={handleChangePageSize}
+            rowsPerPageOptions={[5]}
           />
             }
          }

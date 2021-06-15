@@ -3,6 +3,7 @@ package hospital.hospital.services;
 import java.util.Date;
 
 import hospital.hospital.model.cep.alarms.*;
+import hospital.hospital.repository.CustomLogAlarmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -31,6 +32,7 @@ public class MailService {
 
     @Autowired
     private AlarmService alarmService;
+
 
     public String build(String msg) {
         Context context = new Context();
@@ -83,8 +85,8 @@ public class MailService {
         alarmService.saveInactiveUserAlarm(alarm);
     }
 
-    public void saaveCustomAlarm(CustomLogAlarm alarm) {
-
+    public void saveCustomAlarm(CustomLogAlarm alarm) {
+        alarmService.saveCustomLogAlarm(alarm);
     }
 
        

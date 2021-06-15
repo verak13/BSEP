@@ -10,15 +10,35 @@ import { withFormikField } from '../../utils';
 import Footer from '../../components/Footer';
 import { addConfig } from '../../store/actions/hospitalConfigurationActions';
 import { makeStyles } from '@material-ui/core/styles';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const SIMULATORS = ["SIMULATOR1", "SIMULATOR2", "SIMULATOR3"];
 
 const FormikTextField = withFormikField(TextField);
 
+
+
 function AddConfig(props) {
 
+    const [file, setFile] = React.useState('');
+
+    const SelectField = () => (
+        <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={file}
+        variant="outlined"
+        style={{width: '100%'}}
+        onChange={e => { console.log('ddaaa'); setFile(e.target.value)}}
+      >
+        <MenuItem value={"SIMULATOR1"}>SIMULATOR1</MenuItem>
+        <MenuItem value={"SIMULATOR2"}>SIMULATOR2</MenuItem>
+      </Select>
+    )
+
     const handleSubmit= values => {
-       console.log(values);
+       values.file = file;
        props.addConfig(values);
     }
 
@@ -42,7 +62,7 @@ function AddConfig(props) {
         <Formik
                 initialValues={{ 
                     hospitalId: 0,
-                    file: '',
+                    file: file,
                     interval: 0,
                     regexp: ''
                  }}
@@ -52,7 +72,6 @@ function AddConfig(props) {
                         /^$|[0-9]+$/,
                         "Must Be Integer"
                     ),
-                    file: Yup.string().required('Required'),
                     interval: Yup.string().required('Required')
                     .matches(
                         /^$|[0-9]+$/,
@@ -80,7 +99,7 @@ function AddConfig(props) {
                         </Grid>
                         <Grid item xs={6}>
                         <Field
-                                component={FormikTextField}
+                                component={SelectField}
                                 type="text"
                                 name="file"
                                 variant="outlined"

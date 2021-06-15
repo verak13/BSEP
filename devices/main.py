@@ -12,9 +12,25 @@ SERVER_CERT = './certs/root_ca.cer'
 VALID_CERT = ('./certs/hospital_device2.cer', './certs/hospital_device2.pkcs8')
 INVALID_CERT = ('./certs/revoke_me.cer', './certs/revoke_me.pkcs8')
 
+
+
+def create_message_custom_alarm_trigger():
+    #1, 37, 120, 200, 160, 70
+    id = random.randint(1,2)
+    #trebalo bi da trigeruje za temperaturu manju od 34 npr
+    temp = 33
+    pulse = 151
+    respiration = random.randint(10,19)
+    pressureDiastolic = random.randint(80,150)
+    pressureSystolic = random.randint(60,130)
+
+    return f"{datetime.datetime.now()}|{id}|{temp}|{pulse}|{respiration}|{pressureDiastolic}|{pressureSystolic}".encode('utf-8')
+
+
+
 def create_message():
     #1, 37, 120, 200, 160, 70
-    id = random.randint(1,5)
+    id = random.randint(1,2)
     temp = random.randint(36,41)
     pulse = random.randint(80,120)
     respiration = random.randint(10,19)
@@ -39,6 +55,7 @@ def send_data_valid():
     while True:
 
         message = create_message()
+        # message =  create_message_custom_alarm_trigger()
         signature = priv_key.sign(
             message,
             padding.PKCS1v15(),
@@ -80,6 +97,6 @@ def send_data_XSS():
 
 
 if __name__ == '__main__':
-    #send_data_valid()
-    send_data_invalid()
+    send_data_valid()
+    # send_data_invalid()
     #send_data_XSS()

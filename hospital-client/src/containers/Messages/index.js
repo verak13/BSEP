@@ -92,6 +92,7 @@ function Messages(props) {
 
         <MaterialTable
         title="Message list"
+        style={{minWidth: '70%', minHeight:'100%', overflow:true}}     
         columns={[
             { title: 'Patient Id', field: 'patientId' },
             { title: 'Patient', field: 'patient' },
@@ -115,6 +116,7 @@ function Messages(props) {
             onChangePage={handleChangePage}
             rowsPerPage={pageSize}
             onChangeRowsPerPage={handleChangePageSize}
+            rowsPerPageOptions={[5]}
           />
             }
          }

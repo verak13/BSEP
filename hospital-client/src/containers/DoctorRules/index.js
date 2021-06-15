@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { connect } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import NavBar from '../../components/NavBar';
 import { Paper, Grid, Button, TextField, Divider, Container } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
@@ -14,20 +14,26 @@ import { makeStyles } from '@material-ui/core/styles';
 const FormikTextField = withFormikField(TextField);
 
 function DoctorRules(props) {
+    const [loader, setLoader] = React.useState(false);
+    const [loaderTemp, setLoaderTemp] = React.useState(false);
 
     const handleSubmitTemperature = values => {
        console.log(values);
        props.addTemperatureRule(values);
+       setLoaderTemp(true);
     }
 
     const handleSubmitPressure = values => {
         console.log(values);
         props.addPressureRule(values);
+        setLoader(true);
     }
 
 
     useEffect(() => {
-    }, []);
+        setLoader(false);
+        setLoaderTemp(false);
+    }, [props.success])
   
     return (
         <div>
@@ -44,12 +50,12 @@ function DoctorRules(props) {
         <Grid>
         <Formik
                 initialValues={{ 
-                    patientIdPressure: 0,
+                    patient: 0,
                     diastolic: 0.0,
                     systolic: 0.0
                  }}
                 validationSchema={Yup.object().shape({
-                    patientIdPressure: Yup.string().required('Required')
+                    patient: Yup.string().required('Required')
                     .matches(
                         /^$|[0-9]+$/,
                         "Must Be Integer"
@@ -76,7 +82,7 @@ function DoctorRules(props) {
                             <Field
                                 component={FormikTextField}
                                 type="text"
-                                name="patientIdPressure"
+                                name="patient"
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -107,6 +113,7 @@ function DoctorRules(props) {
                         </Grid>
                         <Grid container justify='center' style={{ margin: '10px 0px' }}>
                             <Button variant='contained' color='primary' type="submit">Add Pressure Alarm</Button>
+                            {loader &&    <CircularProgress style={{marginTop:'5px'}}/>}
                         </Grid>
                     </Grid>
                 </Form>
@@ -118,11 +125,11 @@ function DoctorRules(props) {
             <Grid>
             <Formik
                     initialValues={{ 
-                        patientIdTemperature: 0,
+                        patient: 0,
                         value: 0.0,
                     }}
                     validationSchema={Yup.object().shape({
-                        patientIdTemperature: Yup.string().required('Required')
+                        patient: Yup.string().required('Required')
                         .matches(
                             /^$|[0-9]+$/,
                             "Must Be Integer"
@@ -144,7 +151,7 @@ function DoctorRules(props) {
                                 <Field
                                     component={FormikTextField}
                                     type="text"
-                                    name="patientIdTemperature"
+                                    name="patient"
                                     variant="outlined"
                                     required
                                     fullWidth
@@ -164,6 +171,7 @@ function DoctorRules(props) {
                             </Grid>
                             <Grid container justify='center' style={{ margin: '10px 0px' }}>
                                 <Button variant='contained' color='primary' type="submit">Add High Temperature Alarm</Button>
+                                {loaderTemp &&    <CircularProgress style={{marginTop:'5px'}}/>}
                             </Grid>
                         </Grid>
                     </Form>
@@ -180,7 +188,7 @@ function DoctorRules(props) {
 }
 
 const mapStateToProps = state => ({
-    //requests: state.requests.requests
+    success : state.notification.type
 });
 
 const mapDispatchToProps = {

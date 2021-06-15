@@ -20,6 +20,27 @@ public class Hospital {
     @Pattern(regexp="^$|[a-zA-Z ]+$", message="Field must not include special characters.")
 	@Column
     private String name;
-	
 
+	public Hospital() {};
+
+    public Hospital(Long id, @NotBlank(message = "Field must not be empty") @Size(min = 2, max = 20) @Pattern(regexp = "^$|[a-zA-Z ]+$", message = "Field must not include special characters.") String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

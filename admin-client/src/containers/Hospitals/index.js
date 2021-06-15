@@ -46,6 +46,7 @@ function Hospitals(props) {
     >
         <MaterialTable
         title="Hospitals"
+        style={{minWidth: '80%'}}
         columns={[
             { title: 'ID', field: 'id' },
             { title: 'Name', field: 'name' }

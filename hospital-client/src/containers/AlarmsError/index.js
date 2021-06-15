@@ -40,10 +40,11 @@ function AlarmsError(props) {
         style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
     >
         <MaterialTable
-        title="Alarm list"
+        title="Error alarms list"
+        style={{minWidth: '70%', minHeight:'100%', overflow:true}}     
         columns={[
-            { title: 'Date', field: 'date' },
-            { title: 'Message', field: 'errorMsg' }
+            { title: 'Message', field: 'errorMsg' },
+            { title: 'Date', field: 'date' }
         ]}
         data={props.alarms}        
         options={{
@@ -58,6 +59,7 @@ function AlarmsError(props) {
             onChangePage={handleChangePage}
             rowsPerPage={pageSize}
             onChangeRowsPerPage={handleChangePageSize}
+            rowsPerPageOptions={[5]}
           />
             }
          }

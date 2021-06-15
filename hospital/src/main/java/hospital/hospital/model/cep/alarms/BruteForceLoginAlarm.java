@@ -39,6 +39,7 @@ public class BruteForceLoginAlarm implements Serializable {
     public BruteForceLoginAlarm(String username, long attempts) {
         this.username = username;
         this.attempts = attempts;
+        this.date = new Date();
     }
 
     public String getUsername() {

@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 
 import hospital.hospital.model.cep.alarms.BlackListedIPAlarm;
 import hospital.hospital.model.cep.alarms.BruteForceLoginAlarm;
+import hospital.hospital.model.cep.alarms.CustomLogAlarm;
 import hospital.hospital.model.cep.alarms.ErrorLogAlarm;
 import hospital.hospital.model.cep.alarms.InactiveUserAlarm;
 import hospital.hospital.repository.BlackListedIPAlarmRepository;
 import hospital.hospital.repository.BruteForceLoginAlarmRepository;
+import hospital.hospital.repository.CustomLogAlarmRepository;
 import hospital.hospital.repository.ErrorLogAlarmRepository;
 import hospital.hospital.repository.InactiveUserAlarmRepository;
 
@@ -26,6 +28,9 @@ public class AlarmService {
 	public static final String TOTAL = "TOTAL";
 	
 	@Autowired
+	CustomLogAlarmRepository customLogAlarmRepository;
+	
+	@Autowired
 	BlackListedIPAlarmRepository blackListedIPAlarmRepository;
 	
 	@Autowired
@@ -38,19 +43,23 @@ public class AlarmService {
 	InactiveUserAlarmRepository inactiveUserAlarmRepository;
 	
 	public Page<BlackListedIPAlarm> findAllBlackListedIPAlarms(Pageable pageable) {
-		return blackListedIPAlarmRepository.findAll(pageable);
+		return blackListedIPAlarmRepository.findAllByOrderByDateDesc(pageable);
 	}
 	
 	public Page<BruteForceLoginAlarm> findAllBruteForceLoginAlarms(Pageable pageable) {
-		return bruteForceLoginAlarmRepository.findAll(pageable);
+		return bruteForceLoginAlarmRepository.findAllByOrderByDateDesc(pageable);
 	}
 	
 	public Page<ErrorLogAlarm> findAllErrorLogAlarms(Pageable pageable) {
-		return errorLogAlarmRepository.findAll(pageable);
+		return errorLogAlarmRepository.findAllByOrderByDateDesc(pageable);
 	}
 	
 	public Page<InactiveUserAlarm> findAllInactiveUserAlarms(Pageable pageable) {
 		return inactiveUserAlarmRepository.findAll(pageable);
+	}
+	
+	public Page<CustomLogAlarm> findAllCustomLogAlarms(Pageable pageable) {
+		return customLogAlarmRepository.findAll(pageable);
 	}
 
 	public HashMap<String, Long> countAlarms() {
@@ -77,4 +86,8 @@ public class AlarmService {
 	public void saveBlacklistedIPAlarm(BlackListedIPAlarm alarm) {
 		this.blackListedIPAlarmRepository.save(alarm);
 	}
+	public void saveCustomLogAlarm(CustomLogAlarm alarm) {
+		this.customLogAlarmRepository.save(alarm);
+	}
+
 }

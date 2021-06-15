@@ -18,7 +18,7 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @PreAuthorize("hasRole('HOSPITAL_ADMIN')")
+    @PreAuthorize("hasRole('HOSPITAL_ADMIN') || hasRole('SUPER_ADMIN')")
     @RequestMapping(value="/generate", method = RequestMethod.GET)
     public ResponseEntity<?> generateReport()throws Exception {
 
@@ -27,7 +27,7 @@ public class ReportController {
         return new ResponseEntity<>(report, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOSPITAL_ADMIN')")
+    @PreAuthorize("hasRole('HOSPITAL_ADMIN') || hasRole('SUPER_ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getAll()throws Exception {
 

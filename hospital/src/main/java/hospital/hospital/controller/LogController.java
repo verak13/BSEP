@@ -30,7 +30,7 @@ public class LogController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LogController.class);
 
-	@PreAuthorize("hasRole('HOSPITAL_ADMIN')")
+	@PreAuthorize("hasRole('HOSPITAL_ADMIN') || hasRole('SUPER_ADMIN')")
 	@PostMapping(value = "/by-page")
 	public ResponseEntity<?> getLogs(Pageable pageable, @RequestBody SearchLogDTO searchLog) {
 		try {

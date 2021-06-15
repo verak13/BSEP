@@ -225,7 +225,6 @@ public class RulesService {
         }
     }
 
-
     public void reloadKjar(String drl, String outputPath) throws IOException, MavenInvocationException {
         FileOutputStream drlFile = new FileOutputStream(new File(outputPath), false);
         drlFile.write(drl.getBytes());
