@@ -27,7 +27,7 @@ export default function Routes() {
     return (
         <Switch>
             <PublicRoute path={HOME} component={HomePage} exact />
-            <PrivateRoute path={REQUESTS} role={['HOSPITAL_ADMIN']} component={Requests} exact />
+            <PrivateRoute path={REQUESTS} role={['HOSPITAL_ADMIN', "SUPER_ADMIN"]} component={Requests} exact />
             <PrivateRoute path={ADD_DOCTOR} component={AddDoctor} exact />
             <PrivateRoute path={LOGS} role={["HOSPITAL_ADMIN", "SUPER_ADMIN"]} component={Logs} exact />
             <PrivateRoute path={ALARMS_BLACKLISTED} role={["HOSPITAL_ADMIN"]} component={AlarmsBlacklisted} exact />

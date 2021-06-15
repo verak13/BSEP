@@ -13,12 +13,12 @@ import Hospitals from '../../containers/Hospitals';
 export default function Routes() {
     return (
         <Switch>
-            <PublicRoute path={HOME} component={HomePage} exact />
-            <PrivateRoute path={REQUESTS} component={Requests} exact />
-            <PrivateRoute path={CERTIFICATES} component={Certificates} exact />
-            <PrivateRoute path={USERS} component={Users} exact />
-            <PrivateRoute path={ADD_CONFIG} component={AddConfig} exact />
-            <PrivateRoute path={HOSPITALS} component={Hospitals} exact />
+            <PublicRoute path={HOME} role={'SUPER_ADMIN'} component={HomePage} exact />
+            <PrivateRoute path={REQUESTS} role={'SUPER_ADMIN'} component={Requests} exact />
+            <PrivateRoute path={CERTIFICATES} role={'SUPER_ADMIN'}component={Certificates} exact />
+            <PrivateRoute path={USERS} role={'SUPER_ADMIN'} component={Users} exact />
+            <PrivateRoute path={ADD_CONFIG} role={'SUPER_ADMIN'}component={AddConfig} exact />
+            <PrivateRoute path={HOSPITALS} role={'SUPER_ADMIN'}component={Hospitals} exact />
         </Switch>
     )
 }

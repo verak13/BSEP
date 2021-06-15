@@ -38,7 +38,7 @@ const REVOKE_REASONS = ["UNSPECIFIED", "KEY_COMPROMISE", "CA_COMPROMISE", "AFFIL
 
 const useStyles = makeStyles(theme => ({
     table: {
-      minWidth: 650,
+      minWidth: 850
     },
     formControl: {
         margin: theme.spacing(1),
@@ -109,7 +109,7 @@ function Certificates(props) {
                     <TableHead>
                     <TableRow>
                         <TableCell align="right">Common Name</TableCell>
-                        <TableCell align="right">Email</TableCell>
+                        <TableCell align="right">Issuer</TableCell>
                         <TableCell align="right">CA</TableCell>
                         <TableCell align="right">Revoked</TableCell>
                         
@@ -123,7 +123,7 @@ function Certificates(props) {
                                 <TableCell component="th" scope="row">
                                     {row.commonName}
                                 </TableCell>
-                        <TableCell align="right">{row.email}</TableCell>
+                        <TableCell align="right">{row.issuer}</TableCell>
                         <TableCell align="right">{row.ca + ''}</TableCell>
                         <TableCell align="right">{row.revoked + ''}</TableCell>
                         

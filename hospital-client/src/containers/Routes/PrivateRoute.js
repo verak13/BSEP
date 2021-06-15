@@ -2,7 +2,6 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 import authService from '../../services/AuthService';
-import PublicRoute from './PublicRoute';
 import { HOME } from '../../assets/routes';
 
 function PrivateRoute({ component: Component, ...rest }) {

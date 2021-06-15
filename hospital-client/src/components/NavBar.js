@@ -224,7 +224,11 @@ function NavBar(props) {
                     </>
                 : null }
                 {keycloak?.authenticated && authService.getRole() === 'SUPER_ADMIN' ? <>
-                    <List>                        
+                    <List>      
+                    <ListItem onClick={() => props.history.push(REQUESTS)} button key={'Requests'}>
+                            <ListItemIcon><AddCircle /></ListItemIcon>
+                            <ListItemText primary={'Add Request'} />
+                        </ListItem>                  
                         <ListItem onClick={() => props.history.push(PATIENTS)} button key={'Patients'}>
                             <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
                             <ListItemText primary={'See Patients\' Medical Records'} />

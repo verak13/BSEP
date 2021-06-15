@@ -1,13 +1,13 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { useKeycloak } from '@react-keycloak/web';
-import { REQUESTS } from '../../assets/routes';
+import { Route } from 'react-router-dom';
+import authService from '../../services/AuthService';
 
 function PublicRoute({ component: Component, ...rest }) {
-    const { keycloak } = useKeycloak()
+    const { role } =  rest;
     return <Route   {...rest}
         render={renderProp => {
-            return keycloak?.authenticated ? <Redirect to={REQUESTS} /> : <Component {...renderProp} />
+
+            return role == authService.getRole()? <Component {...renderProp} /> :  window.location.href = "https://localhost:3001"
         }}
 
 

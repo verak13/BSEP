@@ -5,29 +5,29 @@ import hospital.hospital.model.cep.alarms.CustomLogAlarm;
 import java.util.Date;
 global MailService mailService
 
-rule "OVOVOV_0"
+rule "Trigeruj alarm kada se desi login error log 3 puta u roku od 20 sekundi_0"
 no-loop true
     when
       $l1 : LogEvent(
                     log.getType() in ("LOGIN_ERROR"),
-                    log.getSeverity().name() in ("ERROR","TRACE","INFO")
+                    log.getSeverity().name() in ("ERROR","TRACE")
                     )
             $appearance: Long(intValue >= 2) from accumulate(
                                         $l2: LogEvent(
                                             this != $l1,
                                             log.getType() in ("LOGIN_ERROR"),
-                                            log.getSeverity().name() in ("ERROR","TRACE","INFO")
+                                            log.getSeverity().name() in ("ERROR","TRACE")
                                         )
                                         over window:time(20s),
                                         count($l2)
                                     )
-            not (CustomLogAlarm(ruleName == "OVOVOV"))
+            not (CustomLogAlarm(ruleName == "Trigeruj alarm kada se desi login error log 3 puta u roku od 20 sekundi"))
     then
        System.out.println("\n\n==== TRIGEROVAN CUSTOM LOG ALARM  ===");
-       System.out.println("RULE NAME: " + "OVOVOV");
-       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "aaddwaadwd", "OVOVOV"));
+       System.out.println("RULE NAME: " + "Trigeruj alarm kada se desi login error log 3 puta u roku od 20 sekundi");
+       insert(new CustomLogAlarm($l1.getLog().getTimestamp(), "Ova poruka ce se proslediti u mejlu", "Trigeruj alarm kada se desi login error log 3 puta u roku od 20 sekundi"));
 end
-rule "Custom log alarm triggered, notify admin by email_OVOVOV_"
+rule "Custom log alarm triggered, notify admin by email_Trigeruj alarm kada se desi login error log 3 puta u roku od 20 sekundi_"
 no-loop true
   when
         $alarm : CustomLogAlarm($message: errorMsg, $date: date, sentEmail == false)

@@ -10,6 +10,7 @@ import { withFormikField } from '../../utils';
 import Footer from '../../components/Footer';
 import { addRequest } from '../../store/actions/requestActions';
 import { makeStyles } from '@material-ui/core/styles';
+import authService from '../../services/AuthService';
 
 const useStyles = makeStyles({
     table: {
@@ -33,10 +34,10 @@ function Requests(props) {
         keyCertSign: false,
         keyEncipherment: false,
         nonRepudiation: false,
+        email: authService.getRole() == 'SUPER_ADMIN'? 'root-ca' : 'hospital-server'
       };
 
     const handleSubmit = values => {
-        values.email = values.email === 'superadmin@admin.com' ? 'root-ca' : 'hospital-server';
         console.log({...values, id:999, userId:999});
         props.addRequest(values);
         console.log(values);
@@ -55,14 +56,13 @@ function Requests(props) {
             direction="column"
             spacing={2}
             alignItems="center"
-            style={{ margin: '0 auto', marginTop: 100, minHeight: '100vh' }}
+            style={{ margin: 'auto', padding:'30px', width: '80%', height: '70%',marginTop: 100, minHeight: '100vh' }}
         >
             <h1>Make Request</h1>
         <Grid>
         <Formik
-                initialValues={{ commonName: '', countryName: '', organization:'', organizationUnitName:'', stateName:'', localityName:'', email:''  }}
+                initialValues={{ commonName: '', countryName: '', organization:'', organizationUnitName:'', stateName:'', localityName:'',   email: authService.getRole() == 'SUPER_ADMIN'? 'root-ca' : 'hospital-server'  }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Invalid email').required('Required'),
                     commonName: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('Required')
                     .matches(
                         /^$|[a-zA-Z ]+$/,
@@ -180,19 +180,6 @@ function Requests(props) {
                             />
                         </Grid>
 
-
-                        <Grid item xs={12}>
-
-                            <Field
-                                component={FormikTextField}
-                                type="email"
-                                name="email"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                label="Email"
-                            />
-                        </Grid>
     
                       
 

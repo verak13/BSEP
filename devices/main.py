@@ -54,8 +54,8 @@ def send_data_valid():
 
     while True:
 
-        message = create_message()
-        # message =  create_message_custom_alarm_trigger()
+        # message = create_message()
+        message =  create_message_custom_alarm_trigger()
         signature = priv_key.sign(
             message,
             padding.PKCS1v15(),

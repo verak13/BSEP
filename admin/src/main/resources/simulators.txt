@@ -1,2 +1,2 @@
-C:\\Users\\vincitoressa\\Desktop\\BSEP\\simulator\\simulator1.log
-C:\\Users\\vincitoressa\\Desktop\\BSEP\\simulator\\simulator2.log
+C:\\Users\\vincitoressa\\Desktop\BSEP\\simulator\\simulator1.log
+C:\\Users\\vincitoressa\\Desktop\BSEP\\simulator\\simulator2.log

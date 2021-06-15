@@ -24,6 +24,9 @@ public class CreateCertificateDTO {
 	@NotNull
 	private boolean cRLSign;
 
+    @NotNull
+    private String email;
+
 	@NotNull
     private boolean dataEncipherment;
 
@@ -107,6 +110,14 @@ public class CreateCertificateDTO {
             return KeyUsage.decipherOnly;
         else
             return 0;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public boolean isDigitalSignature() {

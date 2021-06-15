@@ -40,7 +40,7 @@ public class CertificateController {
     public ResponseEntity<?> createCertificate(@Valid @RequestBody CreateCertificateDTO certificateCreationDTO) throws OperatorCreationException, CertificateException {
 		
         try {
-	        if (certificateService.createAdminCertificate(certificateCreationDTO, "root-ca")) {
+	        if (certificateService.createAdminCertificate(certificateCreationDTO, certificateCreationDTO.getEmail())) {
 	        	certificateRequestService.delete(certificateCreationDTO.getRequestId());
 		        return new ResponseEntity<>(HttpStatus.CREATED);
 	        } else {
@@ -54,9 +54,6 @@ public class CertificateController {
 	@PreAuthorize("hasRole('SUPER_ADMIN')")
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> revokeCertificate(@Valid @RequestBody RevokeCertificateDTO revokeCertificateDTO) {
-
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //User loggedIn = (User) authentication.getPrincipal();
 
         try {
             certificateService.revokeCertificate(revokeCertificateDTO);

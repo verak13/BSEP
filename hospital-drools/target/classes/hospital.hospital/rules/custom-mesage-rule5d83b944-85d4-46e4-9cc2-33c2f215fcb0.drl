@@ -4,7 +4,7 @@ import hospital.hospital.services.MailService;
 import hospital.hospital.model.cep.alarms.MessageAlarm;
 global MailService mailService
 
-rule "Custom message ruleovo je komplikovaiji maloo."
+rule "Custom message ruleTrigeruj alarm kada je temperatura niza od 34 ili puls visi od 150."
 	agenda-group "doctor-alarms"
     when
         $e : MessageEvent($patientId: message.getPatientId(), 
@@ -15,12 +15,12 @@ rule "Custom message ruleovo je komplikovaiji maloo."
         	$value5: message.getRespirationRate(), ($value5 < 1000.0 || $value5 > 1.0)
         )
     then
-        insert(new MessageAlarm($patientId, "ovo je komplikovaiji maloo"));
+        insert(new MessageAlarm($patientId, "Trigeruj alarm kada je temperatura niza od 34 ili puls visi od 150"));
         System.out.println("==== TRIGEROVAN CUSTOM ALARM ====");
 end
-rule "Message alarm triggered, notify doctor custom-ovo je komplikovaiji maloo"
+rule "Message alarm triggered, notify doctor custom-Trigeruj alarm kada je temperatura niza od 34 ili puls visi od 150"
     when
-        $alarm : MessageAlarm(variable == "ovo je komplikovaiji maloo")
+        $alarm : MessageAlarm(variable == "Trigeruj alarm kada je temperatura niza od 34 ili puls visi od 150")
     then
         mailService.notifyDoctors($alarm);
 end

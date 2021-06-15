@@ -105,10 +105,10 @@ function Requests(props) {
                         <TableCell align="right">Org Unit</TableCell>
                         <TableCell align="right">State</TableCell>
                         <TableCell align="right">Locality</TableCell>
+
                         <TableCell align="right">Email</TableCell>
-
                         <TableCell align="right">Add Certificate</TableCell>
-
+                        <TableCell align="right">Delete</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>

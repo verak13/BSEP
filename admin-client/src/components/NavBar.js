@@ -20,7 +20,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PhotoLibrary from '@material-ui/icons/PhotoLibrary';
 import Info from '@material-ui/icons/Info';
 import ExitToApp from '@material-ui/icons/ExitToApp';
-import Settings from '@material-ui/icons/Settings';
+import authService from '../services/AuthService';
 import { withRouter } from 'react-router-dom';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../assets/constants';
 import { connect } from 'react-redux';
@@ -150,7 +150,7 @@ function NavBar(props) {
                 <Divider />
 
 
-                {keycloak?.authenticated ? <>
+                {keycloak?.authenticated && authService.getRole() === 'SUPER_ADMIN' ?<>
                     <List>
                         <ListItem onClick={() => props.history.push(CERTIFICATES)} button key={'Certificates'}>
                             <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>

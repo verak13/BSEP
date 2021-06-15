@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/report", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/report", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReportController {
 
     @Autowired
